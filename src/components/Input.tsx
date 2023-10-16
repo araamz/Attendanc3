@@ -22,7 +22,7 @@ export default function Input({type, value, name, placeholder, error, disabled, 
             disabled={disabled}
             onChange={onChange}
             inputMode={inputMode}
-            className={error ? ''}
+            className={error ? 'text-rose-200' : undefined}
         />
     )
 
