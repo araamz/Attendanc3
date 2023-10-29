@@ -1,14 +1,6 @@
-export type Section = {
-    sectionNumber: number;
-}
-
 export type Team = {
-    teamNumber: number;
-    tableNumber: number;
-}
-
-export type Pronoun = {
-    pronoun: string;
+    team_number: number;
+    table_number: number;
 }
 
 export type Student = {
@@ -16,8 +8,8 @@ export type Student = {
     firstName: string;
     lastName: string;
     nickName: string;
-    preferredPronoun: Pronoun;
-    assignedTeam: Team;
+    preferred_pronoun: string;
+    assigned_team: Team;
 }
 
 export type Status = {
@@ -35,15 +27,8 @@ export type Record = {
 
 export type TeamRecord = {
     id: string;
-    teamNumber: Team;
+    team_number: Team;
     records: Array<Record>;
-}
-
-export type Data = {
-    sections: Array<Section>;
-    teams: Array<Team>;
-    students: Array<Student>;
-    records: Array<TeamRecord>;
 }
 
 
