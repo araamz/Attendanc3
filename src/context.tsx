@@ -9,55 +9,56 @@ const initalState: Data = {
     records: []
 }
 
-export default function Attendanc3Context() {
-
-    const [data, dispatch] = useReducer(dataReducer, initalState);
-
-
-
-}
-
-type Action = {type: 'addSection', section: Section}
-    | {type: 'deleteSection', removedSection: Section}
-    | {type: 'addTeam', team: Team}
-    | {type: 'deleteTeam', removedTeam: Team}
-    | {type: 'addStudent', student: Student}
-    | {type: 'deleteStudent', removedStudent: Student}
-    | {type: 'addTeamRecord', record: TeamRecord}
-    | {type: 'deleteTeamRecord', removedRecord: TeamRecord}
-
-function dataReducer(data: Data, action: Action) {
+function dataReducer(state: Data, action: Action) {
 
     switch (action.type) {
         case 'addSection': {
-            return [data.sections, action.section]
+            return [state.sections, action.payload]
         }
         case "deleteSection": {
-            return data.sections.filter((section: Section): boolean => section.sectionNumber !== action.removedSection.sectionNumber)
+            return state.sections.filter((section: Section): boolean => section.sectionNumber !== action.payload.sectionNumber)
         }
 
         case "addTeam": {
-            return [data.teams, action.team]
+            return [state.teams, action.payload]
         }
         case "deleteTeam": {
-            return data.teams.filter((team: Team): boolean => team.teamNumber !== action.removedTeam.teamNumber);
+            return state.teams.filter((team: Team): boolean => team.teamNumber !== action.payload.teamNumber);
         }
 
         case "addStudent": {
-            return [data.students, action.student];
+            return [state.students, action.payload];
         }
         case "deleteStudent": {
-            return data.students.filter((student: Student): boolean => student.id !== action.removedStudent.id);
+            return state.students.filter((student: Student): boolean => student.id !== action.payload.id);
         }
 
         case "addTeamRecord": {
-            return [data.records, action.record]
+            return [state.records, action.payload]
         }
         case "deleteTeamRecord": {
-            return data.records.filter((record: TeamRecord): boolean => record.id !== action.removedRecord.id);
+            return state.records.filter((record: TeamRecord): boolean => record.id !== action.payload.id);
         }
     }
 }
+
+
+type Action = {type: 'addSection', payload: Section}
+    | {type: 'deleteSection', payload: Section}
+    | {type: 'addTeam', payload: Team}
+    | {type: 'deleteTeam', payload: Team}
+    | {type: 'addStudent', payload: Student}
+    | {type: 'deleteStudent', payload: Student}
+    | {type: 'addTeamRecord', payload: TeamRecord}
+    | {type: 'deleteTeamRecord', payload: TeamRecord}
+
+export default function Attendanc3Context() {
+
+    const [state, dispatch] = useReducer(dataReducer, initalState);
+    return [state, dispatch];
+
+}
+
 
 // AddSection
 // DeleteSection
