@@ -7,10 +7,11 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import RecordPage from "./pages/RecordPage.tsx";
+import RecordsPage from "./pages/RecordsPage.tsx";
 import CreateRecordPage from "./pages/CreateRecordPage.tsx";
-import TeamsPage from "./pages/TeamsPage.tsx";
-import SectionsPage from "./pages/SectionsPage.tsx";
+import GroupsPage from "./pages/GroupsPage.tsx";
+import StudentsPage from "./pages/StudentsPage.tsx";
+import SettingsPage from "./pages/SettingsPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <RecordPage />
+                element: <RecordsPage />
             },
             {
                 path: "/create",
@@ -27,19 +28,15 @@ const router = createBrowserRouter([
             },
             {
                 path: "/students",
-                element: <p>Students</p>
+                element: <StudentsPage />
             },
             {
-                path: "/teams",
-                element: <TeamsPage />
-            },
-            {
-                path: "/sections",
-                element: <SectionsPage />
+                path: "/groups",
+                element: <GroupsPage />
             },
             {
                 path: "/settings",
-                element: <p>Settings</p>
+                element: <SettingsPage />
             }
         ]
     }

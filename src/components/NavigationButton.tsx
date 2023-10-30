@@ -1,22 +1,20 @@
-import {NavLink, NavLinkProps, useMatch} from "react-router-dom";
+import {NavLink, NavLinkProps} from "react-router-dom";
 
 type NavigationButtonProps = {
-    className?: string; icon: string; label: string; navigation_link_props: NavLinkProps;
-}
+    className?: string; icon: string; label: string;
+} & NavLinkProps;
 
 export default function NavigationButton(props: NavigationButtonProps) {
 
-
-    const {label, icon, navigation_link_props} = props;
-    const active = useMatch(String(navigation_link_props.to))
+    const {icon, label} = props;
 
     return (
-        <NavLink {...navigation_link_props} className={`${props.className} flex flex-col place-items-center ${active ? "text-white" : "text-zinc-600"}`}>
-            <span className="material-symbols-outlined">
-                {icon}
+        <NavLink {...props} className='bg-neutral-200 gap-1 flex flex-row py-2 px-3 place-items-center rounded-md [&.active]:bg-black [&.active]:text-white md:flex-col md:w-16 md:h-16 md:justify-center'>
+            <span className="material-symbols-outlined text-md hidden md:block">
+                { icon }
             </span>
-            <p className="leading-tight text-sm">
-                {label}
+            <p className="leading-tight text-xs font-semibold">
+                { label }
             </p>
         </NavLink>
     )

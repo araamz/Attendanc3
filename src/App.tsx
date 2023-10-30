@@ -5,16 +5,16 @@ import NavigationButton from "./components/NavigationButton.tsx";
 function App(): JSX.Element {
 
   return (
-      <div className="flex flex-col h-screen bg-zinc-600">
-          <main className="grow bg-neutral-200 p-4 overflow-y-auto">
+      <div className="flex flex-col md:flex-row p-5 gap-5">
+          <nav className="h-min flex place-content-between md:flex-col md:gap-4">
+              <NavigationButton icon={'list'} label={'Records'} to='/' />
+              <NavigationButton icon={'person'} label={'Students'} to='/students' />
+              <NavigationButton icon={'groups'} label={'Groups'} to='/groups' />
+              <NavigationButton icon={'settings'} label={'Settings'} to='/settings' />
+          </nav>
+          <main className="">
               <Outlet />
           </main>
-          <nav className="h-min flex place-content-evenly py-3 bg-black">
-              <NavigationButton icon={'list'} label={'Records'} navigation_link_props={{to: "/"}} />
-              <NavigationButton icon={'person'} label={'Students'} navigation_link_props={{to: "/students"}} />
-              <NavigationButton icon={'groups'} label={'Teams'} navigation_link_props={{to: "/teams"}} />
-              <NavigationButton icon={'settings'} label={'Settings'} navigation_link_props={{to: "/settings"}} />
-          </nav>
       </div>
   )
 }

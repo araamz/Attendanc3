@@ -10,6 +10,7 @@ export type Student = {
     nickName: string;
     preferred_pronoun: string;
     assigned_team: Team;
+    notes: string;
 }
 
 export type Status = {

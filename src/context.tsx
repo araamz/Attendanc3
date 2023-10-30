@@ -19,7 +19,7 @@ type Action =
     | { type: 'AddTeamRecord', added_record: TeamRecord }
     | { type: 'DeleteTeamRecord', deleted_record: TeamRecord }
 
-const inital_state: State = {
+const initial_state: State = {
     pronouns: [
         'she-her',
         'he-him',
@@ -145,7 +145,7 @@ function AppReducer(state: State, action: Action): State {
 
 export default function AppContext() {
 
-    const [state, dispatch] = useReducer(AppReducer, inital_state);
+    const [state, dispatch] = useReducer(AppReducer, initial_state);
 
     function AddSection(section: number) {
         dispatch({

@@ -1,6 +1,6 @@
 
 
-export default function RecordPage() {
+export default function RecordsPage() {
 
     return (
         <main>
