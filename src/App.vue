@@ -2,6 +2,7 @@
 
 
 
+import StatusBar from "./components/StatusBar.vue";
 </script>
 
 <template>
@@ -11,6 +12,7 @@
   </p>
   <main>
     <RouterView />
+    <StatusBar />
   </main>
 </template>
 
