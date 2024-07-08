@@ -1,12 +1,10 @@
 <script setup lang="ts">
 
-
-
 </script>
 
 <template>
-  <div class='h-full overflow-y-auto'>
-      <router-view />
+  <div class="md:aspect-square bg-amber-200">
+    <slot />
   </div>
 </template>
 

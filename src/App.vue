@@ -5,8 +5,8 @@ import { ListBulletIcon, PlusIcon, UserGroupIcon } from "@heroicons/vue/24/solid
 </script>
 
 <template>
-  <div class="w-svw h-svh flex flex-col bg-slate-200">
-    <div class="grow">
+  <div class="w-svw h-svh flex flex-col bg-neutral-200 overflow-y-auto">
+    <div class="grow overflow-y-auto">
       <router-view />
     </div>
     <PrimaryNavigation>
