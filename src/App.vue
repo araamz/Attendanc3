@@ -1,19 +1,32 @@
 <script setup lang="ts">
-
-
-
-import StatusBar from "./components/StatusBar.vue";
+import PrimaryNavigation from "./components/PrimaryNavigation.vue";
+import PrimaryNavigationButton from "./components/PrimaryNavigationLink.vue";
+import { ListBulletIcon, PlusIcon, UserGroupIcon } from "@heroicons/vue/24/solid";
 </script>
 
 <template>
-  <h1>Hello App!</h1>
-  <p>
-    <strong>Current route path:</strong> {{ $route.fullPath }}
-  </p>
-  <main>
-    <RouterView />
-    <StatusBar />
-  </main>
+  <div class="w-svw h-svh flex flex-col bg-slate-200">
+    <div class="grow">
+      <router-view />
+    </div>
+    <PrimaryNavigation>
+      <PrimaryNavigationButton label="Records" :to="{name: 'record_list'}">
+        <template #icon>
+          <ListBulletIcon />
+        </template>
+      </PrimaryNavigationButton>
+      <PrimaryNavigationButton label="Teams" :to="{name: 'team_list'}">
+        <template #icon>
+          <UserGroupIcon />
+        </template>
+      </PrimaryNavigationButton>
+      <PrimaryNavigationButton label="New Record" :to="{path: '/new_record'}">
+        <template #icon>
+          <PlusIcon />
+        </template>
+      </PrimaryNavigationButton>
+    </PrimaryNavigation>
+  </div>
 </template>
 
 <style scoped>

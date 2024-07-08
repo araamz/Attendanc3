@@ -6,9 +6,7 @@
 
 <template>
   <div>
-    <p>
-      TeamsRoot
-    </p>
+    <router-view />
   </div>
 </template>
 

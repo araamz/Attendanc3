@@ -6,9 +6,7 @@
 
 <template>
   <div>
-    <p>
-      RecordsRoot
-    </p>
+      <router-view />
   </div>
 </template>
 
