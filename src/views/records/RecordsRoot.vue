@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <div>
+  <div class='h-full overflow-y-auto p-4'>
       <router-view />
   </div>
 </template>

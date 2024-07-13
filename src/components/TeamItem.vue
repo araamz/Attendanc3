@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import Button from "./Button.vue";
+import Button from "./IconButton.vue";
 import {PencilIcon} from "@heroicons/vue/16/solid";
 import GridItem from "./GridItem.vue";
+import Descriptor from "./Descriptor.vue";
+import DescriptorContainer from "./DescriptorContainer.vue";
+import IconButton from "./IconButton.vue";
 
 interface ITeamItemProps {
   teamNumber: string;
@@ -22,46 +25,27 @@ const deleteAction = () => {
 <template>
   <GridItem class="flex flex-col gap-3">
     <div class="flex flex-row justify-between items-center">
-      <p class=" font-medium">
+      <p class="font-medium">
         TEAM #243
       </p>
-      <p class="text-neutral-400 leading-0">
-        🏁🎬
+      <p class="text-neutral-400 font-medium leading-0">
+        Toxic ☢️
       </p>
     </div>
-    <div class="flex flex-col gap-1 [&>*]:border-b-2 [&>*]:border-neutral-200">
-      <div class="flex flex-row justify-between items-center py-0.5">
-        <p class='text-xs font-medium text-neutral-400'>
-          TABLE
-        </p>
-        <p class='text-sm font-semibold'>
-          4
-        </p>
-      </div>
-      <div class="flex flex-row justify-between items-center py-0.5">
-        <p class='text-xs font-medium text-neutral-400'>
-          SECTION
-        </p>
-        <p class='text-sm font-semibold'>
-          1204
-        </p>
-      </div>
-      <div class="flex flex-row justify-between items-center py-0.5">
-        <p class='text-xs font-medium text-neutral-400 font-medium'>
-          LEAD MENTOR
-        </p>
-        <p class='text-sm font-semibold'>
-          John Doe
-        </p>
-      </div>
-    </div>
+    <DescriptorContainer>
+      <Descriptor label="table" value="6" />
+      <Descriptor label="section" value="1204" />
+      <Descriptor label="lead mentor" value="John Doe" />
+    </DescriptorContainer>
       <p class="mt-auto font-medium">
         Emily Johnson, Marcus Rodriguez, Amanda Smith, Benjamin Lee, Sophia Martinez
       </p>
     <div class="flex flex-row-reverse">
-      <button onclick="" label="" class="bg-neutral-100 text-neutral-300 aspect-square p-1.5 rounded-full">
-        <PencilIcon class="size-4" />
-      </button>
+      <IconButton disabled :onclick="editAction" label="" class="bg-neutral-100 text-neutral-300 aspect-square p-1.5 rounded-full">
+        <template #icon>
+          <PencilIcon />
+        </template>
+      </IconButton>
     </div>
   </GridItem>
 </template>

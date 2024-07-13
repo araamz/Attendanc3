@@ -2,14 +2,17 @@
 
 
 
+import GridContainer from "../../components/GridContainer.vue";
+import RecordItem from "../../components/RecordItem.vue";
 </script>
 
 <template>
-  <div>
-    <p>
-      RecordsList
-    </p>
-  </div>
+  <GridContainer>
+    <RecordItem />
+    <RecordItem />
+    <RecordItem />
+    <RecordItem />
+  </GridContainer>
 </template>
 
 <style scoped>
