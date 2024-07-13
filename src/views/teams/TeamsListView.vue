@@ -2,28 +2,19 @@
 
 import GridContainer from "../../components/GridContainer.vue";
 import GridItem from "../../components/GridItem.vue";
+import TeamItem from "../../components/TeamItem.vue";
 </script>
 
 <template>
-  <div class="h-full">
-  <GridContainer>
-    <GridItem>
-      Grid Item
-    </GridItem>
-    <GridItem>
-      Grid Item
-    </GridItem>
-    <GridItem>
-      Grid Item
-    </GridItem>
-    <GridItem>
-      Grid Item
-    </GridItem>
-    <GridItem>
-      Grid Item
-    </GridItem>
+  <GridContainer class="">
+    <TeamItem team-number="233" />
+    <TeamItem team-number="233" />
+    <TeamItem team-number="233" />
+    <TeamItem team-number="233" />
+    <TeamItem team-number="233" />
+    <TeamItem team-number="233" />
+    <TeamItem team-number="233" />
   </GridContainer>
-  </div>
 </template>
 
 <style scoped>

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="md:aspect-square bg-amber-200">
+  <div class="aspect-square bg-white p-4 rounded drop-shadow">
     <slot />
   </div>
 </template>

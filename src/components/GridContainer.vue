@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 md:grid md:grid-cols-4 content-center mx-5 h-min">
+  <div class="flex flex-col gap-4 md:grid md:grid-cols-4 xl:grid-cols-6 content-center h-min">
     <slot />
   </div>
 </template>
