@@ -5,7 +5,7 @@
 </script>
 
 <template>
-  <div class="bg-white flex flex-row justify-around p-2.5 drop-shadow md:justify-start md:px-6 md:py-3 md:gap-6">
+  <div class="bg-white flex flex-row justify-around p-2.5 drop-shadow md:flex-col md:justify-start md:py-6 md:gap-6">
     <slot />
   </div>
 </template>

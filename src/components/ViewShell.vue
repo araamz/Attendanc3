@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="h-full overflow-y-auto p-4">
+  <div class="h-full w-full overflow-y-auto p-4 pb-8">
     <slot/>
   </div>
 </template>

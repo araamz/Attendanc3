@@ -20,12 +20,14 @@ export interface IRubricSlice {
 }
 export interface IRubric {
     label: string;
+    commonDeductions: Array<string>;
     slices: Array<IRubricSlice>
 }
 
 export interface IRubricGrade {
     rubric: IRubric;
     earnedSlice: IRubricSlice;
+    commonDeductionsSelections: Array<string>;
     comment: string;
 }
 

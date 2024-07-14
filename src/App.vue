@@ -4,8 +4,16 @@
   import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon } from "@heroicons/vue/24/solid";
   import {IRubric} from "./types.ts";
 
+  // Add State for Report Selections - use Dependency Injection to provide functionality between RecordsListView and ReportView
+  // Make Rubrics Available = use Dependency Injection to provide functionality NewRecordView
+
   const billableHoursRubric: IRubric = {
     label: "Billable Hours",
+    commonDeductions: [
+      "Late first 5 minutes.",
+      "Late first 10 minutes.",
+      "Late first 15 minutes."
+    ],
     slices: [
       {
         id: "70c41ff1-b234-48bd-b9d9-52629c8bf373",
@@ -29,6 +37,10 @@
   }
   const labPreparationRubric: IRubric = {
     label: "Lab Preparation",
+    commonDeductions: [
+        "Incomplete notes on Page ...",
+        "Missing notes on Page ..."
+    ],
     slices: [
       {
         id: "c18335d0-5d56-4268-bfa3-dc1c209fca3a",
@@ -57,10 +69,8 @@
 </script>
 
 <template>
-  <div class="h-svh flex flex-col bg-neutral-200 overflow-y-auto">
-    <div class="grow overflow-y-auto">
-      <router-view />
-    </div>
+  <div class="h-lvh flex flex-col bg-neutral-200 overflow-y-auto md:flex-row-reverse">
+      <router-view class="grow overflow-y-auto" />
     <PrimaryNavigation>
       <PrimaryNavigationButton label="New Record" :to="{path: '/new_record'}">
         <template #icon>

@@ -7,7 +7,7 @@ import ViewShell from "../components/ViewShell.vue";
 
 <template>
   <ViewShell>
-    <p>
+    <p >
       FloaterView
     </p>
   </ViewShell>
