@@ -1,10 +1,10 @@
-interface IStudent {
+export interface IStudent {
     id: string;
     firstName: string;
     lastName: string;
     pronouns: string;
 }
-interface ITeam {
+export interface ITeam {
     teamNumber: number;
     teamNickname: string;
     table: string;
@@ -12,28 +12,29 @@ interface ITeam {
     mentor: string;
 }
 
-interface IRubricSlice {
+export interface IRubricSlice {
     id: string;
     score: number;
+    label: string;
     description: string;
 }
-interface IRubric {
-    id: string;
+export interface IRubric {
     label: string;
     slices: Array<IRubricSlice>
 }
 
-interface IRubricGrade {
+export interface IRubricGrade {
     rubric: IRubric;
     earnedSlice: IRubricSlice;
+    comment: string;
 }
 
-interface IStudentRecord {
+export interface IStudentRecord {
     student: IStudent;
     rubricGrade: Array<IRubricGrade>;
 }
 
-interface IRecord {
+export interface IRecord {
     team: ITeam;
     studentRecords: Array<IStudentRecord>
     timestamp: Date;

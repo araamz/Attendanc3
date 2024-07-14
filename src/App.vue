@@ -1,7 +1,59 @@
 <script setup lang="ts">
-import PrimaryNavigation from "./components/PrimaryNavigation.vue";
-import PrimaryNavigationButton from "./components/PrimaryNavigationLink.vue";
-import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon } from "@heroicons/vue/24/solid";
+  import PrimaryNavigation from "./components/PrimaryNavigation.vue";
+  import PrimaryNavigationButton from "./components/PrimaryNavigationLink.vue";
+  import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon } from "@heroicons/vue/24/solid";
+  import {IRubric} from "./types.ts";
+
+  const billableHoursRubric: IRubric = {
+    label: "Billable Hours",
+    slices: [
+      {
+        id: "70c41ff1-b234-48bd-b9d9-52629c8bf373",
+        score: 0,
+        label: "No Marks",
+        description: "Did not attend lab or multiple reasons why billable hours should not be awarded."
+      },
+      {
+        id: "c0852a50-cc22-4d81-a3fc-be002298a661",
+        score: 5,
+        label: "Partial Marks",
+        description: "Student is NOT on time and ready to participate at start of class."
+      },
+      {
+        id: "92478a18-db74-4fae-aab7-0e32e4277cfb",
+        score: 10,
+        label: "Full Marks",
+        description: "Student is on time and ready to participate at start of class."
+      }
+    ]
+  }
+  const labPreparationRubric: IRubric = {
+    label: "Lab Preparation",
+    slices: [
+      {
+        id: "c18335d0-5d56-4268-bfa3-dc1c209fca3a",
+        score: 0,
+        label: "No Marks",
+        description: ""
+      },
+      {
+        id: "be4c59e6-fc0c-46b0-866e-c0574d3d2ccd",
+        score: 2.5,
+        label: "Partial Marks",
+        description: ""
+      },
+      {
+        id: "6cb45610-7331-4507-9bdb-fcd14400e84f",
+        score: 5,
+        label: "Full Marks",
+        description: ""
+      }
+    ]
+  }
+
+  const consolidatedRubrics: Array<IRubric> = [billableHoursRubric, labPreparationRubric]
+
+
 </script>
 
 <template>
