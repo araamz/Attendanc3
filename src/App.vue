@@ -6,10 +6,12 @@
 
   // Add State for Report Selections - use Dependency Injection to provide functionality between RecordsListView and ReportView
   // Make Rubrics Available = use Dependency Injection to provide functionality NewRecordView
+  // Make Pronouns Available = use Dependency Injection to provide functionality NewTeamView
 
   const billableHoursRubric: IRubric = {
     label: "Billable Hours",
     commonDeductions: [
+      "Absent.",
       "Late first 5 minutes.",
       "Late first 10 minutes.",
       "Late first 15 minutes."
@@ -38,30 +40,37 @@
   const labPreparationRubric: IRubric = {
     label: "Lab Preparation",
     commonDeductions: [
+        "Absent.",
         "Incomplete notes on Page ...",
-        "Missing notes on Page ..."
+        "Missing notes on Page ...",
     ],
     slices: [
       {
         id: "c18335d0-5d56-4268-bfa3-dc1c209fca3a",
         score: 0,
         label: "No Marks",
-        description: ""
+        description: "Missing CSE Lecture 1 notes."
       },
       {
         id: "be4c59e6-fc0c-46b0-866e-c0574d3d2ccd",
         score: 2.5,
         label: "Partial Marks",
-        description: ""
+        description: "Some CSE Lecture 1 notes are filled in, but not all sections are complete."
       },
       {
         id: "6cb45610-7331-4507-9bdb-fcd14400e84f",
         score: 5,
         label: "Full Marks",
-        description: ""
+        description: "Lecture notes from CSE Lecture 1 are complete."
       }
     ]
   }
+  const pronouns = [
+      "she/her",
+      "he/him",
+      "they/them",
+      "pns"
+  ]
 
   const consolidatedRubrics: Array<IRubric> = [billableHoursRubric, labPreparationRubric]
 
@@ -69,7 +78,7 @@
 </script>
 
 <template>
-  <div class="h-lvh flex flex-col bg-neutral-200 overflow-y-auto md:flex-row-reverse">
+  <div class="h-svh flex flex-col bg-neutral-200 overflow-y-auto md:flex-row-reverse">
       <router-view class="grow overflow-y-auto" />
     <PrimaryNavigation>
       <PrimaryNavigationButton label="New Record" :to="{path: '/new_record'}">

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 
   import GridContainer from "../../components/GridContainer.vue";
-  import GridItem from "../../components/GridItem.vue";
   import TeamItem from "../../components/TeamItem.vue";
   import {useRouter} from "vue-router";
-  import HorizontalStack from "../../components/HorizontalStack.vue";
+  import HorizontalStack from "../../components/VerticalStack.vue";
   import ScrollButton from "../../components/ScrollButton.vue";
   import {PlusIcon} from "@heroicons/vue/16/solid";
 
@@ -19,7 +18,7 @@
 
 <template>
   <HorizontalStack>
-    <GridContainer class="">
+    <GridContainer>
       <TeamItem team-number="233" />
       <TeamItem team-number="233" />
       <TeamItem team-number="233" />

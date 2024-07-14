@@ -2,14 +2,16 @@ export interface IStudent {
     id: string;
     firstName: string;
     lastName: string;
+    preferredName: string;
     pronouns: string;
 }
 export interface ITeam {
-    teamNumber: number;
-    teamNickname: string;
+    number: string;
+    nickname: string;
     table: string;
     section: string;
     mentor: string;
+    assignedStudents: Array<IStudent>;
 }
 
 export interface IRubricSlice {

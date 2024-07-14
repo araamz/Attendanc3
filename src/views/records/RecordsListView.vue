@@ -4,7 +4,7 @@
   import ScrollButton from "../../components/ScrollButton.vue";
   import {useRouter} from "vue-router";
   import { PlusIcon } from "@heroicons/vue/16/solid";
-  import HorizontalStack from "../../components/HorizontalStack.vue";
+  import HorizontalStack from "../../components/VerticalStack.vue";
 
 
   const router = useRouter();
