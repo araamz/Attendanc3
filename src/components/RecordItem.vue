@@ -13,11 +13,11 @@
     teamNickname: string;
     table: string;
     section: string;
-    leadMentor: string
+    mentor: string
     dateCreated: Date;
     timeCreated: Date;
   }
-  const {recordId, teamNumber, teamNickname, table, section, leadMentor, dateCreated, timeCreated} = defineProps<IRecordItemProps>();
+  const {recordId, teamNumber, teamNickname, table, section, mentor, dateCreated, timeCreated} = defineProps<IRecordItemProps>();
 
   const model = defineModel<boolean>("recordChecked", {
     default: false,
@@ -50,7 +50,7 @@
     <DescriptorContainer>
       <Descriptor label="table" :value="table" />
       <Descriptor label="section" :value="section" />
-      <Descriptor label="lead mentor" :value="leadMentor" />
+      <Descriptor label="mentor" :value="mentor" />
       <Descriptor label="date created" value="12/15/2024" />
       <Descriptor label="time created" value="3:15 p.m." />
     </DescriptorContainer>

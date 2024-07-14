@@ -35,13 +35,13 @@ const deleteAction = () => {
     <DescriptorContainer>
       <Descriptor label="table" value="6" />
       <Descriptor label="section" value="1204" />
-      <Descriptor label="lead mentor" value="John Doe" />
+      <Descriptor label="mentor" value="John Doe" />
     </DescriptorContainer>
       <p class="mt-auto font-medium">
         Emily Johnson, Marcus Rodriguez, Amanda Smith, Benjamin Lee, Sophia Martinez
       </p>
     <div class="flex flex-row-reverse">
-      <IconButton disabled :onclick="editAction" label="" class="bg-neutral-100 text-neutral-300 aspect-square p-1.5 rounded-full">
+      <IconButton :onclick="editAction" class="bg-neutral-100 text-neutral-300 aspect-square p-1.5 rounded-full">
         <template #icon>
           <PencilIcon />
         </template>
