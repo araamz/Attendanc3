@@ -20,7 +20,7 @@ import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon } from "@her
           <ListBulletIcon />
         </template>
       </PrimaryNavigationButton>
-      <PrimaryNavigationButton label="Report" :to="{path: '/new_record'}">
+      <PrimaryNavigationButton label="Report" :to="{name: 'generate_report'}">
         <template #icon>
           <DocumentCheckIcon/>
         </template>

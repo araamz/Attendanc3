@@ -2,14 +2,15 @@
 
 
 
+import ViewShell from "../components/ViewShell.vue";
 </script>
 
 <template>
-  <div>
+  <ViewShell>
     <p>
       NewRecordView
     </p>
-  </div>
+  </ViewShell>
 </template>
 
 <style scoped>

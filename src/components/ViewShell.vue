@@ -1,14 +1,11 @@
 <script setup lang="ts">
 
 
-
 </script>
 
 <template>
-  <div>
-    <p>
-      ViewShell
-    </p>
+  <div class="h-full overflow-y-auto p-4">
+    <slot/>
   </div>
 </template>
 

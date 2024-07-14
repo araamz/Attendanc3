@@ -1,14 +1,10 @@
 <script setup lang="ts">
 
-
-
 </script>
 
 <template>
-  <div>
-    <p>
-      FloaterView
-    </p>
+  <div class="flex flex-col gap-4">
+    <slot />
   </div>
 </template>
 

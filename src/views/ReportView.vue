@@ -2,12 +2,14 @@
 
 
 
-import ViewShell from "../../components/ViewShell.vue";
+import ViewShell from "../components/ViewShell.vue";
 </script>
 
 <template>
   <ViewShell>
-      <router-view />
+    <p>
+      FloaterView
+    </p>
   </ViewShell>
 </template>
 

@@ -4,7 +4,6 @@ import App from './App.vue'
 import RecordsRoot from "./views/records/RecordsRoot.vue";
 import TeamsRoot from "./views/teams/TeamsRoot.vue";
 import NewRecordView from "./views/NewRecordView.vue";
-import FloaterView from "./views/records/FloaterView.vue";
 import RecordEditView from "./views/records/RecordEditView.vue";
 import RecordsListView from "./views/records/RecordsListView.vue";
 import NewTeamView from "./views/teams/NewTeamView.vue";
@@ -12,17 +11,13 @@ import TeamEditView from "./views/teams/TeamEditView.vue";
 import TeamsListView from "./views/teams/TeamsListView.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import {VueQueryPlugin} from '@tanstack/vue-query'
+import ReportView from "./views/ReportView.vue";
 
 const routes = [
     {
         path: '',
         component: RecordsRoot,
         children: [
-            {
-                path: 'floater',
-                component: FloaterView,
-                name: 'floater_viewer'
-            },
             {
                 path: 'edit/:recordId',
                 component: RecordEditView,
@@ -42,7 +37,7 @@ const routes = [
             {
                 path: 'new',
                 component: NewTeamView,
-                name: 'team_creator'
+                name: 'new_team'
             },
             {
                 path: 'edit/:teamId',
@@ -58,8 +53,14 @@ const routes = [
     },
     {
         path: '/new_record',
-        component: NewRecordView
-    }
+        component: NewRecordView,
+        name: 'new_record'
+    },
+    {
+        path: '/report',
+        component: ReportView,
+        name: 'generate_report'
+    },
 ]
 
 const router = createRouter({
