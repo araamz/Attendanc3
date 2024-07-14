@@ -68,12 +68,7 @@
         <button :onclick="showData">
           Show Data
         </button>
-        <NewStudentForm v-for="student in teamState.assignedStudents" :student-model="{
-          firstName: student.firstName,
-          lastName: student.lastName,
-          preferredName: student.preferredName,
-          pronouns: student.pronouns
-        }" />
+        <NewStudentForm v-for="student in teamState.assignedStudents" v-model:first-name="student.firstName" v-model:last-name="student.lastName" v-model:preferred-name="student.preferredName" />
       </VerticalStack>
       <ScrollButton :onclick="() => addStudent()" label="New Student">
         <template #icon>

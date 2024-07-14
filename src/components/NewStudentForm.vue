@@ -1,27 +1,16 @@
 <template>
   <div>
-    <input type="text" placeholder="John" v-model="studentModel.firstName">
-    <input type="text" placeholder="Doe" v-model="studentModel.lastName">
-    <input type="text" placeholder="JD" v-model="studentModel.preferredName">
+    <input type="text" placeholder="John" v-model="firstName">
+    <input type="text" placeholder="Doe" v-model="lastName">
+    <input type="text" placeholder="JD" v-model="preferredName">
   </div>
 </template>
 
 <script setup lang="ts">
 
-  const studentModel = defineModel<{
-    firstName: string;
-    lastName: string;
-    preferredName: string;
-    pronouns: string;
-  }>("studentModel", {
-    required: true,
-    default: {
-      firstName: "",
-      lastName: "",
-      preferredName: "",
-      pronouns: ""
-    }
-  })
+  const firstName = defineModel<string>("firstName")
+  const lastName = defineModel<string>("lastName")
+  const preferredName = defineModel<string>("preferredName")
 
 </script>
 
