@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <button :disabled="disabled" @click="onclick()" class="flex flex-row gap-1 text-neutral-400 hover:text-black items-center place-content-center">
+  <button :disabled="disabled" @click="onclick()" class="flex flex-row gap-1 text-neutral-400 hover:text-black items-center place-content-center my-4">
     <span class="[&>*]:size-4">
       <slot name="icon" />
     </span>

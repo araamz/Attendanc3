@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
+import PaperContainer from "./PaperContainer.vue";
 </script>
 
 <template>
-  <div class="aspect-square bg-white p-4 rounded drop-shadow">
+  <PaperContainer class="aspect-square">
     <slot />
-  </div>
+  </PaperContainer>
 </template>
 
 <style scoped>

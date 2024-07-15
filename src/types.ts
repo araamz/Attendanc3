@@ -3,7 +3,7 @@ export interface IStudent {
     firstName: string;
     lastName: string;
     preferredName: string;
-    pronouns: string;
+    preferredPronouns: string;
 }
 export interface ITeam {
     number?: number;

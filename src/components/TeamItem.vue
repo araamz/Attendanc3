@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Button from "./IconButton.vue";
 import {PencilIcon} from "@heroicons/vue/16/solid";
 import GridItem from "./GridItem.vue";
 import Descriptor from "./Descriptor.vue";
