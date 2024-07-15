@@ -50,7 +50,7 @@
         <NewStudentForm :key="student.id" v-for="(student, index) in teamState.assignedStudents"
                         v-model:first-name="student.firstName"
                         v-model:last-name="student.lastName" v-model:preferred-name="student.preferredName"
-                        :remove-function="() => removeStudent(Number(index))" :index="index"/>
+                        :remove-function="() => removeStudent(Number(index))" :index="index" v-model:pronouns="student.pronouns" />
       </VerticalStack>
       <ScrollButton :onclick="() => addStudent()" label="New Student">
         <template #icon>

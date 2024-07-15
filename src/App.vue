@@ -65,13 +65,6 @@
       }
     ]
   }
-  const pronouns = [
-      "she/her",
-      "he/him",
-      "they/them",
-      "pns"
-  ]
-
   const consolidatedRubrics: Array<IRubric> = [billableHoursRubric, labPreparationRubric]
 
 
