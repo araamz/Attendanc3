@@ -1,7 +1,5 @@
 <script setup lang="ts">
 
-  import {useRouter} from "vue-router";
-
   interface IScrollButtonProps {
     onclick: () => void;
     disabled?: boolean;
