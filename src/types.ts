@@ -6,10 +6,10 @@ export interface IStudent {
     pronouns: string;
 }
 export interface ITeam {
-    number: string;
+    assignedNumber: number | undefined;
     nickname: string;
-    table: string;
-    section: string;
+    table: number | undefined;
+    section: number | undefined;
     mentor: string;
     assignedStudents: Array<IStudent>;
 }
