@@ -2,7 +2,7 @@ export interface IStudent {
     id: string;
     firstName: string;
     lastName: string;
-    preferredName: string;
+    preferredName?: string;
     preferredPronouns: string;
 }
 export interface ITeam {

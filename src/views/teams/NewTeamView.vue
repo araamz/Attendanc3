@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ScrollButton from "../../components/ScrollButton.vue";
-import {PlusIcon} from "@heroicons/vue/16/solid";
+import {PlusIcon, XMarkIcon} from "@heroicons/vue/16/solid";
 import {UserGroupIcon, UserPlusIcon, UserIcon} from "@heroicons/vue/20/solid";
 import {IStudent, ITeam} from "../../types.ts";
 import {ref, watch} from "vue";
@@ -10,6 +10,8 @@ import PaperContainer from "../../components/PaperContainer.vue";
 import Dialog from "../../components/Dialog.vue";
 import TeamInformationForm, {ITeamInformationFormData} from "../../components/TeamInformationForm.vue";
 import StudentForm from "../../components/StudentForm.vue";
+import HorizontalStack from "../../components/HorizontalStack.vue";
+import IconButton from "../../components/IconButton.vue";
 
 const studentFormOpen = ref(false)
 
@@ -83,7 +85,21 @@ const handleStudentInformationSubmission = (studentInformation: IStudent) => {
     <template #icon>
       <UserPlusIcon />
     </template>
-    <StudentForm  form-id="studentInformation" @submit="handleStudentInformationSubmission" />
+    <VerticalStack spacing="lg">
+      <StudentForm  form-id="studentInformation" @submit="handleStudentInformationSubmission" />
+      <HorizontalStack class="justify-between">
+        <IconButton type="submit" form="studentInformation">
+          <template #icon>
+            <PlusIcon />
+          </template>
+        </IconButton>
+        <IconButton :onclick="closeStudentForm">
+          <template #icon>
+            <XMarkIcon />
+          </template>
+        </IconButton>
+      </HorizontalStack>
+    </VerticalStack>
   </Dialog>
 </template>
 
