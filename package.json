@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.4",
     "@tanstack/vue-query": "^5.50.1",
     "pinia": "^2.1.7",

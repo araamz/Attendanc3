@@ -3,8 +3,7 @@
     <span class="text-xs font-semibold text-neutral-400 uppercase" v-if="label !== null">
       {{label}}
     </span>
-    <input v-if="type === 'text'" :placeholder="placeholder" :type="type" v-model="model" />
-    <input v-if="type === 'number'" :placeholder="placeholder" :type="type" v-model.number="model" />
+    <slot />
   </label>
 </template>
 
@@ -12,16 +11,10 @@
 
   interface IInputProps {
     label?: string | null;
-    type: 'text' | 'number';
-    placeholder: string | undefined;
   }
-  const {label, type, placeholder} = withDefaults(defineProps<IInputProps>(), {
+  const {label} = withDefaults(defineProps<IInputProps>(), {
     label: null,
-    type: 'text',
-    placeholder: undefined,
   })
-
-  const model = defineModel()
 
 </script>
 

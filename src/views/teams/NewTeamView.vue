@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import ScrollButton from "../../components/ScrollButton.vue";
 import {PlusIcon} from "@heroicons/vue/16/solid";
-import {UserGroupIcon, UserPlusIcon} from "@heroicons/vue/20/solid";
+import {UserGroupIcon, UserPlusIcon, UserIcon} from "@heroicons/vue/20/solid";
 import {IStudent, ITeam} from "../../types.ts";
 import {ref, watch} from "vue";
 import VerticalStack from "../../components/VerticalStack.vue";
 import {v4 as uuid} from 'uuid';
 import NewStudentForm from "../../components/NewStudentForm.vue";
-import Input from "../../components/InputContainer.vue";
 import Section from "../../components/Section.vue";
 import PaperContainer from "../../components/PaperContainer.vue";
+import Dialog from "../../components/Dialog.vue";
+import TeamInformationForm, {ITeamInformationFormData} from "../../components/TeamInformationForm.vue";
+
+const studentFormOpen = ref(false)
 
 const teamState = ref<ITeam>({
   number: undefined,
@@ -20,9 +23,16 @@ const teamState = ref<ITeam>({
   assignedStudents: []
 });
 
-watch(teamState.value, () => {
-  console.log(teamState.value.assignedStudents);
+watch(teamState, () => {
+  console.log(teamState.value);
 })
+
+const openStudentForm = () => {
+  studentFormOpen.value = true;
+}
+const closeStudentForm = () => {
+  studentFormOpen.value = false;
+}
 
 const addStudent = () => {
   const newStudentObject: IStudent = {
@@ -39,6 +49,17 @@ const removeStudent = (index: number) => {
   teamState.value.assignedStudents.splice(index, 1)
 }
 
+const handleTeamInformationSubmission = (teamInformation: ITeamInformationFormData) => {
+  teamState.value = {
+    ...teamState.value,
+    number: teamInformation.number,
+    nickname: teamInformation.nickname,
+    table: teamInformation.table,
+    section: teamInformation.section,
+    mentor: teamInformation.mentor
+  }
+}
+
 </script>
 
 <template>
@@ -48,18 +69,12 @@ const removeStudent = (index: number) => {
         <UserGroupIcon/>
       </template>
       <PaperContainer>
-        <VerticalStack spacing="lg">
-          <Input type="number" label="Team Number" placeholder="230" v-model="teamState.number"/>
-          <Input type="text" label="Team Nickname" placeholder="Dream Team" v-model="teamState.nickname"/>
-          <Input type="text" label="Table" placeholder="1" v-model="teamState.table"/>
-          <Input type="number" label="Class Section" placeholder="1204" v-model="teamState.section"/>
-          <Input type="text" label="Mentor" placeholder="John Doe" v-model="teamState.mentor"/>
-        </VerticalStack>
+        <TeamInformationForm form-id="teamInformation" @submit="handleTeamInformationSubmission" />
       </PaperContainer>
     </Section>
     <Section title="Assigned Students">
       <template #icon>
-        <UserPlusIcon/>
+        <UserIcon />
       </template>
       <VerticalStack>
         <VerticalStack>
@@ -69,16 +84,24 @@ const removeStudent = (index: number) => {
                           v-model:preferredPronouns="student.preferredPronouns"
                           :remove-function="() => removeStudent(Number(index))" :index="index"/>
         </VerticalStack>
-        <ScrollButton :onclick="() => addStudent()" label="New Student">
+        <ScrollButton :onclick="() => openStudentForm()" label="New Student">
           <template #icon>
             <PlusIcon/>
           </template>
         </ScrollButton>
       </VerticalStack>
     </Section>
+
   </VerticalStack>
+  <Dialog title="Assign Student" v-model:dialogOpen="studentFormOpen" @close="closeStudentForm">
+    <template #icon>
+      <UserPlusIcon />
+    </template>
+    <NewStudentForm />
+  </Dialog>
 </template>
 
 <style scoped>
 
 </style>
+

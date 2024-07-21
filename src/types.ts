@@ -7,7 +7,7 @@ export interface IStudent {
 }
 export interface ITeam {
     number?: number;
-    nickname: string;
+    nickname?: string;
     table?: number;
     section?: number;
     mentor: string;
