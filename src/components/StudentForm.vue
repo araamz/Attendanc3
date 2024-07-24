@@ -75,9 +75,8 @@ const validateForm = (field?: keyof IStudentFormValidation): IStudentFormValidat
 function submitHandler(): IFormData<IStudent, IStudentFormValidation> {
 
   const validation = validateForm()
-
   const data = () => {
-    if (!isFirstNameValid.value || !isLastNameValid.value || !isPreferredPronounsValid.value) return null;
+    if (hasValidationErrors.value) return null;
     return {
       id: uuid(),
       firstName: firstName.value,

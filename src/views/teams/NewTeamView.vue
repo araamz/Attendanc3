@@ -22,11 +22,12 @@ const toggleStudentForm = (state: boolean): void => {
 const assignedStudents = ref<Array<IStudent>>([])
 
 const handleTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
-  console.log(team)
+  console.log("NewTeamView.vue","handleTeamSubmission", team)
   if (team.data === null) return;
 }
 
 const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValidation>): void => {
+  console.log("NewTeamView.vue","handleStudentSubmission", student)
   if (student.data !== null) toggleStudentForm(false)
   else return
   console.log("ADDING STUDENT", student.data)

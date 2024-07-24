@@ -38,7 +38,7 @@
 
 import VerticalStack from "./VerticalStack.vue";
 import InputContainer from "./InputContainer.vue";
-import {computed, reactive, watch} from "vue";
+import {computed, reactive} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
 import ValidationDescriptor from "./ValidationDescriptor.vue";
 
@@ -61,10 +61,6 @@ const assignedStudents = defineModel<Array<IStudent>>('assignedStudents', {
   default: [],
 })
 
-watch(section, () => {
-  console.log("TeamForm", section.value)
-})
-
 export interface ITeamFormValidation {
   teamNumber: string | null;
   table: string | null;
@@ -72,7 +68,6 @@ export interface ITeamFormValidation {
   mentor: string | null;
   assignedStudents: string | null
 }
-
 const teamFormValidation = reactive<ITeamFormValidation>({
   teamNumber: null,
   table: null,
@@ -81,23 +76,12 @@ const teamFormValidation = reactive<ITeamFormValidation>({
   assignedStudents: null
 })
 
-watch(teamFormValidation, () =>{
-  console.log("TeamFormValidation - Section", teamFormValidation.section)
-})
-watch(teamFormValidation, () =>{
-  console.log("TeamFormValidation - TeamNumber", teamFormValidation.teamNumber)
-})
-
-const isTeamNumberValid = computed<boolean>(() => teamNumber.value !== '')
-const isTableValid = computed<boolean>(() => table.value !== '')
-const isSectionValid = computed<boolean>(() => section.value !== '')
-const isMentorValid = computed<boolean>(() => mentor.value.trim() !== '')
-const isAssignedStudentsValid = computed<boolean>(() => assignedStudents.value.length > 0)
-const hasValidationErrors = computed<boolean>(() => !isTeamNumberValid || !isTableValid || !isSectionValid || !isMentorValid)
-
-watch(isSectionValid, () => {
-  console.log("isSectionValid", isSectionValid.value)
-})
+const isTeamNumberValid = computed<boolean>(() => teamNumber.value !== '');
+const isTableValid = computed<boolean>(() => table.value !== '');
+const isSectionValid = computed<boolean>(() => section.value !== '');
+const isMentorValid = computed<boolean>(() => mentor.value.trim() !== '');
+const isAssignedStudentsValid = computed<boolean>(() => assignedStudents.value.length > 0);
+const hasValidationErrors = computed<boolean>(() => !isTeamNumberValid || !isTableValid || !isSectionValid || !isMentorValid || !isAssignedStudentsValid);
 
 const validateForm = (field?: keyof ITeamFormValidation): ITeamFormValidation => {
 
@@ -126,9 +110,9 @@ const validateForm = (field?: keyof ITeamFormValidation): ITeamFormValidation =>
   } else {
     if (!isTeamNumberValid.value) teamFormValidation.teamNumber = teamNumberValidationMessage;
     if (!isTableValid.value) teamFormValidation.table = tableValidationMessage;
-    if (!teamFormValidation.section) teamFormValidation.section = sectionValidationMessage;
-    if (!teamFormValidation.mentor) teamFormValidation.mentor = mentorValidationMessage;
-    if (!teamFormValidation.assignedStudents) teamFormValidation.assignedStudents = assignedStudentsValidationMessage;
+    if (!isSectionValid.value) teamFormValidation.section = sectionValidationMessage;
+    if (!isMentorValid.value) teamFormValidation.mentor = mentorValidationMessage;
+    if (!isAssignedStudentsValid.value) teamFormValidation.assignedStudents = assignedStudentsValidationMessage;
   }
 
   return {
@@ -141,10 +125,7 @@ function submitHandler(): IFormData<ITeam, ITeamFormValidation> {
   const validation = validateForm()
 
   const data = () => {
-    Object.entries({...teamFormValidation}).forEach(([value]) => {
-      if (value === null) return null
-    })
-
+    if (hasValidationErrors.value) return null;
     return {
       teamNumber: Number(teamNumber.value),
       nickname: nickname.value === null ? null : nickname.value,
