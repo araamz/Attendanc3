@@ -7,14 +7,9 @@ import VerticalStack from "./VerticalStack.vue";
 import InputContainer from "./InputContainer.vue";
 import {IFormData, IStudent} from "../types.ts";
 import PronounsSelector from "./PronounsSelector.vue";
-import {computed, reactive, ref, watch} from "vue";
-
-interface IStudentFormData {
-  firstName: string;
-  lastName: string;
-  preferredName?: string;
-  preferredPronouns: string;
-}
+import {computed, reactive} from "vue";
+import {v4 as uuid} from 'uuid';
+import ValidationDescriptor from "./ValidationDescriptor.vue";
 
 const firstName = defineModel<string>('firstName', {
   default: ''
@@ -41,47 +36,65 @@ const studentFormValidation = reactive<IStudentFormValidation>({
   preferredPronouns: null
 })
 
-
 const isFirstNameValid = computed<boolean>(() => firstName.value.trim() !== '')
 const isLastNameValid = computed<boolean>(() => lastName.value.trim() !== '')
 const isPreferredPronounsValid = computed<boolean>(() => preferredPronouns.value !== '')
 
-watch(isFirstNameValid, () => {
-  console.log(isFirstNameValid.value)
-})
+const validateForm = (field?: keyof IStudentFormValidation): IStudentFormValidation => {
 
-const validateField = (field: keyof IStudentFormValidation) => {
-  studentFormValidation[field] = null;
-  console.log("RUNNING", isLastNameValid.value, studentFormValidation[field])
-  if (field === "firstName" && !isFirstNameValid) {
-    studentFormValidation[field] = "Student's first name is missing.";
+  if (field === undefined) {
+    studentFormValidation.firstName = null;
+    studentFormValidation.lastName = null;
+    studentFormValidation.preferredPronouns = null;
+  } else {
+    studentFormValidation[field] = null;
   }
-  if (field === "lastName" && !isLastNameValid) {
-    studentFormValidation[field] = "Student's last name is missing.";
+
+  if (field) {
+    if ((field === "firstName" && !isFirstNameValid.value)) {
+      studentFormValidation[field] = "Student's first name is missing.";
+    }
+    if ((field === "lastName" && !isLastNameValid.value)) {
+      studentFormValidation[field] = "Student's last name is missing.";
+    }
+    if ((field === "preferredPronouns" && !isPreferredPronounsValid.value)) {
+      studentFormValidation[field] = "Student's preferred name is not selected.";
+    }
+  } else {
+    if (!isFirstNameValid.value) studentFormValidation.firstName = "Student's first name is missing.";
+    if (!isLastNameValid.value) studentFormValidation.lastName = "Student's last name is missing.";
+    if (!isPreferredPronounsValid.value) studentFormValidation.preferredPronouns = "Student's preferred name is not selected.";
   }
-  if (field === "preferredPronouns" && !isPreferredPronounsValid) {
-    studentFormValidation[field] = "Student's preferred name is not selected.";
+
+  return {
+    ...studentFormValidation
   }
 }
 
-const clearStudentFormValidation = () => {
-  studentFormValidation.firstName = null;
-  studentFormValidation.lastName = null;
-  studentFormValidation.preferredPronouns = null;
+function submitHandler(): IFormData<IStudent, IStudentFormValidation> {
+
+  const validation = validateForm()
+
+  const data = () => {
+    if (!isFirstNameValid.value || !isLastNameValid.value || !isPreferredPronounsValid.value) return null;
+    return {
+      id: uuid(),
+      firstName: firstName.value,
+      lastName: lastName.value,
+      preferredName: preferredName.value,
+      preferredPronouns: preferredPronouns.value,
+    }
+  }
+
+  return {
+    data: data(),
+    validation: validation
+  }
 }
 
-function submitHandler(): IFormData<IStudent> {
-
-  clearStudentFormValidation()
-  validateField('firstName')
-  validateField('lastName')
-  validateField('preferredPronouns')
-  console.log(studentFormValidation)
-  console.log(firstName.value, lastName.value, preferredPronouns.value)
-}
 
 interface IStudentFormEmits {
-  (event: 'submit', data: IFormData<IStudent>): void
+  (event: 'submit', data: IFormData<IStudent, IStudentFormValidation>): void
 }
 
 const emit = defineEmits<IStudentFormEmits>()
@@ -96,18 +109,28 @@ const {formId} = defineProps<IStudentFormProps>()
 
 <template>
   <form :id="formId" @submit.prevent="emit('submit', submitHandler())">
-    <VerticalStack spacing="lg">
-      <InputContainer label="First Name">
-        <input type="text" v-model="firstName" @blur="validateField('firstName')" placeholder="John"/>
-      </InputContainer>
-      <InputContainer label="Last Name">
-        <input type="text" v-model="lastName" @blur="validateField('lastName')" name="lastName"
-               placeholder="Doe"/>
-      </InputContainer>
-      <InputContainer label="Preferred Name">
-        <input type="text" v-model="preferredName" name="preferredName" placeholder="JD"/>
-      </InputContainer>
-      <PronounsSelector v-model="preferredPronouns" @blur="validateField('preferredPronouns')"/>
+    <VerticalStack>
+      <VerticalStack spacing="lg">
+        <InputContainer label="First Name">
+          <input type="text" v-model="firstName" @blur="validateForm('firstName')" placeholder="John"/>
+        </InputContainer>
+        <InputContainer label="Last Name">
+          <input type="text" v-model="lastName" @blur="validateForm('lastName')" name="lastName"
+                 placeholder="Doe"/>
+        </InputContainer>
+        <InputContainer label="Preferred Name">
+          <input type="text" v-model="preferredName" name="preferredName" placeholder="JD"/>
+        </InputContainer>
+        <PronounsSelector v-model="preferredPronouns" @blur="validateForm('preferredPronouns')"/>
+      </VerticalStack>
+      <VerticalStack spacing="sm">
+        <ValidationDescriptor v-if="studentFormValidation.firstName !== null" label="First Name"
+                              :message="studentFormValidation.firstName"/>
+        <ValidationDescriptor v-if="studentFormValidation.lastName !== null" label="Last Name"
+                              :message="studentFormValidation.lastName"/>
+        <ValidationDescriptor v-if="studentFormValidation.preferredPronouns !== null" label="Preferred Pronouns"
+                              :message="studentFormValidation.preferredPronouns"/>
+      </VerticalStack>
     </VerticalStack>
   </form>
 </template>

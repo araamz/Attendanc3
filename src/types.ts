@@ -1,5 +1,6 @@
-export interface IFormData<Type> {
-    data: Type;
+export interface IFormData<DataType, ValidationType> {
+    data: DataType | null;
+    validation: ValidationType;
 }
 
 export interface IStudent {
