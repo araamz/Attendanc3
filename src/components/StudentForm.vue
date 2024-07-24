@@ -7,7 +7,7 @@ import VerticalStack from "./VerticalStack.vue";
 import InputContainer from "./InputContainer.vue";
 import {IFormData, IStudent} from "../types.ts";
 import PronounsSelector from "./PronounsSelector.vue";
-import {computed, reactive, watch} from "vue";
+import {computed, reactive} from "vue";
 import {v4 as uuid} from 'uuid';
 import ValidationDescriptor from "./ValidationDescriptor.vue";
 
@@ -24,7 +24,7 @@ const preferredPronouns = defineModel<string>('preferredPronouns', {
   default: ''
 })
 
-interface IStudentFormValidation {
+export interface IStudentFormValidation {
   firstName: string | null;
   lastName: string | null;
   preferredPronouns: string | null;

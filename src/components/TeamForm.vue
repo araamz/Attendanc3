@@ -2,29 +2,31 @@
   <form :id="formId" @submit.prevent="emit('submit', submitHandler())">
     <VerticalStack spacing="lg">
       <InputContainer label="Team Number">
-        <input type="number" name="number" placeholder="230"/>
+        <input type="number" v-model="teamNumber" @blur="validateForm('teamNumber')" name="number" placeholder="230"/>
       </InputContainer>
       <InputContainer label="Team Nickname">
-        <input type="text" name="nickname" placeholder="Dream Team"/>
+        <input type="text" v-model="nickname" name="nickname" placeholder="Dream Team"/>
       </InputContainer>
       <InputContainer label="Table">
-        <input type="number" name="table" placeholder="1"/>
+        <input type="number" v-model="table" @blur="validateForm('table')" name="table" placeholder="1"/>
       </InputContainer>
       <InputContainer label="Section">
-        <input type="number" name="section" placeholder="1204"/>
+        <input type="number" v-model="section" @blur="validateForm('section')" name="section" placeholder="1204"/>
       </InputContainer>
       <InputContainer label="Mentor">
-        <input type="text" name="mentor" placeholder="John Doe"/>
+        <input type="text" v-model="mentor" @blur="validateForm('mentor')" name="mentor" placeholder="John Doe"/>
       </InputContainer>
       <VerticalStack :v-if="hasValidationErrors" spacing="sm">
         <ValidationDescriptor v-if="teamFormValidation.teamNumber !== null" label="Team Number"
                               :message="teamFormValidation.teamNumber"/>
         <ValidationDescriptor v-if="teamFormValidation.table !== null" label="Table"
-                              :message="teamFormValidation.table" />
+                              :message="teamFormValidation.table"/>
         <ValidationDescriptor v-if="teamFormValidation.section !== null" label="Section"
                               :message="teamFormValidation.section"/>
         <ValidationDescriptor v-if="teamFormValidation.mentor !== null" label="Mentor"
                               :message="teamFormValidation.mentor"/>
+        <ValidationDescriptor v-if="teamFormValidation.assignedStudents !== null" label="Assigned Students"
+                              :message="teamFormValidation.assignedStudents"/>
       </VerticalStack>
     </VerticalStack>
   </form>
@@ -36,7 +38,7 @@
 
 import VerticalStack from "./VerticalStack.vue";
 import InputContainer from "./InputContainer.vue";
-import {computed, reactive} from "vue";
+import {computed, reactive, watch} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
 import ValidationDescriptor from "./ValidationDescriptor.vue";
 
@@ -56,10 +58,14 @@ const mentor = defineModel<string>('mentor', {
   default: ''
 })
 const assignedStudents = defineModel<Array<IStudent>>('assignedStudents', {
-  default: []
+  default: [],
 })
 
-interface ITeamFormValidation {
+watch(section, () => {
+  console.log("TeamForm", section.value)
+})
+
+export interface ITeamFormValidation {
   teamNumber: string | null;
   table: string | null;
   section: string | null;
@@ -75,12 +81,23 @@ const teamFormValidation = reactive<ITeamFormValidation>({
   assignedStudents: null
 })
 
+watch(teamFormValidation, () =>{
+  console.log("TeamFormValidation - Section", teamFormValidation.section)
+})
+watch(teamFormValidation, () =>{
+  console.log("TeamFormValidation - TeamNumber", teamFormValidation.teamNumber)
+})
+
 const isTeamNumberValid = computed<boolean>(() => teamNumber.value !== '')
 const isTableValid = computed<boolean>(() => table.value !== '')
 const isSectionValid = computed<boolean>(() => section.value !== '')
 const isMentorValid = computed<boolean>(() => mentor.value.trim() !== '')
-const isAssignedStudentsValid = computed<boolean>(() => assignedStudents.value.length !== 0)
+const isAssignedStudentsValid = computed<boolean>(() => assignedStudents.value.length > 0)
 const hasValidationErrors = computed<boolean>(() => !isTeamNumberValid || !isTableValid || !isSectionValid || !isMentorValid)
+
+watch(isSectionValid, () => {
+  console.log("isSectionValid", isSectionValid.value)
+})
 
 const validateForm = (field?: keyof ITeamFormValidation): ITeamFormValidation => {
 
@@ -95,6 +112,7 @@ const validateForm = (field?: keyof ITeamFormValidation): ITeamFormValidation =>
     teamFormValidation.table = null;
     teamFormValidation.section = null;
     teamFormValidation.mentor = null;
+    teamFormValidation.assignedStudents = null;
   } else {
     teamFormValidation[field] = null;
   }
@@ -155,6 +173,7 @@ interface ITeamFormProps {
 }
 
 const {formId} = defineProps<ITeamFormProps>();
+
 </script>
 
 <style scoped>

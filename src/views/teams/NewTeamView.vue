@@ -2,65 +2,40 @@
 import ScrollButton from "../../components/ScrollButton.vue";
 import {PlusIcon, XMarkIcon} from "@heroicons/vue/16/solid";
 import {UserGroupIcon, UserPlusIcon, UserIcon} from "@heroicons/vue/20/solid";
-import {IStudent, ITeam} from "../../types.ts";
 import {ref, watch} from "vue";
 import VerticalStack from "../../components/VerticalStack.vue";
 import Section from "../../components/Section.vue";
 import PaperContainer from "../../components/PaperContainer.vue";
 import Dialog from "../../components/Dialog.vue";
-import TeamInformationForm, {ITeamInformationFormData} from "../../components/TeamForm.vue";
-import StudentForm from "../../components/StudentForm.vue";
 import HorizontalStack from "../../components/HorizontalStack.vue";
 import IconButton from "../../components/IconButton.vue";
+import TeamForm, {ITeamFormValidation} from "../../components/TeamForm.vue";
+import StudentForm, {IStudentFormValidation} from "../../components/StudentForm.vue";
+import {IFormData, IStudent, ITeam} from "../../types.ts";
 
 const studentFormOpen = ref(false)
 
-const teamState = defineModel<ITeam>("teamState", {
-  default: {
-    number: undefined,
-    nickname: "",
-    table: undefined,
-    section: undefined,
-    mentor: "",
-    assignedStudents: []
-  }
-});
+const toggleStudentForm = (state: boolean): void => {
+  studentFormOpen.value = state;
+}
 
-watch(teamState, () => {
-  console.log(teamState.value);
+const assignedStudents = ref<Array<IStudent>>([])
+
+const handleTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
+  console.log(team)
+  if (team.data === null) return;
+}
+
+const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValidation>): void => {
+  if (student.data !== null) toggleStudentForm(false)
+  else return
+  console.log("ADDING STUDENT", student.data)
+  assignedStudents.value.push(student.data)
+}
+
+watch(assignedStudents.value, () => {
+  console.log(assignedStudents.value)
 })
-
-const openStudentForm = () => {
-  studentFormOpen.value = true;
-}
-const closeStudentForm = () => {
-  studentFormOpen.value = false;
-}
-
-const addStudent = (student: IStudent) => {
-  teamState.value.assignedStudents.push(student);
-}
-const removeStudent = (index: number) => {
-  teamState.value.assignedStudents.splice(index, 1)
-}
-
-const handleTeamInformationSubmission = (teamInformation: ITeamInformationFormData) => {
-  teamState.value = {
-    ...teamState.value,
-    teamNumber: teamInformation.number,
-    nickname: teamInformation.nickname,
-    table: teamInformation.table,
-    section: teamInformation.section,
-    mentor: teamInformation.mentor
-  }
-}
-
-const handleStudentInformationSubmission = (studentInformation: IStudent) => {
-  if (studentInformation === null) return;
-  console.log("ADDING STUDENT", studentInformation)
-  addStudent(studentInformation)
-
-}
 
 </script>
 
@@ -71,8 +46,8 @@ const handleStudentInformationSubmission = (studentInformation: IStudent) => {
         <UserGroupIcon/>
       </template>
       <PaperContainer>
-        <TeamInformationForm form-id="teamInformation" @submit="handleTeamInformationSubmission" />
-        <IconButton type="submit" form="teamInformation">
+        <TeamForm form-id="teamForm" v-model:assigned-students="assignedStudents" @submit="handleTeamSubmission" />
+        <IconButton type="submit" form="teamForm">
           <template #icon>
             <PlusIcon />
           </template>
@@ -85,8 +60,11 @@ const handleStudentInformationSubmission = (studentInformation: IStudent) => {
       </template>
       <VerticalStack>
         <VerticalStack>
+          <p v-for="student in assignedStudents">
+            {{student.firstName}}
+          </p>
         </VerticalStack>
-        <ScrollButton :onclick="() => openStudentForm()" label="New Student">
+        <ScrollButton :onclick="() => toggleStudentForm(true)" label="New Student">
           <template #icon>
             <PlusIcon/>
           </template>
@@ -94,19 +72,19 @@ const handleStudentInformationSubmission = (studentInformation: IStudent) => {
       </VerticalStack>
     </Section>
   </VerticalStack>
-  <Dialog title="Assign Student" v-model:dialogOpen="studentFormOpen" @close="closeStudentForm">
+  <Dialog title="Assign Student" v-model:dialogOpen="studentFormOpen" @close="() => toggleStudentForm(false)">
     <template #icon>
       <UserPlusIcon />
     </template>
     <VerticalStack spacing="lg">
-      <StudentForm  form-id="studentInformation" @submit="handleStudentInformationSubmission" />
+      <StudentForm form-id="studentInformation" @submit="handleStudentSubmission" />
       <HorizontalStack class="justify-between">
         <IconButton type="submit" form="studentInformation">
           <template #icon>
             <PlusIcon />
           </template>
         </IconButton>
-        <IconButton :onclick="closeStudentForm">
+        <IconButton :onclick="() => toggleStudentForm(false)">
           <template #icon>
             <XMarkIcon />
           </template>
