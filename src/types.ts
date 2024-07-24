@@ -1,11 +1,5 @@
 export interface IFormData<Type> {
     data: Type;
-    validation: {
-        successful: boolean;
-        errors: {
-            [label: string]: string;
-        };
-    }
 }
 
 export interface IStudent {
