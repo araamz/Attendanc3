@@ -52,15 +52,20 @@ const routes = [
         ]
     },
     {
-        path: '/new_record',
+        path: '/grade',
         component: NewRecordView,
-        name: 'new_record'
+        name: 'grade'
     },
     {
         path: '/report',
         component: ReportView,
         name: 'generate_report'
     },
+    {
+        path: '/help',
+        component: ReportView,
+        name: 'help'
+    }
 ]
 
 const router = createRouter({

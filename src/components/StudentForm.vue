@@ -7,7 +7,7 @@ import VerticalStack from "./VerticalStack.vue";
 import InputContainer from "./InputContainer.vue";
 import {IFormData, IStudent} from "../types.ts";
 import PronounsSelector from "./PronounsSelector.vue";
-import {computed, reactive} from "vue";
+import {computed, reactive, watch} from "vue";
 import {v4 as uuid} from 'uuid';
 import ValidationDescriptor from "./ValidationDescriptor.vue";
 
@@ -39,6 +39,7 @@ const studentFormValidation = reactive<IStudentFormValidation>({
 const isFirstNameValid = computed<boolean>(() => firstName.value.trim() !== '')
 const isLastNameValid = computed<boolean>(() => lastName.value.trim() !== '')
 const isPreferredPronounsValid = computed<boolean>(() => preferredPronouns.value !== '')
+const hasValidationErrors = computed<boolean>(() => !isFirstNameValid || !isLastNameValid || !isPreferredPronounsValid)
 
 const validateForm = (field?: keyof IStudentFormValidation): IStudentFormValidation => {
 
@@ -81,7 +82,7 @@ function submitHandler(): IFormData<IStudent, IStudentFormValidation> {
       id: uuid(),
       firstName: firstName.value,
       lastName: lastName.value,
-      preferredName: preferredName.value,
+      preferredName: preferredName.value === null ? null : preferredName.value,
       preferredPronouns: preferredPronouns.value,
     }
   }
@@ -123,7 +124,7 @@ const {formId} = defineProps<IStudentFormProps>()
         </InputContainer>
         <PronounsSelector v-model="preferredPronouns" @blur="validateForm('preferredPronouns')"/>
       </VerticalStack>
-      <VerticalStack spacing="sm">
+      <VerticalStack :v-if="hasValidationErrors" spacing="sm">
         <ValidationDescriptor v-if="studentFormValidation.firstName !== null" label="First Name"
                               :message="studentFormValidation.firstName"/>
         <ValidationDescriptor v-if="studentFormValidation.lastName !== null" label="Last Name"

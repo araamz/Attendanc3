@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import PrimaryNavigation from "./components/PrimaryNavigation.vue";
   import PrimaryNavigationButton from "./components/PrimaryNavigationLink.vue";
-  import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon } from "@heroicons/vue/24/solid";
+  import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon, QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
   import {IRubric} from "./types.ts";
 
   // Add State for Report Selections - use Dependency Injection to provide functionality between RecordsListView and ReportView
@@ -74,7 +74,7 @@
   <div class="h-svh flex flex-col bg-neutral-200 overflow-y-auto md:flex-row-reverse">
       <router-view class="grow overflow-y-auto" />
     <PrimaryNavigation>
-      <PrimaryNavigationButton label="New Record" :to="{path: '/new_record'}">
+      <PrimaryNavigationButton label="Grade" :to="{name: 'grade'}">
         <template #icon>
           <PlusIcon />
         </template>
@@ -92,6 +92,11 @@
       <PrimaryNavigationButton label="Teams" :to="{name: 'team_list'}">
         <template #icon>
           <UserGroupIcon />
+        </template>
+      </PrimaryNavigationButton>
+      <PrimaryNavigationButton label="Help" :to="{name: 'help'}">
+        <template #icon>
+          <QuestionMarkCircleIcon />
         </template>
       </PrimaryNavigationButton>
     </PrimaryNavigation>

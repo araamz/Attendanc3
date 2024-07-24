@@ -7,14 +7,14 @@ export interface IStudent {
     id: string;
     firstName: string;
     lastName: string;
-    preferredName?: string;
+    preferredName: string | null;
     preferredPronouns: string;
 }
 export interface ITeam {
-    number?: number;
-    nickname?: string;
-    table?: number;
-    section?: number;
+    teamNumber: number;
+    nickname: string | null;
+    table: number;
+    section: number;
     mentor: string;
     assignedStudents: Array<IStudent>;
 }

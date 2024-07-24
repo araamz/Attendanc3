@@ -8,20 +8,22 @@ import VerticalStack from "../../components/VerticalStack.vue";
 import Section from "../../components/Section.vue";
 import PaperContainer from "../../components/PaperContainer.vue";
 import Dialog from "../../components/Dialog.vue";
-import TeamInformationForm, {ITeamInformationFormData} from "../../components/TeamInformationForm.vue";
+import TeamInformationForm, {ITeamInformationFormData} from "../../components/TeamForm.vue";
 import StudentForm from "../../components/StudentForm.vue";
 import HorizontalStack from "../../components/HorizontalStack.vue";
 import IconButton from "../../components/IconButton.vue";
 
 const studentFormOpen = ref(false)
 
-const teamState = ref<ITeam>({
-  number: undefined,
-  nickname: "",
-  table: undefined,
-  section: undefined,
-  mentor: "",
-  assignedStudents: []
+const teamState = defineModel<ITeam>("teamState", {
+  default: {
+    number: undefined,
+    nickname: "",
+    table: undefined,
+    section: undefined,
+    mentor: "",
+    assignedStudents: []
+  }
 });
 
 watch(teamState, () => {
@@ -35,6 +37,9 @@ const closeStudentForm = () => {
   studentFormOpen.value = false;
 }
 
+const addStudent = (student: IStudent) => {
+  teamState.value.assignedStudents.push(student);
+}
 const removeStudent = (index: number) => {
   teamState.value.assignedStudents.splice(index, 1)
 }
@@ -42,7 +47,7 @@ const removeStudent = (index: number) => {
 const handleTeamInformationSubmission = (teamInformation: ITeamInformationFormData) => {
   teamState.value = {
     ...teamState.value,
-    number: teamInformation.number,
+    teamNumber: teamInformation.number,
     nickname: teamInformation.nickname,
     table: teamInformation.table,
     section: teamInformation.section,
@@ -51,7 +56,10 @@ const handleTeamInformationSubmission = (teamInformation: ITeamInformationFormDa
 }
 
 const handleStudentInformationSubmission = (studentInformation: IStudent) => {
-  console.log(studentInformation)
+  if (studentInformation === null) return;
+  console.log("ADDING STUDENT", studentInformation)
+  addStudent(studentInformation)
+
 }
 
 </script>
@@ -64,6 +72,11 @@ const handleStudentInformationSubmission = (studentInformation: IStudent) => {
       </template>
       <PaperContainer>
         <TeamInformationForm form-id="teamInformation" @submit="handleTeamInformationSubmission" />
+        <IconButton type="submit" form="teamInformation">
+          <template #icon>
+            <PlusIcon />
+          </template>
+        </IconButton>
       </PaperContainer>
     </Section>
     <Section title="Assigned Students">
