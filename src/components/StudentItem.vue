@@ -40,7 +40,16 @@
       <StudentForm :form-id="formId" v-model:first-name="firstNameRef" v-model:last-name="lastNameRef"
                    v-model:preferred-name="preferredNameRef" v-model:preferred-pronouns="preferredPronounsRef" v-model:notes="notesRef" />
       <HorizontalStack>
-        <slot />
+        <button :onclick="() => submissionEditFunction(id, {
+          id: id,
+          firstName: firstNameRef,
+          lastName: lastNameRef,
+          preferredName: preferredNameRef,
+          preferredPronouns: preferredPronounsRef,
+          notes: notesRef
+        })">
+          Edit
+        </button>
       </HorizontalStack>
     </VerticalStack>
   </Dialog>
@@ -48,7 +57,7 @@
 
 <script setup lang="ts">
 
-import {IStudent} from "../types.ts";
+import { IStudent} from "../types.ts";
 import GridItem from "./GridItem.vue";
 import VerticalStack from "./VerticalStack.vue";
 import HorizontalStack from "./HorizontalStack.vue";
@@ -69,8 +78,9 @@ const toggleStudentEditorForm = (state: boolean): void => {
 
 interface IStudentItemProps extends IStudent {
   formId: string;
+  submissionEditFunction: (id: string, newStudent: IStudent) => boolean;
 }
-const {formId, firstName, lastName, preferredName, preferredPronouns, notes} = defineProps<IStudentItemProps>()
+const {formId, id, firstName, lastName, preferredName, preferredPronouns, notes} = defineProps<IStudentItemProps>()
 
 const firstNameRef = ref<string>(firstName)
 const lastNameRef = ref<string>(lastName)

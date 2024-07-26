@@ -33,8 +33,16 @@ const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValida
   assignedStudents.value.push(student.data)
 }
 
-const handleStudentEditSubmission = () => {
+const handleStudentEditSubmission = (id: string, newStudent: IStudent): boolean => {
+  assignedStudents.value.forEach((student: IStudent, index) => {
+    if (student.id === id) {
+      console.log("EDITED", assignedStudents.value[index], newStudent)
+      assignedStudents.value[index] = newStudent;
+      return true;
+    }
+  })
 
+  return false;
 }
 
 
@@ -50,6 +58,7 @@ const handleStudentEditSubmission = () => {
         <GridContainer>
           <StudentItem v-for="student in assignedStudents"
                        :key="student.id"
+                       :submission-edit-function="handleStudentEditSubmission"
                        :formId="['studentForm', 'editor', student.id].toString()"
                        :id="student.id"
                        :first-name="student.firstName"
@@ -57,11 +66,6 @@ const handleStudentEditSubmission = () => {
                        :preferred-name="student.preferredName"
                        :preferred-pronouns="student.preferredPronouns"
                        :notes="student.notes">
-              <IconButton type="submit" :form="['studentForm', 'editor', student.id].toString()">
-                <template #icon>
-                  <DocumentCheckIcon />
-                </template>
-              </IconButton>
           </StudentItem>
           <button :onclick="() => toggleStudentAssignmentForm(true)" label="New Student" class="aspect-square">
             <PaperContainer class="h-full flex flex-col gap-4 text-neutral-300 place-items-center place-content-center rounded-md hover:text-slate-600 ">
