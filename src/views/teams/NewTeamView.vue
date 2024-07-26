@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import ScrollButton from "../../components/ScrollButton.vue";
 import {PlusIcon, XMarkIcon} from "@heroicons/vue/16/solid";
 import {UserGroupIcon, UserPlusIcon, UserIcon} from "@heroicons/vue/20/solid";
-import {computed, ref} from "vue";
+import {ref} from "vue";
 import VerticalStack from "../../components/VerticalStack.vue";
 import Section from "../../components/Section.vue";
 import PaperContainer from "../../components/PaperContainer.vue";
@@ -13,8 +12,8 @@ import TeamForm, {ITeamFormValidation} from "../../components/TeamForm.vue";
 import StudentForm, {IStudentFormValidation} from "../../components/StudentForm.vue";
 import {IFormData, IStudent, ITeam} from "../../types.ts";
 import GridContainer from "../../components/GridContainer.vue";
-import GridItem from "../../components/GridItem.vue";
 import StudentItem from "../../components/StudentItem.vue";
+import {DocumentCheckIcon} from "@heroicons/vue/24/solid";
 
 const studentAssignmentFormOpen = ref(false)
 
@@ -34,6 +33,11 @@ const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValida
   assignedStudents.value.push(student.data)
 }
 
+const handleStudentEditSubmission = () => {
+
+}
+
+
 </script>
 
 <template>
@@ -46,15 +50,21 @@ const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValida
         <GridContainer>
           <StudentItem v-for="student in assignedStudents"
                        :key="student.id"
+                       :formId="['studentForm', 'editor', student.id].toString()"
                        :id="student.id"
                        :first-name="student.firstName"
                        :last-name="student.lastName"
                        :preferred-name="student.preferredName"
                        :preferred-pronouns="student.preferredPronouns"
-                       :notes="student.notes"
-          />
-          <button :onclick="() => toggleStudentAssignmentForm(true)" label="New Student">
-            <PaperContainer class="flex flex-col gap-4 text-neutral-300 place-items-center place-content-center aspect-square rounded-md hover:text-slate-600 ">
+                       :notes="student.notes">
+              <IconButton type="submit" :form="['studentForm', 'editor', student.id].toString()">
+                <template #icon>
+                  <DocumentCheckIcon />
+                </template>
+              </IconButton>
+          </StudentItem>
+          <button :onclick="() => toggleStudentAssignmentForm(true)" label="New Student" class="aspect-square">
+            <PaperContainer class="h-full flex flex-col gap-4 text-neutral-300 place-items-center place-content-center rounded-md hover:text-slate-600 ">
               <span>
                 <PlusIcon class="size-16" />
               </span>
