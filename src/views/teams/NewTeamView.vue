@@ -2,7 +2,7 @@
 import ScrollButton from "../../components/ScrollButton.vue";
 import {PlusIcon, XMarkIcon} from "@heroicons/vue/16/solid";
 import {UserGroupIcon, UserPlusIcon, UserIcon} from "@heroicons/vue/20/solid";
-import {ref, watch} from "vue";
+import {ref} from "vue";
 import VerticalStack from "../../components/VerticalStack.vue";
 import Section from "../../components/Section.vue";
 import PaperContainer from "../../components/PaperContainer.vue";
@@ -12,6 +12,9 @@ import IconButton from "../../components/IconButton.vue";
 import TeamForm, {ITeamFormValidation} from "../../components/TeamForm.vue";
 import StudentForm, {IStudentFormValidation} from "../../components/StudentForm.vue";
 import {IFormData, IStudent, ITeam} from "../../types.ts";
+import GridContainer from "../../components/GridContainer.vue";
+import GridItem from "../../components/GridItem.vue";
+import StudentItem from "../../components/StudentItem.vue";
 
 const studentFormOpen = ref(false)
 
@@ -22,55 +25,50 @@ const toggleStudentForm = (state: boolean): void => {
 const assignedStudents = ref<Array<IStudent>>([])
 
 const handleTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
-  console.log("NewTeamView.vue","handleTeamSubmission", team)
   if (team.data === null) return;
 }
 
 const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValidation>): void => {
-  console.log("NewTeamView.vue","handleStudentSubmission", student)
   if (student.data !== null) toggleStudentForm(false)
   else return
-  console.log("ADDING STUDENT", student.data)
   assignedStudents.value.push(student.data)
 }
-
-watch(assignedStudents.value, () => {
-  console.log(assignedStudents.value)
-})
 
 </script>
 
 <template>
   <VerticalStack spacing="lg">
-    <Section title="Team Information">
-      <template #icon>
-        <UserGroupIcon/>
-      </template>
-      <PaperContainer>
-        <TeamForm form-id="teamForm" v-model:assigned-students="assignedStudents" @submit="handleTeamSubmission" />
-        <IconButton type="submit" form="teamForm">
-          <template #icon>
-            <PlusIcon />
-          </template>
-        </IconButton>
-      </PaperContainer>
-    </Section>
     <Section title="Assigned Students">
       <template #icon>
         <UserIcon />
       </template>
       <VerticalStack>
-        <VerticalStack>
-          <p v-for="student in assignedStudents">
-            {{student.firstName}}
-          </p>
-        </VerticalStack>
+        <GridContainer>
+          <StudentItem v-for="student in assignedStudents" />
+        </GridContainer>
         <ScrollButton :onclick="() => toggleStudentForm(true)" label="New Student">
           <template #icon>
             <PlusIcon/>
           </template>
         </ScrollButton>
       </VerticalStack>
+    </Section>
+    <Section title="Team Information">
+      <template #icon>
+        <UserGroupIcon/>
+      </template>
+      <PaperContainer>
+        <VerticalStack spacing="lg">
+          <TeamForm form-id="teamForm" v-model:assigned-students="assignedStudents" @submit="handleTeamSubmission" />
+          <HorizontalStack>
+            <IconButton type="submit" form="teamForm">
+              <template #icon>
+                <PlusIcon />
+              </template>
+            </IconButton>
+          </HorizontalStack>
+        </VerticalStack>
+      </PaperContainer>
     </Section>
   </VerticalStack>
   <Dialog title="Assign Student" v-model:dialogOpen="studentFormOpen" @close="() => toggleStudentForm(false)">

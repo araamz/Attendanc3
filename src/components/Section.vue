@@ -12,7 +12,7 @@
 
 <template>
   <VerticalStack>
-    <HorizontalStack class="bg-slate-600 px-3 py-2 rounded-md text-white drop-shadow">
+    <HorizontalStack class="bg-slate-600 px-3 py-2 rounded-md text-white shadow">
       <span class="[&>*]:size-4">
         <slot name="icon" />
       </span>

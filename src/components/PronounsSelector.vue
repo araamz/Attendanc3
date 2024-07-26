@@ -1,6 +1,6 @@
 <template>
   <InputContainer label="Pronouns">
-    <HorizontalStack spacing="md" class="[&>*]:grow w-full">
+    <HorizontalStack spacing="md" class="[&>*]:grow w-full flex-wrap">
       <label
           class="has-[:checked]:bg-slate-600 has-[:checked]:text-white bg-neutral-100 text-neutral-400 grow flex justify-center p-1.5 rounded-md"
           :for="pronoun" v-for="pronoun in pronounsOptions">

@@ -9,6 +9,7 @@ export interface IStudent {
     lastName: string;
     preferredName: string | null;
     preferredPronouns: string;
+    notes: string | null;
 }
 export interface ITeam {
     teamNumber: number;

@@ -1,21 +1,23 @@
 <template>
   <form :id="formId" @submit.prevent="emit('submit', submitHandler())">
-    <VerticalStack spacing="lg">
-      <InputContainer label="Team Number">
-        <input type="number" v-model="teamNumber" @blur="validateForm('teamNumber')" name="number" placeholder="230"/>
-      </InputContainer>
-      <InputContainer label="Team Nickname">
-        <input type="text" v-model="nickname" name="nickname" placeholder="Dream Team"/>
-      </InputContainer>
-      <InputContainer label="Table">
-        <input type="number" v-model="table" @blur="validateForm('table')" name="table" placeholder="1"/>
-      </InputContainer>
-      <InputContainer label="Section">
-        <input type="number" v-model="section" @blur="validateForm('section')" name="section" placeholder="1204"/>
-      </InputContainer>
-      <InputContainer label="Mentor">
-        <input type="text" v-model="mentor" @blur="validateForm('mentor')" name="mentor" placeholder="John Doe"/>
-      </InputContainer>
+    <VerticalStack>
+      <VerticalStack spacing="lg">
+        <InputContainer label="Team Number">
+          <input type="number" v-model="teamNumber" @blur="validateForm('teamNumber')" name="number" placeholder="230"/>
+        </InputContainer>
+        <InputContainer label="Team Nickname">
+          <input type="text" v-model="nickname" name="nickname" placeholder="Dream Team"/>
+        </InputContainer>
+        <InputContainer label="Table">
+          <input type="number" v-model="table" @blur="validateForm('table')" name="table" placeholder="1"/>
+        </InputContainer>
+        <InputContainer label="Section">
+          <input type="number" v-model="section" @blur="validateForm('section')" name="section" placeholder="1204"/>
+        </InputContainer>
+        <InputContainer label="Mentor">
+          <input type="text" v-model="mentor" @blur="validateForm('mentor')" name="mentor" placeholder="John Doe"/>
+        </InputContainer>
+      </VerticalStack>
       <VerticalStack :v-if="hasValidationErrors" spacing="sm">
         <ValidationDescriptor v-if="teamFormValidation.teamNumber !== null" label="Team Number"
                               :message="teamFormValidation.teamNumber"/>
@@ -81,7 +83,7 @@ const isTableValid = computed<boolean>(() => table.value !== '');
 const isSectionValid = computed<boolean>(() => section.value !== '');
 const isMentorValid = computed<boolean>(() => mentor.value.trim() !== '');
 const isAssignedStudentsValid = computed<boolean>(() => assignedStudents.value.length > 0);
-const hasValidationErrors = computed<boolean>(() => !isTeamNumberValid || !isTableValid || !isSectionValid || !isMentorValid || !isAssignedStudentsValid);
+const hasValidationErrors = computed<boolean>(() => !isTeamNumberValid.value || !isTableValid.value || !isSectionValid.value || !isMentorValid.value || !isAssignedStudentsValid.value);
 
 const validateForm = (field?: keyof ITeamFormValidation): ITeamFormValidation => {
 

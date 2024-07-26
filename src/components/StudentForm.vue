@@ -39,7 +39,7 @@ const studentFormValidation = reactive<IStudentFormValidation>({
 const isFirstNameValid = computed<boolean>(() => firstName.value.trim() !== '')
 const isLastNameValid = computed<boolean>(() => lastName.value.trim() !== '')
 const isPreferredPronounsValid = computed<boolean>(() => preferredPronouns.value !== '')
-const hasValidationErrors = computed<boolean>(() => !isFirstNameValid || !isLastNameValid || !isPreferredPronounsValid)
+const hasValidationErrors = computed<boolean>(() => !isFirstNameValid.value || !isLastNameValid.value || !isPreferredPronounsValid.value)
 
 const validateForm = (field?: keyof IStudentFormValidation): IStudentFormValidation => {
 
@@ -122,6 +122,9 @@ const {formId} = defineProps<IStudentFormProps>()
           <input type="text" v-model="preferredName" name="preferredName" placeholder="JD"/>
         </InputContainer>
         <PronounsSelector v-model="preferredPronouns" @blur="validateForm('preferredPronouns')"/>
+        <InputContainer label="Notes">
+          <textarea rows="10" placeholder="Rides skateboards in their free time..." />
+        </InputContainer>
       </VerticalStack>
       <VerticalStack :v-if="hasValidationErrors" spacing="sm">
         <ValidationDescriptor v-if="studentFormValidation.firstName !== null" label="First Name"
