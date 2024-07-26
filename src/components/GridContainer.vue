@@ -3,8 +3,10 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-4 md:grid md:grid-cols-3 xl:grid-cols-6 content-center h-min">
-    <slot />
+  <div class="w-full @container">
+    <div class="flex flex-col gap-4 @md:grid @md:grid-cols-2 @3xl:grid-cols-3 content-center h-min">
+      <slot />
+    </div>
   </div>
 </template>
 

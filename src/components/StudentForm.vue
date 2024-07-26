@@ -23,6 +23,9 @@ const preferredName = defineModel<string>('preferredName', {
 const preferredPronouns = defineModel<string>('preferredPronouns', {
   default: ''
 })
+const notes = defineModel<string>('notes', {
+  default: ''
+})
 
 export interface IStudentFormValidation {
   firstName: string | null;
@@ -81,8 +84,9 @@ function submitHandler(): IFormData<IStudent, IStudentFormValidation> {
       id: uuid(),
       firstName: firstName.value,
       lastName: lastName.value,
-      preferredName: preferredName.value === null ? null : preferredName.value,
+      preferredName: preferredName.value === '' ? null : preferredName.value,
       preferredPronouns: preferredPronouns.value,
+      notes: notes.value === '' ? null : notes.value,
     }
   }
 
@@ -123,7 +127,7 @@ const {formId} = defineProps<IStudentFormProps>()
         </InputContainer>
         <PronounsSelector v-model="preferredPronouns" @blur="validateForm('preferredPronouns')"/>
         <InputContainer label="Notes">
-          <textarea rows="10" placeholder="Rides skateboards in their free time..." />
+          <textarea v-model="notes" rows="10" name="notes" placeholder="Rides skateboards in their free time..." />
         </InputContainer>
       </VerticalStack>
       <VerticalStack :v-if="hasValidationErrors" spacing="sm">

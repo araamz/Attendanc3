@@ -2,7 +2,7 @@
 import ScrollButton from "../../components/ScrollButton.vue";
 import {PlusIcon, XMarkIcon} from "@heroicons/vue/16/solid";
 import {UserGroupIcon, UserPlusIcon, UserIcon} from "@heroicons/vue/20/solid";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import VerticalStack from "../../components/VerticalStack.vue";
 import Section from "../../components/Section.vue";
 import PaperContainer from "../../components/PaperContainer.vue";
@@ -16,10 +16,10 @@ import GridContainer from "../../components/GridContainer.vue";
 import GridItem from "../../components/GridItem.vue";
 import StudentItem from "../../components/StudentItem.vue";
 
-const studentFormOpen = ref(false)
+const studentAssignmentFormOpen = ref(false)
 
-const toggleStudentForm = (state: boolean): void => {
-  studentFormOpen.value = state;
+const toggleStudentAssignmentForm = (state: boolean): void => {
+  studentAssignmentFormOpen.value = state;
 }
 
 const assignedStudents = ref<Array<IStudent>>([])
@@ -29,7 +29,7 @@ const handleTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
 }
 
 const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValidation>): void => {
-  if (student.data !== null) toggleStudentForm(false)
+  if (student.data !== null) toggleStudentAssignmentForm(false)
   else return
   assignedStudents.value.push(student.data)
 }
@@ -37,23 +37,36 @@ const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValida
 </script>
 
 <template>
-  <VerticalStack spacing="lg">
-    <Section title="Assigned Students">
+  <div class="flex flex-col gap-4 md:flex-row-reverse">
+    <Section title="Assigned Students" class="md:flex-grow">
       <template #icon>
         <UserIcon />
       </template>
       <VerticalStack>
         <GridContainer>
-          <StudentItem v-for="student in assignedStudents" />
+          <StudentItem v-for="student in assignedStudents"
+                       :key="student.id"
+                       :id="student.id"
+                       :first-name="student.firstName"
+                       :last-name="student.lastName"
+                       :preferred-name="student.preferredName"
+                       :preferred-pronouns="student.preferredPronouns"
+                       :notes="student.notes"
+          />
+          <button :onclick="() => toggleStudentAssignmentForm(true)" label="New Student">
+            <PaperContainer class="flex flex-col gap-4 text-neutral-300 place-items-center place-content-center aspect-square rounded-md hover:text-slate-600 ">
+              <span>
+                <PlusIcon class="size-16" />
+              </span>
+              <p class="font-medium">
+                NEW STUDENT
+              </p>
+            </PaperContainer>
+          </button>
         </GridContainer>
-        <ScrollButton :onclick="() => toggleStudentForm(true)" label="New Student">
-          <template #icon>
-            <PlusIcon/>
-          </template>
-        </ScrollButton>
       </VerticalStack>
     </Section>
-    <Section title="Team Information">
+    <Section title="Team Information" class="md:w-[300px] md:max-w-[400px]">
       <template #icon>
         <UserGroupIcon/>
       </template>
@@ -70,8 +83,8 @@ const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValida
         </VerticalStack>
       </PaperContainer>
     </Section>
-  </VerticalStack>
-  <Dialog title="Assign Student" v-model:dialogOpen="studentFormOpen" @close="() => toggleStudentForm(false)">
+  </div>
+  <Dialog title="Assign Student" v-model:dialogOpen="studentAssignmentFormOpen" @close="() => toggleStudentAssignmentForm(false)">
     <template #icon>
       <UserPlusIcon />
     </template>
@@ -83,7 +96,7 @@ const handleStudentSubmission = (student: IFormData<IStudent, IStudentFormValida
             <PlusIcon />
           </template>
         </IconButton>
-        <IconButton :onclick="() => toggleStudentForm(false)">
+        <IconButton :onclick="() => toggleStudentAssignmentForm(false)">
           <template #icon>
             <XMarkIcon />
           </template>
