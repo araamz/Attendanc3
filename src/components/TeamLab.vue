@@ -11,7 +11,7 @@
                        :preferred-pronouns="student.preferredPronouns" :notes="student.notes"
                        :preferred-name="student.preferredName"
                        :edit-button-handler="() => toggleStudentEditorDialog(true, student)"
-                       :delete-button-handler="() => handleStudentItemDeleteButton()"/>
+                       :delete-button-handler="() => handleStudentItemDeleteButton(student)"/>
 
           <GridButton :onclick="() => toggleStudentCreatorDialog(true)" label="NEW STUDENT">
             <template #icon>
@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref, watch} from "vue";
+import {ref, Ref} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
 import {UserGroupIcon, UserPlusIcon, UserIcon, PlusIcon} from "@heroicons/vue/20/solid";
 import VerticalStack from "./VerticalStack.vue";
@@ -147,8 +147,8 @@ const updateStudent = (student: IStudent): boolean => {
   return true;
 }
 
-const handleStudentItemDeleteButton = () => {
-  console.log("handleStudentItemDeleteButton");
+const handleStudentItemDeleteButton = (student: IStudent) => {
+  deleteStudent(student)
 }
 const handleStudentCreatorActionButton = () => {
   if (studentFormReference.value === undefined) throw new Error('studentFormReference is undefined.');
