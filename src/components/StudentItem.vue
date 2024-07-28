@@ -18,12 +18,12 @@
         {{ notes }}
       </p>
       <HorizontalStack class="justify-between">
-        <IconButton :onclick="() => toggleStudentEditorForm(true)">
+        <IconButton @click="editButtonHandler()">
           <template #icon>
             <PencilIcon/>
           </template>
         </IconButton>
-        <IconButton>
+        <IconButton @click="deleteButtonHandler()">
           <template #icon>
             <TrashIcon/>
           </template>
@@ -31,63 +31,25 @@
       </HorizontalStack>
     </VerticalStack>
   </GridItem>
-  <Dialog title="Modify Student" v-model:dialog-open="studentEditorFormOpen"
-          @close="() => toggleStudentEditorForm(false)">
-    <template #icon>
-      <UserIcon/>
-    </template>
-    <VerticalStack spacing="lg">
-      <StudentForm :form-id="formId" v-model:first-name="firstNameRef" v-model:last-name="lastNameRef"
-                   v-model:preferred-name="preferredNameRef" v-model:preferred-pronouns="preferredPronounsRef" v-model:notes="notesRef" />
-      <HorizontalStack>
-        <button :onclick="() => submissionEditFunction(id, {
-          id: id,
-          firstName: firstNameRef,
-          lastName: lastNameRef,
-          preferredName: preferredNameRef,
-          preferredPronouns: preferredPronounsRef,
-          notes: notesRef
-        })">
-          Edit
-        </button>
-      </HorizontalStack>
-    </VerticalStack>
-  </Dialog>
 </template>
 
 <script setup lang="ts">
 
-import { IStudent} from "../types.ts";
+interface IStudentItemProps extends IStudent {
+  editButtonHandler: Function;
+  deleteButtonHandler: Function;
+}
+
+import {IStudent} from "../types.ts";
 import GridItem from "./GridItem.vue";
 import VerticalStack from "./VerticalStack.vue";
 import HorizontalStack from "./HorizontalStack.vue";
 import Descriptor from "./Descriptor.vue";
 import DescriptorContainer from "./DescriptorContainer.vue";
-import Dialog from "./Dialog.vue";
-import {ref} from "vue";
-import {UserIcon} from "@heroicons/vue/20/solid";
 import IconButton from "./IconButton.vue";
 import {PencilIcon, TrashIcon} from "@heroicons/vue/16/solid";
-import StudentForm from "./StudentForm.vue";
 
-const studentEditorFormOpen = ref<boolean>(false);
-const toggleStudentEditorForm = (state: boolean): void => {
-  studentEditorFormOpen.value = state;
-}
-
-
-interface IStudentItemProps extends IStudent {
-  formId: string;
-  submissionEditFunction: (id: string, newStudent: IStudent) => boolean;
-}
-const {formId, id, firstName, lastName, preferredName, preferredPronouns, notes} = defineProps<IStudentItemProps>()
-
-const firstNameRef = ref<string>(firstName)
-const lastNameRef = ref<string>(lastName)
-const preferredPronounsRef = ref<string>(preferredPronouns)
-const preferredNameRef = ref<string>(preferredName === null ? '' : preferredName)
-const notesRef = ref<string>(notes === null ? '' : notes)
-
+const {firstName, lastName, preferredName, preferredPronouns, notes, editButtonHandler, deleteButtonHandler} = defineProps<IStudentItemProps>()
 </script>
 
 <style scoped>

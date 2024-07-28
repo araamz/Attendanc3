@@ -7,7 +7,7 @@ import VerticalStack from "./VerticalStack.vue";
 import InputContainer from "./InputContainer.vue";
 import {IFormData, IStudent} from "../types.ts";
 import PronounsSelector from "./PronounsSelector.vue";
-import {computed, reactive} from "vue";
+import {computed, reactive, ref} from "vue";
 import {v4 as uuid} from 'uuid';
 import ValidationDescriptor from "./ValidationDescriptor.vue";
 
@@ -76,17 +76,16 @@ const validateForm = (field?: keyof IStudentFormValidation): IStudentFormValidat
 }
 
 function submitHandler(): IFormData<IStudent, IStudentFormValidation> {
-
   const validation = validateForm()
   const data = () => {
     if (hasValidationErrors.value) return null;
     return {
-      id: uuid(),
-      firstName: firstName.value,
-      lastName: lastName.value,
+      id: id === undefined ? uuid() : id,
+      firstName: firstName.value.trim(),
+      lastName: lastName.value.trim(),
       preferredName: preferredName.value === '' ? null : preferredName.value,
-      preferredPronouns: preferredPronouns.value,
-      notes: notes.value === '' ? null : notes.value,
+      preferredPronouns: preferredPronouns.value.trim(),
+      notes: notes.value === '' ? null : notes.value.trim(),
     }
   }
 
@@ -96,27 +95,38 @@ function submitHandler(): IFormData<IStudent, IStudentFormValidation> {
   }
 }
 
+const studentFormReference = ref(undefined)
+const forceSubmit = (): boolean => {
+  if (studentFormReference.value === undefined) return false;
+  studentFormReference.value.requestSubmit();
+  return true;
+}
+
+defineExpose({
+  forceSubmit
+})
+
 
 interface IStudentFormEmits {
   (event: 'submit', data: IFormData<IStudent, IStudentFormValidation>): void
 }
-
 const emit = defineEmits<IStudentFormEmits>()
 
 interface IStudentFormProps {
   formId: string;
+  id?: string;
 }
 
-const {formId} = defineProps<IStudentFormProps>()
+const {formId, id} = defineProps<IStudentFormProps>()
 
 </script>
 
 <template>
-  <form :id="formId" @submit.prevent="emit('submit', submitHandler())">
+  <form ref="studentFormReference" :id="formId" @submit.prevent="emit('submit', submitHandler())">
     <VerticalStack>
       <VerticalStack spacing="lg">
         <InputContainer label="First Name">
-          <input type="text" v-model="firstName" @blur="validateForm('firstName')" placeholder="John"/>
+          <input type="text" v-model="firstName" @blur="validateForm('firstName')" name="firstName" placeholder="John"/>
         </InputContainer>
         <InputContainer label="Last Name">
           <input type="text" v-model="lastName" @blur="validateForm('lastName')" name="lastName"
@@ -127,7 +137,7 @@ const {formId} = defineProps<IStudentFormProps>()
         </InputContainer>
         <PronounsSelector v-model="preferredPronouns" @blur="validateForm('preferredPronouns')"/>
         <InputContainer label="Notes">
-          <textarea v-model="notes" rows="10" name="notes" placeholder="Rides skateboards in their free time..." />
+          <textarea v-model="notes" rows="10" name="notes" placeholder="Rides skateboards in their free time..."/>
         </InputContainer>
       </VerticalStack>
       <VerticalStack :v-if="hasValidationErrors" spacing="sm">

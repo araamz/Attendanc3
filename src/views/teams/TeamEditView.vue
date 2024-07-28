@@ -2,14 +2,11 @@
 
 
 
+import TeamLab from "../../components/TeamLab.vue";
 </script>
 
 <template>
-  <div>
-    <p>
-      TeamEdit
-    </p>
-  </div>
+  <TeamLab />
 </template>
 
 <style scoped>

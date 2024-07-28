@@ -1,5 +1,5 @@
 <template>
-  <form :id="formId" @submit.prevent="emit('submit', submitHandler())">
+  <form ref="teamFormReference" :id="formId" @submit.prevent="emit('submit', submitHandler())">
     <VerticalStack>
       <VerticalStack spacing="lg">
         <InputContainer label="Team Number">
@@ -40,7 +40,7 @@
 
 import VerticalStack from "./VerticalStack.vue";
 import InputContainer from "./InputContainer.vue";
-import {computed, reactive} from "vue";
+import {computed, reactive, ref} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
 import ValidationDescriptor from "./ValidationDescriptor.vue";
 
@@ -143,6 +143,13 @@ function submitHandler(): IFormData<ITeam, ITeamFormValidation> {
     validation: validation
   }
 
+}
+
+const teamFormReference = ref(undefined)
+const forceSubmit = (): boolean => {
+  if (teamFormReference.value === undefined) return false;
+  teamFormReference.value.requestSubmit();
+  return true;
 }
 
 interface ITeamFormEmits {
