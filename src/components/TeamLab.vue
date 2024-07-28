@@ -45,16 +45,26 @@
   </Dialog>
   <Dialog title="Student Editor" :dialog-open="state.studentEditorDialogOpen.value"
           @close="toggleStudentEditorDialog(false)" :action-button-handler="() => handleStudentCreatorActionButton()"
-          action-button-label="Create Student">
+          action-button-label="Update Student">
     <template #icon>
       <UserIcon/>
     </template>
-    <StudentForm ref="studentFormReference" form-id="studentFormEditor" @submit="handleStudentEditorSubmission" />
+    <StudentForm
+        v-if="state.studentEditorTarget.value !== null"
+        ref="studentFormReference"
+        form-id="studentFormEditor"
+        @submit="handleStudentEditorSubmission"
+        :id="state.studentEditorTarget.value.id"
+        :first-name="state.studentEditorTarget.value.firstName"
+        :last-name="state.studentEditorTarget.value.lastName"
+        :preferred-name="state.studentEditorTarget.value.preferredName"
+        :preferred-pronouns="state.studentEditorTarget.value.preferredPronouns"
+        :notes="state.studentEditorTarget.value.notes" />
   </Dialog>
 </template>
 
 <script setup lang="ts">
-import {ref, Ref} from "vue";
+import {ref, Ref, watch} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
 import {UserGroupIcon, UserPlusIcon, UserIcon, PlusIcon} from "@heroicons/vue/20/solid";
 import VerticalStack from "./VerticalStack.vue";
@@ -130,7 +140,6 @@ const deleteStudent = (student: IStudent): boolean => {
 const updateStudent = (student: IStudent): boolean => {
   if (student === null) return false
   if (!state.assignedStudents.value.some((existingStudent: IStudent) => existingStudent.id === student.id)) return false
-
   const studentIndex = state.assignedStudents.value.findIndex((existingStudent: IStudent) => existingStudent.id === student.id)
   state.assignedStudents.value[studentIndex] = {
     ...student,
@@ -154,7 +163,7 @@ const handleStudentCreatorSubmission = (newStudent: IFormData<IStudent, IStudent
 
 const handleStudentEditorSubmission = (updatedStudent: IFormData<IStudent, IStudentFormValidation>): void => {
   if (updatedStudent.data === null) return;
-  updateStudent(updatedStudent.data);
+  updateStudent(updatedStudent.data)
   toggleStudentEditorDialog(false)
 }
 
@@ -177,6 +186,7 @@ const toggleStudentEditorDialog = (open: boolean, student?: IStudent) => {
     state.studentEditorTarget.value = null;
   }
 }
+
 </script>
 
 <style scoped>
