@@ -1,147 +1,36 @@
 <script setup lang="ts">
-import { PlusIcon, XMarkIcon } from "@heroicons/vue/16/solid";
-import { UserGroupIcon, UserPlusIcon, UserIcon } from "@heroicons/vue/20/solid";
-import { ref } from "vue";
+import TeamLab from "../../components/TeamLab.vue";
+import {IFormData, ITeam} from "../../types.ts";
+import {ITeamFormValidation} from "../../components/TeamForm.vue";
 import VerticalStack from "../../components/VerticalStack.vue";
-import Section from "../../components/Section.vue";
-import PaperContainer from "../../components/PaperContainer.vue";
 import Dialog from "../../components/Dialog.vue";
-import HorizontalStack from "../../components/HorizontalStack.vue";
-import IconButton from "../../components/IconButton.vue";
-import TeamForm, { ITeamFormValidation } from "../../components/TeamForm.vue";
-import StudentForm, {
-    IStudentFormValidation,
-} from "../../components/StudentForm.vue";
-import { IFormData, IStudent, ITeam } from "../../types.ts";
-import GridContainer from "../../components/GridContainer.vue";
-import StudentItem from "../../components/StudentItem.vue";
-import { DocumentCheckIcon } from "@heroicons/vue/24/solid";
+import {ref} from "vue";
 
-const studentAssignmentFormOpen = ref(false);
+const teamSubmission = ref<ITeam | null>(null);
+const submissionFailure = ref<ITeamFormValidation | null>(null);
+const successfulDialog = ref<boolean>(false);
+const unsuccessfulDialog = ref<boolean>(false);
 
-const toggleStudentAssignmentForm = (state: boolean): void => {
-    studentAssignmentFormOpen.value = state;
-};
+const handleNewTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
+  if (team.data === null) {
+    submissionFailure.value = team.validation
+  } else {
+    successfulDialog.value = true;
+    teamSubmission.value = team.data
+  }
+}
 
-const assignedStudents = ref<Array<IStudent>>([]);
-
-const handleTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
-    if (team.data === null) return;
-};
-
-const handleStudentSubmission = (
-    student: IFormData<IStudent, IStudentFormValidation>,
-): void => {
-    if (student.data !== null) toggleStudentAssignmentForm(false);
-    else return;
-    assignedStudents.value.push(student.data);
-};
-
-const handleStudentEditSubmission = (
-    id: string,
-    newStudent: IStudent,
-): boolean => {
-    assignedStudents.value.forEach((student: IStudent, index) => {
-        if (student.id === id) {
-            console.log("EDITED", assignedStudents.value[index], newStudent);
-            assignedStudents.value[index] = newStudent;
-            return true;
-        }
-    });
-
-    return false;
-};
 </script>
 
 <template>
-    <div class="flex flex-col gap-4 md:flex-row-reverse">
-        <Section title="Assigned Students" class="md:flex-grow">
-            <template #icon>
-                <UserIcon />
-            </template>
-            <VerticalStack>
-                <GridContainer>
-                    <StudentItem
-                        v-for="student in assignedStudents"
-                        :key="student.id"
-                        :submission-edit-function="handleStudentEditSubmission"
-                        :formId="
-                            ['studentForm', 'editor', student.id].toString()
-                        "
-                        :id="student.id"
-                        :first-name="student.firstName"
-                        :last-name="student.lastName"
-                        :preferred-name="student.preferredName"
-                        :preferred-pronouns="student.preferredPronouns"
-                        :notes="student.notes"
-                    >
-                    </StudentItem>
-                    <button
-                        :onclick="() => toggleStudentAssignmentForm(true)"
-                        label="New Student"
-                        class="aspect-square"
-                    >
-                        <PaperContainer
-                            class="h-full flex flex-col gap-4 text-neutral-300 place-items-center place-content-center rounded-md hover:text-slate-600"
-                        >
-                            <span>
-                                <PlusIcon class="size-16" />
-                            </span>
-                            <p class="font-medium">NEW STUDENT</p>
-                        </PaperContainer>
-                    </button>
-                </GridContainer>
-            </VerticalStack>
-        </Section>
-        <Section title="Team Information" class="md:w-[300px] md:max-w-[400px]">
-            <template #icon>
-                <UserGroupIcon />
-            </template>
-            <PaperContainer>
-                <VerticalStack spacing="lg">
-                    <TeamForm
-                        form-id="teamForm"
-                        v-model:assigned-students="assignedStudents"
-                        @submit="handleTeamSubmission"
-                    />
-                    <HorizontalStack>
-                        <IconButton type="submit" form="teamForm">
-                            <template #icon>
-                                <PlusIcon />
-                            </template>
-                        </IconButton>
-                    </HorizontalStack>
-                </VerticalStack>
-            </PaperContainer>
-        </Section>
-    </div>
-    <Dialog
-        title="Assign Student"
-        v-model:dialogOpen="studentAssignmentFormOpen"
-        @close="() => toggleStudentAssignmentForm(false)"
-    >
-        <template #icon>
-            <UserPlusIcon />
-        </template>
-        <VerticalStack spacing="lg">
-            <StudentForm
-                form-id="studentInformation"
-                @submit="handleStudentSubmission"
-            />
-            <HorizontalStack class="justify-between">
-                <IconButton type="submit" form="studentInformation">
-                    <template #icon>
-                        <PlusIcon />
-                    </template>
-                </IconButton>
-                <IconButton :onclick="() => toggleStudentAssignmentForm(false)">
-                    <template #icon>
-                        <XMarkIcon />
-                    </template>
-                </IconButton>
-            </HorizontalStack>
-        </VerticalStack>
-    </Dialog>
+  <TeamLab @submit="handleNewTeamSubmission"/>
+  <Dialog :v-if="teamSubmission !== null" title="Team Created" :dialog-open="successfulDialog">
+    <VerticalStack>
+      <p class="font-semibold">
+        Team {{teamSubmission?.teamNumber}} Created!
+      </p>
+    </VerticalStack>
+  </Dialog>
 </template>
 
 <style scoped></style>

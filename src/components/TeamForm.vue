@@ -82,7 +82,7 @@ const isTeamNumberValid = computed<boolean>(() => teamNumber.value !== '');
 const isTableValid = computed<boolean>(() => table.value !== '');
 const isSectionValid = computed<boolean>(() => section.value !== '');
 const isMentorValid = computed<boolean>(() => mentor.value.trim() !== '');
-const isAssignedStudentsValid = computed<boolean>(() => assignedStudents.value.length > 0);
+const isAssignedStudentsValid = computed<boolean>(() => assignedStudents.value.length > 1);
 const hasValidationErrors = computed<boolean>(() => !isTeamNumberValid.value || !isTableValid.value || !isSectionValid.value || !isMentorValid.value || !isAssignedStudentsValid.value);
 
 const validateForm = (field?: keyof ITeamFormValidation): ITeamFormValidation => {
@@ -91,7 +91,7 @@ const validateForm = (field?: keyof ITeamFormValidation): ITeamFormValidation =>
   const tableValidationMessage = "Team's assigned table is missing.";
   const sectionValidationMessage = "Team's assigned section is missing.";
   const mentorValidationMessage = "Team's assigned mentor is missing.";
-  const assignedStudentsValidationMessage = "Student's are not assigned to this team.";
+  const assignedStudentsValidationMessage = "There must be at least two students assigned.";
 
   if (field === undefined) {
     teamFormValidation.teamNumber = null;

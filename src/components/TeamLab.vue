@@ -27,7 +27,7 @@
       </template>
       <PaperContainer>
         <VerticalStack>
-          <TeamForm form-id="teamForm" v-model:assigned-students="state.assignedStudents.value"/>
+          <TeamForm form-id="teamForm" v-model:assigned-students="state.assignedStudents.value" @submit="handleTeamSubmission"/>
           <HorizontalStack>
             <Button form="teamForm" type="submit">Create</Button>
           </HorizontalStack>
@@ -115,7 +115,7 @@ const state: ITeamLabState = {
 }
 
 interface ITeamLabEmits {
-  (event: 'createTeam', data: ITeam): void
+  (event: 'submit', data: IFormData<ITeam, ITeamFormValidation>): void
 }
 
 const emit = defineEmits<ITeamLabEmits>()
@@ -167,9 +167,8 @@ const handleStudentEditorSubmission = (updatedStudent: IFormData<IStudent, IStud
   toggleStudentEditorDialog(false)
 }
 
-const handleTeamCreatorSubmission = (newTeam: IFormData<ITeam, ITeamFormValidation>) => {
-  if (newTeam.data === null) return;
-  emit('createTeam', newTeam.data)
+const handleTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
+  emit('submit', team)
 }
 
 const toggleStudentCreatorDialog = (open: boolean) => {
