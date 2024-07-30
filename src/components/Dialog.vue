@@ -11,18 +11,18 @@
             {{ title }}
           </p>
         </HorizontalStack>
-        <PaperContainer class="overflow-y-auto">
-          <VerticalStack>
+        <PaperContainer class="flex flex-col overflow-y-auto p-0">
+          <div class="p-4">
             <slot/>
-            <HorizontalStack spacing="lg">
-              <Button @click="handleClose()">
-                Close
-              </Button>
-              <Button highlighted v-if="actionButtonHandler !== undefined" @click="actionButtonHandler()">
-                {{ actionButtonLabel }}
-              </Button>
-            </HorizontalStack>
-          </VerticalStack>
+          </div>
+          <HorizontalStack spacing="lg" class="border-t-2 border-neutral-100 p-4 flex-row-reverse">
+            <Button highlighted v-if="actionButtonHandler !== undefined" @click="actionButtonHandler()">
+              {{ actionButtonLabel }}
+            </Button>
+            <Button @click="handleClose()">
+              Close
+            </Button>
+          </HorizontalStack>
         </PaperContainer>
       </VerticalStack>
     </DialogPanel>
@@ -39,7 +39,7 @@ import VerticalStack from "./VerticalStack.vue";
 import HorizontalStack from "./HorizontalStack.vue";
 import Button from "./Button.vue";
 
-interface IDialogEmits {
+export interface IDialogEmits {
   (event: 'close', data: void): void
 }
 
@@ -54,7 +54,7 @@ const handleClose = () => {
   emit('close')
 }
 
-interface IDialogProps {
+export interface IDialogProps {
   title: string;
   actionButtonLabel?: string;
   actionButtonHandler?: Function;

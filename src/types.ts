@@ -45,6 +45,7 @@ export interface IStudentRecord {
 }
 
 export interface IRecord {
+    id: string;
     team: ITeam;
     studentRecords: Array<IStudentRecord>
     timestamp: Date;
