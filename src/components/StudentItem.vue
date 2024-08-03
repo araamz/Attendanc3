@@ -5,18 +5,20 @@
         <p class="font-medium">
           {{ firstName }} {{ lastName }}
         </p>
-        <p class="text-neutral-400 font-medium leading-0">
+        <p class="text-neutral-400 font-medium leading-0 text-sm">
           {{ preferredName }}
         </p>
       </HorizontalStack>
-      <DescriptorContainer>
+      <DescriptorContainer class="mb-auto">
         <Descriptor label="First Name" :value="firstName"/>
         <Descriptor label="Last Name" :value="lastName"/>
         <Descriptor label="Preferred Pronouns" :value="preferredPronouns"/>
       </DescriptorContainer>
-      <p class="font-medium mt-auto line-clamp-2 @xs/student-item:line-clamp-3 @sm/student-item:line-clamp-1">
-        {{ notes }}
-      </p>
+      <div class="line-clamp-1 @xs/student-item:line-clamp-3 @lg/student-item:line-clamp-5 bg-amber-100">
+        <p class="font-medium">
+          {{ notes }}
+        </p>
+      </div>
       <HorizontalStack class="justify-between">
         <IconButton @click="editButtonHandler()">
           <template #icon>
@@ -49,7 +51,15 @@ import DescriptorContainer from "./DescriptorContainer.vue";
 import IconButton from "./IconButton.vue";
 import {PencilIcon, TrashIcon} from "@heroicons/vue/16/solid";
 
-const {firstName, lastName, preferredName, preferredPronouns, notes, editButtonHandler, deleteButtonHandler} = defineProps<IStudentItemProps>()
+const {
+  firstName,
+  lastName,
+  preferredName,
+  preferredPronouns,
+  notes,
+  editButtonHandler,
+  deleteButtonHandler
+} = defineProps<IStudentItemProps>()
 </script>
 
 <style scoped>

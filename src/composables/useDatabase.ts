@@ -28,6 +28,13 @@ export function useDatabase() {
         return db.teams.add(sanitizedTeamObject)
     }
 
+    const getAllTeams = async (): Promise<Array<ITeam>> => {
+        return db.teams.toArray()
+    }
+    const getSingleTeam = (teamNumber: number): Promise<ITeam | undefined> => {
+        return db.teams.get(teamNumber)
+    }
+
     const editTeam = async (team: ITeam): Promise<number> => {
         try {
             return await db.teams.put(team)
@@ -36,6 +43,6 @@ export function useDatabase() {
         }
     }
 
-    return {createNewTeam, editTeam}
+    return {createNewTeam, getAllTeams, getSingleTeam, editTeam}
 
 }

@@ -3,10 +3,11 @@ import TeamLab from "../../components/TeamLab.vue";
 import {IFormData, ITeam} from "../../types.ts";
 import {ITeamFormValidation} from "../../components/TeamForm.vue";
 import {Ref, ref} from "vue";
-import {UserGroupIcon} from "@heroicons/vue/20/solid";
+import {useRouter} from "vue-router";
 import StatusDialog, {IStatusDialogProps} from "../../components/StatusDialog.vue";
 import {useDatabase} from "../../composables/useDatabase.ts";
 
+const router = useRouter();
 const {createNewTeam} = useDatabase();
 
 interface INewTeamViewState {
@@ -19,7 +20,6 @@ const state: INewTeamViewState = {
 }
 
 const handleNewTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
-  console.log(team)
   if (team.data === null) return;
 
   createNewTeam(team.data).then(() => {
@@ -29,8 +29,7 @@ const handleNewTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) =>
     }
     state.statusDialogOpen.value = true;
   }).catch((error: Error) => {
-
-    if (error.name === "KeyConstraint") {
+    if (error.name === "ConstraintError") {
       state.statusDialogState.value = {
         type: "error",
         message: `Team #${team.data?.teamNumber} already exists in the database.`
@@ -46,11 +45,20 @@ const handleNewTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) =>
   })
 }
 
+const handleStatusDialogClose = () => {
+  if ((state.statusDialogState.value !== null) && (state.statusDialogState?.value.type === "successful")) {
+    router.push({name: 'team_list'})
+  } else {
+    state.statusDialogState.value = null;
+    return;
+  }
+}
+
 </script>
 
 <template>
-  <TeamLab @submit="handleNewTeamSubmission"/>
-  <StatusDialog v-if="state.statusDialogState.value !== null" v-model:dialog-open="state.statusDialogOpen.value" :type="state.statusDialogState.value.type" :message="state.statusDialogState.value!.message" />
+  <TeamLab team-lab-mode="create" @submit="handleNewTeamSubmission"/>
+  <StatusDialog @close="handleStatusDialogClose()" v-if="state.statusDialogState.value !== null" v-model:dialog-open="state.statusDialogOpen.value" :type="state.statusDialogState.value.type" :message="state.statusDialogState.value!.message" />
 
 </template>
 

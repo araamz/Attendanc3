@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col gap-4 md:flex-row-reverse">
-    <Section title="Assign Students" class="md:flex-grow">
+    <Section title="Assigned Students" class="md:flex-grow">
       <template #icon>
-        <UserIcon/>
+        <UserGroupIcon/>
       </template>
       <VerticalStack>
         <GridContainer>
@@ -21,15 +21,17 @@
         </GridContainer>
       </VerticalStack>
     </Section>
-    <Section title="Create Team" class="md:w-[300px] md:max-w-[400px]">
+    <Section title="Team Information" class="md:w-[300px] md:max-w-[400px]">
       <template #icon>
-        <UserGroupIcon/>
+        <InformationCircleIcon />
       </template>
       <PaperContainer>
         <VerticalStack>
           <TeamForm form-id="teamForm" v-model:assigned-students="state.assignedStudents.value" @submit="handleTeamSubmission"/>
           <HorizontalStack>
-            <Button form="teamForm" type="submit">Create</Button>
+            <Button v-if="teamLabMode === 'create'" form="teamForm" type="submit" highlighted>Create Team</Button>
+            <Button v-if="teamLabMode === 'edit'" form="teamForm" type="submit" highlighted>Update Team</Button>
+            <Button v-if="teamLabMode === 'edit'" form="teamForm" type="submit">Delete Team</Button>
           </HorizontalStack>
         </VerticalStack>
       </PaperContainer>
@@ -66,7 +68,7 @@
 <script setup lang="ts">
 import {ref, Ref} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
-import {UserGroupIcon, UserPlusIcon, UserIcon, PlusIcon} from "@heroicons/vue/20/solid";
+import {UserGroupIcon, UserPlusIcon, UserIcon, PlusIcon, InformationCircleIcon} from "@heroicons/vue/20/solid";
 import VerticalStack from "./VerticalStack.vue";
 import GridContainer from "./GridContainer.vue";
 import GridButton from "./GridButton.vue";
@@ -86,9 +88,11 @@ export interface ITeamLabProps {
   section?: string;
   mentor?: string;
   assignedStudents?: Array<IStudent>;
+  teamLabMode: 'create' | 'edit';
 }
 
 const props = defineProps<ITeamLabProps>()
+const {teamLabMode} = props;
 
 export interface ITeamLabState {
   teamNumber: Ref<string>;

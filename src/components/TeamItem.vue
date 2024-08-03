@@ -1,51 +1,63 @@
 <script setup lang="ts">
-import {PencilIcon} from "@heroicons/vue/16/solid";
-import GridItem from "./GridItem.vue";
+import {IStudent, ITeam} from "../types.ts";
+import VerticalStack from "./VerticalStack.vue";
 import Descriptor from "./Descriptor.vue";
-import DescriptorContainer from "./DescriptorContainer.vue";
 import IconButton from "./IconButton.vue";
+import {PencilIcon} from "@heroicons/vue/16/solid";
+import DescriptorContainer from "./DescriptorContainer.vue";
+import HorizontalStack from "./HorizontalStack.vue";
+import GridItem from "./GridItem.vue";
+import {computed} from "vue";
+import {useRouter} from "vue-router";
 
-interface ITeamItemProps {
-  teamNumber: string;
+const {teamNumber, nickname, table, section, mentor, assignedStudents} = defineProps<ITeam>()
+
+const router = useRouter();
+const navigateEditTeamView = () => {
+  router.push({
+    name: "team_editor",
+    params: {
+      teamNumber: teamNumber
+    }
+  });
 }
 
-const {teamNumber} = defineProps<ITeamItemProps>()
-
-const editAction = () => {
-  console.log("editAction");
-}
-
-const deleteAction = () => {
-  console.log("deleteAction");
-}
+const studentNames = computed(() => assignedStudents.map((student: IStudent) => {
+    return `${student.firstName} ${student.lastName}`
+  }).join(', ')
+)
 
 </script>
 
 <template>
-  <GridItem class="flex flex-col gap-3">
-    <div class="flex flex-row justify-between items-center">
-      <p class="font-medium">
-        TEAM #243
-      </p>
-      <p class="text-neutral-400 font-medium leading-0">
-        Toxic ☢️
-      </p>
-    </div>
-    <DescriptorContainer>
-      <Descriptor label="table" value="6" />
-      <Descriptor label="section" value="1204" />
-      <Descriptor label="mentor" value="John Doe" />
-    </DescriptorContainer>
-      <p class="mt-auto font-medium">
-        Emily Johnson, Marcus Rodriguez, Amanda Smith, Benjamin Lee, Sophia Martinez
-      </p>
-    <div class="flex flex-row-reverse">
-      <IconButton :onclick="editAction" class="bg-neutral-100 text-neutral-300 aspect-square p-1.5 rounded-full">
-        <template #icon>
-          <PencilIcon />
-        </template>
-      </IconButton>
-    </div>
+  <GridItem class=" flex @container/team-item">
+    <VerticalStack class="w-full">
+      <HorizontalStack class="justify-between items-center">
+        <p class="font-medium">
+          TEAM #{{ teamNumber }}
+        </p>
+        <p class="text-neutral-400 font-medium leading-0 text-sm">
+          {{nickname}}
+        </p>
+      </HorizontalStack>
+      <DescriptorContainer class="mb-auto">
+        <Descriptor label="Table" :value="String(table)"/>
+        <Descriptor label="Section" :value="String(section)"/>
+        <Descriptor label="Mentor" :value="mentor"/>
+      </DescriptorContainer>
+      <div class="line-clamp-2 @xs/team-item:line-clamp-3 @lg/team-item:line-clamp-5">
+        <p class="font-medium">
+          {{ studentNames }}
+        </p>
+      </div>
+      <HorizontalStack class="justify-between">
+        <IconButton @click="navigateEditTeamView()">
+          <template #icon>
+            <PencilIcon/>
+          </template>
+        </IconButton>
+      </HorizontalStack>
+    </VerticalStack>
   </GridItem>
 </template>
 

@@ -40,7 +40,7 @@ const routes = [
                 name: 'new_team'
             },
             {
-                path: 'edit/:teamId',
+                path: 'edit/:teamNumber',
                 component: TeamEditView,
                 name: 'team_editor',
             },
