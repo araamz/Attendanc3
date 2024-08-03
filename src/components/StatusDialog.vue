@@ -46,7 +46,7 @@ import { useSlots } from 'vue'
 
 const slots = useSlots()
 
-interface IStatusDialogProps extends IDialogProps {
+export interface IStatusDialogProps extends IDialogProps {
   type: 'successful' | 'error' | 'confirmation';
   message?: string;
 }

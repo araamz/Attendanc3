@@ -2,39 +2,55 @@
 import TeamLab from "../../components/TeamLab.vue";
 import {IFormData, ITeam} from "../../types.ts";
 import {ITeamFormValidation} from "../../components/TeamForm.vue";
-import {computed, Ref, ref} from "vue";
+import {Ref, ref} from "vue";
 import {UserGroupIcon} from "@heroicons/vue/20/solid";
-import StatusDialog from "../../components/StatusDialog.vue";
+import StatusDialog, {IStatusDialogProps} from "../../components/StatusDialog.vue";
+import {useDatabase} from "../../composables/useDatabase.ts";
+
+const {createNewTeam} = useDatabase();
 
 interface INewTeamViewState {
-  teamSubmission: Ref<ITeam | null>;
-  successfulDialogOpen: Ref<boolean>;
-  errorDialogOpen: Ref<boolean>;
+  statusDialogOpen: Ref<boolean>;
+  statusDialogState: Ref<IStatusDialogProps | null>;
 }
 const state: INewTeamViewState = {
-  teamSubmission: ref<ITeam | null>(null),
-  successfulDialogOpen: ref<boolean>(false),
-  errorDialogOpen: ref<boolean>(false)
+  statusDialogOpen: ref<boolean>(false),
+  statusDialogState: ref<IStatusDialogProps | null>(null)
 }
 
 const handleNewTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
-  if (team.data !== null) return;
-  state.successfulDialogOpen.value = true;
-}
+  console.log(team)
+  if (team.data === null) return;
 
-const successfulMessage = computed(() => {
-  if (state.teamSubmission !== null) return `Team #${state.teamSubmission.value?.teamNumber} is successfully created.`
-})
+  createNewTeam(team.data).then(() => {
+    state.statusDialogState.value = {
+      type: "successful",
+      message: `Team #${team.data?.teamNumber} successfully added to database.`
+    }
+    state.statusDialogOpen.value = true;
+  }).catch((error: Error) => {
+
+    if (error.name === "KeyConstraint") {
+      state.statusDialogState.value = {
+        type: "error",
+        message: `Team #${team.data?.teamNumber} already exists in the database.`
+      }
+    } else {
+      state.statusDialogState.value = {
+        type: "error",
+        message: `An unknown database error occurred while adding Team #${team.data?.teamNumber}.`
+      }
+    }
+
+    state.statusDialogOpen.value = true;
+  })
+}
 
 </script>
 
 <template>
   <TeamLab @submit="handleNewTeamSubmission"/>
-  <StatusDialog v-if="state.teamSubmission !== null" v-model:dialog-open="state.successfulDialogOpen.value" :title="state.teamSubmission.value?.teamNumber" type="error" :message="successfulMessage">
-    <template #icon>
-      <UserGroupIcon />
-    </template>
-  </StatusDialog>
+  <StatusDialog v-if="state.statusDialogState.value !== null" v-model:dialog-open="state.statusDialogOpen.value" :type="state.statusDialogState.value.type" :message="state.statusDialogState.value!.message" />
 
 </template>
 

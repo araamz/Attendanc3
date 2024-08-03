@@ -85,7 +85,7 @@ function submitHandler(): IFormData<IStudent, IStudentFormValidation> {
       lastName: lastName.value.trim(),
       preferredName: preferredName.value === '' ? null : preferredName.value,
       preferredPronouns: preferredPronouns.value.trim(),
-      notes: notes.value === '' ? null : notes.value.trim(),
+      notes: notes.value.trim() === '' ? null : notes.value.trim(),
     };
   };
 

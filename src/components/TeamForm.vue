@@ -130,7 +130,7 @@ function submitHandler(): IFormData<ITeam, ITeamFormValidation> {
     if (hasValidationErrors.value) return null;
     return {
       teamNumber: Number(teamNumber.value),
-      nickname: nickname.value === null ? null : nickname.value,
+      nickname: nickname.value.trim() === '' ? null : nickname.value,
       table: Number(table.value),
       section: Number(section.value),
       mentor: mentor.value,

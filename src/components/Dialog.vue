@@ -3,7 +3,7 @@
           class="flex place-content-center absolute top-0 left-0 w-full h-svh backdrop-blur bg-black/50 ">
     <DialogPanel class="flex flex-col w-full max-h-full md:max-w-[350px] lg:max-w-[500px]">
       <VerticalStack class="p-10 overflow-y-auto">
-        <HorizontalStack class="text-white">
+        <HorizontalStack v-if="title !== undefined" class="text-white">
             <span class="[&>*]:size-4">
               <slot name="icon"/>
             </span>
@@ -11,11 +11,9 @@
             {{ title }}
           </p>
         </HorizontalStack>
-        <PaperContainer class="flex flex-col overflow-y-auto p-0">
-          <div class="p-4">
-            <slot/>
-          </div>
-          <HorizontalStack spacing="lg" class="border-t-2 border-neutral-100 p-4 flex-row-reverse">
+        <PaperContainer class="flex flex-col gap-4 overflow-y-auto">
+          <slot/>
+          <HorizontalStack class="border-t-2 border-neutral-100 pt-4 flex-row-reverse">
             <Button highlighted v-if="actionButtonHandler !== undefined" @click="actionButtonHandler()">
               {{ actionButtonLabel }}
             </Button>
@@ -55,7 +53,7 @@ const handleClose = () => {
 }
 
 export interface IDialogProps {
-  title: string;
+  title?: string;
   actionButtonLabel?: string;
   actionButtonHandler?: Function;
 }
