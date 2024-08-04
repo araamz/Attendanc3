@@ -4,10 +4,11 @@ import {onBeforeMount, ref, Ref, watch} from "vue";
 import {useDatabase} from "../../composables/useDatabase.ts";
 import {useRouter} from "vue-router";
 import StatusDialog, {IStatusDialogProps} from "../../components/StatusDialog.vue";
-import {ITeam} from "../../types.ts";
+import {IFormData, ITeam} from "../../types.ts";
+import {ITeamFormValidation} from "../../components/TeamForm.vue";
 
 const router = useRouter();
-const {getSingleTeam} = useDatabase()
+const {getSingleTeam, updateTeam, deleteTeam} = useDatabase()
 
 interface ITeamEditViewState {
   team: Ref<ITeam | null | undefined>;
@@ -29,12 +30,6 @@ watch(state.statusDialogState, () => {
 
 onBeforeMount(() => {
   getSingleTeam(Number(router.currentRoute.value.params.teamNumber)).then((team) => {
-    if (team === undefined) {
-      const error = new Error()
-      error.name = "UnknownTeam"
-      error.message = `Team #${router.currentRoute.value.params.teamNumber} is not found in the database.`
-      throw error
-    }
     state.team.value = team;
   }).catch((error) => {
     if (error.name === "UnknownTeam") {
@@ -58,6 +53,16 @@ const handleStatusDialogClose = () => {
   }
 }
 
+const handleUpdatedTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
+  if (team.data === null) return;
+  updateTeam(team.data).then((data) => {
+  })
+}
+
+const handleTeamDeletion = () => {
+  deleteTeam(Number(router.currentRoute.value.params.teamNumber))
+}
+
 </script>
 
 
@@ -65,16 +70,18 @@ const handleStatusDialogClose = () => {
   <TeamLab
       v-if="state.team.value"
       mode="edit"
-      :team-number="String(state.team.value?.teamNumber)"
+      :team-number="state.team.value?.teamNumber"
       :nickname="String(state.team.value?.nickname)"
-      :table="String(state.team.value?.table)"
-      :section="String(state.team.value?.section)"
+      :table="state.team.value?.table"
+      :section="state.team.value?.section"
       :mentor="String(state.team.value?.mentor)"
       :assigned-students="state.team.value?.assignedStudents"
+      @submit="handleUpdatedTeamSubmission"
+      @delete="handleTeamDeletion"
   />
   <StatusDialog v-if="state.statusDialogState.value !== null" :type="state.statusDialogState.value.type"
                 v-model:dialog-open="state.statusDialogOpen.value" :message="state.statusDialogState.value.message"
-                @close="handleStatusDialogClose()"/>
+                @close="handleStatusDialogClose"/>
 </template>
 
 <style scoped>

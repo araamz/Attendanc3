@@ -45,7 +45,7 @@ const studentNames = computed(() => assignedStudents.map((student: IStudent) => 
         <Descriptor label="Section" :value="String(section)"/>
         <Descriptor label="Mentor" :value="mentor"/>
       </DescriptorContainer>
-      <div class="line-clamp-2 @xs/team-item:line-clamp-3 @lg/team-item:line-clamp-5">
+      <div class="line-clamp-1 @md/team-item:line-clamp-3 @lg/team-item:line-clamp-5">
         <p class="font-medium">
           {{ studentNames }}
         </p>

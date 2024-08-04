@@ -90,10 +90,10 @@ import Dialog from "./Dialog.vue";
 import StudentItem from "./StudentItem.vue";
 
 export interface ITeamLabProps {
-  teamNumber?: string;
+  teamNumber?: number;
   nickname?: string;
-  table?: string;
-  section?: string;
+  table?: number;
+  section?: number;
   mentor?: string;
   assignedStudents?: Array<IStudent>;
   mode: 'create' | 'edit';
@@ -103,10 +103,10 @@ const props = defineProps<ITeamLabProps>()
 const {mode} = props;
 
 export interface ITeamLabState {
-  teamNumber: Ref<string>;
+  teamNumber: Ref<number | undefined>;
   nickname: Ref<string>;
-  table: Ref<string>;
-  section: Ref<string>;
+  table: Ref<number | undefined>;
+  section: Ref<number | undefined>;
   mentor: Ref<string>;
   assignedStudents: Ref<Array<IStudent>>;
   studentEditorTarget: Ref<IStudent | null>;
@@ -115,10 +115,10 @@ export interface ITeamLabState {
 }
 
 const state: ITeamLabState = {
-  teamNumber: ref<string>(props.teamNumber ? props.teamNumber : ""),
+  teamNumber: ref<number | undefined>(props.teamNumber ? props.teamNumber : undefined),
   nickname: ref<string>(props.nickname ? props.nickname : ""),
-  table: ref<string>(props.table ? props.table : ""),
-  section: ref<string>(props.section ? props.section : ""),
+  table: ref<number | undefined>(props.table ? props.table : undefined),
+  section: ref<number | undefined>(props.section ? props.section : undefined),
   mentor: ref<string>(props.mentor ? props.mentor : ""),
   assignedStudents: ref<Array<IStudent>>(props.assignedStudents ? props.assignedStudents : []),
   studentEditorTarget: ref<IStudent | null>(null),

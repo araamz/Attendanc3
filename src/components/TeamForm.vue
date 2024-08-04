@@ -44,16 +44,16 @@ import {computed, reactive, ref} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
 import ValidationDescriptor from "./ValidationDescriptor.vue";
 
-const teamNumber = defineModel<string>('teamNumber', {
+const teamNumber = defineModel<number | string>('teamNumber', {
   default: ''
 })
 const nickname = defineModel<string>('nickname', {
   default: ''
 })
-const table = defineModel<string>('table', {
+const table = defineModel<number | string>('table', {
   default: ''
 })
-const section = defineModel<string>('section', {
+const section = defineModel<number | string>('section', {
   default: ''
 })
 const mentor = defineModel<string>('mentor', {
@@ -133,7 +133,7 @@ function submitHandler(): IFormData<ITeam, ITeamFormValidation> {
       nickname: nickname.value.trim() === '' ? null : nickname.value,
       table: Number(table.value),
       section: Number(section.value),
-      mentor: mentor.value,
+      mentor: mentor.value.trim(),
       assignedStudents: assignedStudents.value
     }
   }
