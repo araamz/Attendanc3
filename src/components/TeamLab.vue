@@ -27,11 +27,19 @@
       </template>
       <PaperContainer>
         <VerticalStack>
-          <TeamForm form-id="teamForm" v-model:assigned-students="state.assignedStudents.value" @submit="handleTeamSubmission"/>
+          <TeamForm form-id="teamForm"
+                    v-model:team-number="state.teamNumber.value"
+                    v-model:nickname="state.nickname.value"
+                    v-model:table="state.table.value"
+                    v-model:section="state.section.value"
+                    v-model:mentor="state.mentor.value"
+                    v-model:assigned-students="state.assignedStudents.value"
+                    :freeze-team-number="mode === 'edit'"
+                    @submit="handleTeamSubmission"/>
           <HorizontalStack>
-            <Button v-if="teamLabMode === 'create'" form="teamForm" type="submit" highlighted>Create Team</Button>
-            <Button v-if="teamLabMode === 'edit'" form="teamForm" type="submit" highlighted>Update Team</Button>
-            <Button v-if="teamLabMode === 'edit'" form="teamForm" type="submit">Delete Team</Button>
+            <Button v-if="mode === 'create'" form="teamForm" type="submit" highlighted>Create Team</Button>
+            <Button v-if="mode === 'edit'" form="teamForm" type="submit" highlighted>Update Team</Button>
+            <Button v-if="mode === 'edit'" form="teamForm" :onclick="() => emit('delete')">Delete Team</Button>
           </HorizontalStack>
         </VerticalStack>
       </PaperContainer>
@@ -88,11 +96,11 @@ export interface ITeamLabProps {
   section?: string;
   mentor?: string;
   assignedStudents?: Array<IStudent>;
-  teamLabMode: 'create' | 'edit';
+  mode: 'create' | 'edit';
 }
 
 const props = defineProps<ITeamLabProps>()
-const {teamLabMode} = props;
+const {mode} = props;
 
 export interface ITeamLabState {
   teamNumber: Ref<string>;
@@ -120,6 +128,7 @@ const state: ITeamLabState = {
 
 interface ITeamLabEmits {
   (event: 'submit', data: IFormData<ITeam, ITeamFormValidation>): void
+  (event: 'delete'): void
 }
 
 const emit = defineEmits<ITeamLabEmits>()

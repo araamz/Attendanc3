@@ -3,7 +3,7 @@
     <VerticalStack>
       <VerticalStack spacing="lg">
         <InputContainer label="Team Number">
-          <input type="number" v-model="teamNumber" @blur="validateForm('teamNumber')" name="number" placeholder="230"/>
+          <input type="number" v-model="teamNumber" @blur="validateForm('teamNumber')" name="number" placeholder="230" :disabled="freezeTeamNumber" />
         </InputContainer>
         <InputContainer label="Team Nickname">
           <input type="text" v-model="nickname" name="nickname" placeholder="Dream Team"/>
@@ -151,6 +151,9 @@ const forceSubmit = (): boolean => {
   teamFormReference.value.requestSubmit();
   return true;
 }
+defineExpose({
+  forceSubmit
+});
 
 interface ITeamFormEmits {
   (event: 'submit', data: IFormData<ITeam, ITeamFormValidation>): void;
@@ -160,6 +163,7 @@ const emit = defineEmits<ITeamFormEmits>()
 
 interface ITeamFormProps {
   formId: string;
+  freezeTeamNumber?: boolean;
 }
 
 const {formId} = defineProps<ITeamFormProps>();

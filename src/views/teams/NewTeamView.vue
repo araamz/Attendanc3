@@ -57,7 +57,7 @@ const handleStatusDialogClose = () => {
 </script>
 
 <template>
-  <TeamLab team-lab-mode="create" @submit="handleNewTeamSubmission"/>
+  <TeamLab mode="create" @submit="handleNewTeamSubmission"/>
   <StatusDialog @close="handleStatusDialogClose()" v-if="state.statusDialogState.value !== null" v-model:dialog-open="state.statusDialogOpen.value" :type="state.statusDialogState.value.type" :message="state.statusDialogState.value!.message" />
 
 </template>

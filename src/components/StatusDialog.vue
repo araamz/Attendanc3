@@ -20,14 +20,6 @@
           Error!
         </p>
       </HorizontalStack>
-      <HorizontalStack spacing="sm" v-if="type === 'confirmation'" class="text-yellow-600">
-        <span class="[&>*]:size-6">
-          <ExclamationCircleIcon />
-        </span>
-        <p class="text-lg font-semibold leading-none">
-          Are you sure?
-        </p>
-      </HorizontalStack>
       <p class="font-medium" v-if="message !== undefined">
         {{message}}
       </p>
@@ -40,14 +32,14 @@
 
 import HorizontalStack from "./HorizontalStack.vue";
 import Dialog, {IDialogEmits, IDialogProps} from "./Dialog.vue";
-import {ExclamationCircleIcon, ExclamationTriangleIcon, CheckCircleIcon} from "@heroicons/vue/20/solid";
+import {ExclamationTriangleIcon, CheckCircleIcon} from "@heroicons/vue/20/solid";
 import VerticalStack from "./VerticalStack.vue";
 import { useSlots } from 'vue'
 
 const slots = useSlots()
 
 export interface IStatusDialogProps extends IDialogProps {
-  type: 'successful' | 'error' | 'confirmation';
+  type: 'successful' | 'error';
   message?: string;
 }
 const {type, message, title, actionButtonLabel, actionButtonHandler} = defineProps<IStatusDialogProps>();

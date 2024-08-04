@@ -58,14 +58,13 @@ const handleStatusDialogClose = () => {
   }
 }
 
-
 </script>
 
 
 <template>
   <TeamLab
-      v-if="state.team.value !== null"
-      team-lab-mode="edit"
+      v-if="state.team.value"
+      mode="edit"
       :team-number="String(state.team.value?.teamNumber)"
       :nickname="String(state.team.value?.nickname)"
       :table="String(state.team.value?.table)"
