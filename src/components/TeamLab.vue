@@ -91,7 +91,7 @@ import StudentItem from "./StudentItem.vue";
 
 export interface ITeamLabProps {
   teamNumber?: number;
-  nickname?: string;
+  nickname?: string | null;
   table?: number;
   section?: number;
   mentor?: string;
@@ -113,7 +113,6 @@ export interface ITeamLabState {
   studentEditorDialogOpen: Ref<boolean>;
   studentCreatorDialogOpen: Ref<boolean>;
 }
-
 const state: ITeamLabState = {
   teamNumber: ref<number | undefined>(props.teamNumber ? props.teamNumber : undefined),
   nickname: ref<string>(props.nickname ? props.nickname : ""),

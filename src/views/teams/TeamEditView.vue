@@ -6,20 +6,25 @@ import {useRouter} from "vue-router";
 import StatusDialog, {IStatusDialogProps} from "../../components/StatusDialog.vue";
 import {IFormData, ITeam} from "../../types.ts";
 import {ITeamFormValidation} from "../../components/TeamForm.vue";
+import ConfirmationDialog from "../../components/ConfirmationDialog.vue";
 
 const router = useRouter();
 const {getSingleTeam, updateTeam, deleteTeam} = useDatabase()
 
 interface ITeamEditViewState {
-  team: Ref<ITeam | null | undefined>;
+  team: Ref<ITeam | undefined>;
+  status: Ref<'failure' | 'fresh' | 'stale' | 'updated' | 'error'>;
   statusDialogOpen: Ref<boolean>;
   statusDialogState: Ref<IStatusDialogProps | null>;
+  confirmationDialogOpen: Ref<boolean>;
 }
 
 const state: ITeamEditViewState = {
-  team: ref<ITeam | null | undefined>(undefined),
+  team: ref<ITeam | undefined>(undefined),
+  status: ref('failure'),
   statusDialogOpen: ref<boolean>(false),
-  statusDialogState: ref<IStatusDialogProps | null>(null)
+  statusDialogState: ref<IStatusDialogProps | null>(null),
+  confirmationDialogOpen: ref<boolean>(false)
 }
 
 watch(state.statusDialogState, () => {
@@ -31,6 +36,7 @@ watch(state.statusDialogState, () => {
 onBeforeMount(() => {
   getSingleTeam(Number(router.currentRoute.value.params.teamNumber)).then((team) => {
     state.team.value = team;
+    state.status.value = 'fresh';
   }).catch((error) => {
     if (error.name === "UnknownTeam") {
       state.statusDialogState.value = {
@@ -43,24 +49,46 @@ onBeforeMount(() => {
         message: `An unknown database error occurred while searching Team #${router.currentRoute.value.params.teamNumber} in database.`
       }
     }
-    state.team.value = null;
+    state.status.value = 'failure';
+    state.statusDialogOpen.value = true;
   })
 })
 
 const handleStatusDialogClose = () => {
-  if (state.team.value === null) {
+  if (state.status.value === 'failure' || state.status.value === 'updated') {
     router.push({name: 'team_list'})
   }
+  return;
 }
 
 const handleUpdatedTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
   if (team.data === null) return;
-  updateTeam(team.data).then((data) => {
+  updateTeam(team.data).then(() => {
+    state.statusDialogState.value = {
+      type: "successful",
+      message: `Team #${Number(router.currentRoute.value.params.teamNumber)} has been updated in database.`,
+    }
+    state.status.value = 'updated';
+    state.statusDialogOpen.value = true;
   })
 }
 
 const handleTeamDeletion = () => {
-  deleteTeam(Number(router.currentRoute.value.params.teamNumber))
+  state.statusDialogOpen.value = false;
+  state.confirmationDialogOpen.value = true;
+
+}
+
+const deleteTeamAction = () => {
+  deleteTeam(Number(router.currentRoute.value.params.teamNumber)).then(() => {
+    state.confirmationDialogOpen.value = false;
+    state.statusDialogState.value = {
+      type: "successful",
+      message: `Team #${Number(router.currentRoute.value.params.teamNumber)} has been deleted from the database.`,
+    }
+    state.status.value = 'updated';
+    state.statusDialogOpen.value = true;
+  })
 }
 
 </script>
@@ -71,7 +99,7 @@ const handleTeamDeletion = () => {
       v-if="state.team.value"
       mode="edit"
       :team-number="state.team.value?.teamNumber"
-      :nickname="String(state.team.value?.nickname)"
+      :nickname="state.team.value?.nickname"
       :table="state.team.value?.table"
       :section="state.team.value?.section"
       :mentor="String(state.team.value?.mentor)"
@@ -82,6 +110,7 @@ const handleTeamDeletion = () => {
   <StatusDialog v-if="state.statusDialogState.value !== null" :type="state.statusDialogState.value.type"
                 v-model:dialog-open="state.statusDialogOpen.value" :message="state.statusDialogState.value.message"
                 @close="handleStatusDialogClose"/>
+  <ConfirmationDialog v-if="state.status.value !== 'failure'"  :message="`Delete Team #${router.currentRoute.value.params.teamNumber} from database?`" action-button-label="Delete Team" :action-button-handler="deleteTeamAction" :dialog-open="state.confirmationDialogOpen.value" />
 </template>
 
 <style scoped>
