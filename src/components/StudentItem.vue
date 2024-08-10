@@ -1,5 +1,5 @@
 <template>
-  <GridItem class="flex @container/student-item">
+  <GridItem class="flex @container/student box-content">
     <VerticalStack class="w-full">
       <HorizontalStack class="justify-between items-center">
         <p class="font-medium">
@@ -14,11 +14,9 @@
         <Descriptor label="Last Name" :value="lastName"/>
         <Descriptor label="Preferred Pronouns" :value="preferredPronouns"/>
       </DescriptorContainer>
-      <div class="line-clamp-1 @xs/student-item:line-clamp-3 @lg/student-item:line-clamp-5 bg-amber-100">
-        <p class="font-medium">
-          {{ notes }}
-        </p>
-      </div>
+      <p class="font-medium hidden @[12rem]/student:block @[12rem]/student:line-clamp-1 @[14rem]/student:line-clamp-2 @[18rem]/student:line-clamp-3">
+        {{ notes }}
+      </p>
       <HorizontalStack class="justify-between">
         <IconButton @click="editButtonHandler()">
           <template #icon>

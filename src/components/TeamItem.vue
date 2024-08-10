@@ -23,21 +23,21 @@ const navigateEditTeamView = () => {
 }
 
 const studentNames = computed(() => assignedStudents.map((student: IStudent) => {
-    return `${student.firstName} ${student.lastName}`
-  }).join(', ')
+      return student.preferredName ? `${student.firstName} ${student.lastName} (${student.preferredName})` : `${student.firstName} ${student.lastName}`;
+    }).join(', ')
 )
 
 </script>
 
 <template>
-  <GridItem class=" flex @container/team-item">
+  <GridItem class="flex @container/team-item box-content">
     <VerticalStack class="w-full">
       <HorizontalStack class="justify-between items-center">
         <p class="font-medium">
           TEAM #{{ teamNumber }}
         </p>
         <p class="text-neutral-400 font-medium leading-0 text-sm">
-          {{nickname}}
+          {{ nickname }}
         </p>
       </HorizontalStack>
       <DescriptorContainer class="mb-auto">
@@ -45,12 +45,10 @@ const studentNames = computed(() => assignedStudents.map((student: IStudent) => 
         <Descriptor label="Section" :value="String(section)"/>
         <Descriptor label="Mentor" :value="mentor"/>
       </DescriptorContainer>
-      <div class="line-clamp-1 @md/team-item:line-clamp-3 @lg/team-item:line-clamp-5">
-        <p class="font-medium">
-          {{ studentNames }}
-        </p>
-      </div>
-      <HorizontalStack class="justify-between">
+      <p class="font-medium @[0px]/team-item:hidden @[220px]/team-item:line-clamp-1 @[300px]/team-item:line-clamp-3 @[500px]/team-item:line-clamp-3">
+        {{ studentNames }}
+      </p>
+      <HorizontalStack class="flex-row-reverse">
         <IconButton @click="navigateEditTeamView()">
           <template #icon>
             <PencilIcon/>

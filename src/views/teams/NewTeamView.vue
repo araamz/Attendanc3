@@ -8,7 +8,7 @@ import StatusDialog, {IStatusDialogProps} from "../../components/StatusDialog.vu
 import {useDatabase} from "../../composables/useDatabase.ts";
 
 const router = useRouter();
-const {createNewTeam} = useDatabase();
+const {createTeam} = useDatabase();
 
 interface INewTeamViewState {
   statusDialogOpen: Ref<boolean>;
@@ -22,7 +22,7 @@ const state: INewTeamViewState = {
 const handleNewTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
   if (team.data === null) return;
 
-  createNewTeam(team.data).then(() => {
+  createTeam(team.data).then(() => {
     state.statusDialogState.value = {
       type: "successful",
       message: `Team #${team.data?.teamNumber} successfully added to database.`

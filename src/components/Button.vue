@@ -1,5 +1,6 @@
 <template>
-  <button :form="form" :type="type" @click="onclick ? onclick() : undefined" :disabled="disabled" :class="[backgroundColor, 'flex flex-row items-center rounded-md px-3 py-2 gap-1 hover:bg-slate-600 hover:text-white transition-colors']">
+  <button :form="form" :type="type" @click="onclick ? onclick() : undefined" :disabled="disabled" :class="[backgroundColor, 'flex flex-row items-center rounded-md border-2 px-2.5 py-1.5 gap-1 disabled:bg-white disabled:border-neutral-200 disabled:text-neutral-400 hover:border-slate-600 hover:bg-slate-600 hover:text-white transition-colors',
+  'disabled:bg-none']">
     <span class="font-medium leading-none">
       <slot />
     </span>
@@ -23,7 +24,7 @@
     button: 'button'
   })
 
-  const backgroundColor = computed(() => highlighted ? 'bg-slate-200 text-slate-500' : 'bg-neutral-100 text-neutral-400')
+  const backgroundColor = computed(() => highlighted ? 'bg-slate-200 border-slate-200 text-slate-500' : 'bg-neutral-100 border-neutral-100 text-neutral-400')
 
 </script>
 

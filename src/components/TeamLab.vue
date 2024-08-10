@@ -36,10 +36,10 @@
                     v-model:assigned-students="state.assignedStudents.value"
                     :freeze-team-number="mode === 'edit'"
                     @submit="handleTeamSubmission"/>
-          <HorizontalStack>
+          <HorizontalStack class="justify-between">
             <Button v-if="mode === 'create'" form="teamForm" type="submit" highlighted>Create Team</Button>
             <Button v-if="mode === 'edit'" form="teamForm" type="submit" highlighted>Update Team</Button>
-            <Button v-if="mode === 'edit'" form="teamForm" :onclick="() => emit('delete')">Delete Team</Button>
+            <Button v-if="mode === 'edit'" :onclick="() => emit('delete')">Delete Team</Button>
           </HorizontalStack>
         </VerticalStack>
       </PaperContainer>
@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, Ref} from "vue";
+import {computed, ref, Ref} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
 import {UserGroupIcon, UserPlusIcon, UserIcon, PlusIcon, InformationCircleIcon} from "@heroicons/vue/20/solid";
 import VerticalStack from "./VerticalStack.vue";

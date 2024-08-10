@@ -6,50 +6,60 @@ import {useRouter} from "vue-router";
 import StatusDialog, {IStatusDialogProps} from "../../components/StatusDialog.vue";
 import {IFormData, ITeam} from "../../types.ts";
 import {ITeamFormValidation} from "../../components/TeamForm.vue";
-import ConfirmationDialog from "../../components/ConfirmationDialog.vue";
 
 const router = useRouter();
 const {getSingleTeam, updateTeam, deleteTeam} = useDatabase()
+
+const unknownTeamState: IStatusDialogProps = {
+  type: "error",
+  message: `Team #${router.currentRoute.value.params.teamNumber} is not in database.`
+}
+const failureTeamState: IStatusDialogProps = {
+  type: "error",
+  message: `Unknown error fetching Team #${router.currentRoute.value.params.teamNumber} from database.`
+}
+const updatingErrorTeamState: IStatusDialogProps = {
+  type: "error",
+  message: `Error updating Team #${router.currentRoute.value.params.teamNumber} in database.`
+}
+const deletingErrorTeamState: IStatusDialogProps = {
+  type: "error",
+  message: `Error deleting Team #${router.currentRoute.value.params.teamNumber} in database.`
+}
+const updatedTeamState: IStatusDialogProps = {
+  type: "successful",
+  message: `Team #${router.currentRoute.value.params.teamNumber} is successfully updated in database.`,
+}
+const deletedTeamState: IStatusDialogProps = {
+  type: "successful",
+  message: `Team #${router.currentRoute.value.params.teamNumber} is successfully deleted in database.`
+}
 
 interface ITeamEditViewState {
   team: Ref<ITeam | undefined>;
   status: Ref<'failure' | 'fresh' | 'stale' | 'updated' | 'error'>;
   statusDialogOpen: Ref<boolean>;
   statusDialogState: Ref<IStatusDialogProps | null>;
-  confirmationDialogOpen: Ref<boolean>;
 }
 
 const state: ITeamEditViewState = {
   team: ref<ITeam | undefined>(undefined),
-  status: ref('failure'),
+  status: ref('fresh'),
   statusDialogOpen: ref<boolean>(false),
   statusDialogState: ref<IStatusDialogProps | null>(null),
-  confirmationDialogOpen: ref<boolean>(false)
 }
-
-watch(state.statusDialogState, () => {
-  if (state.statusDialogState.value?.type === "error") {
-    state.statusDialogOpen.value = true;
-  }
-})
 
 onBeforeMount(() => {
   getSingleTeam(Number(router.currentRoute.value.params.teamNumber)).then((team) => {
     state.team.value = team;
-    state.status.value = 'fresh';
-  }).catch((error) => {
+    state.status.value = 'fresh'
+  }).catch((error: Error) => {
+    state.status.value = 'failure'
     if (error.name === "UnknownTeam") {
-      state.statusDialogState.value = {
-        type: "error",
-        message: error.message
-      }
+      state.statusDialogState.value = unknownTeamState;
     } else {
-      state.statusDialogState.value = {
-        type: "error",
-        message: `An unknown database error occurred while searching Team #${router.currentRoute.value.params.teamNumber} in database.`
-      }
+      state.statusDialogState.value = failureTeamState;
     }
-    state.status.value = 'failure';
     state.statusDialogOpen.value = true;
   })
 })
@@ -58,37 +68,39 @@ const handleStatusDialogClose = () => {
   if (state.status.value === 'failure' || state.status.value === 'updated') {
     router.push({name: 'team_list'})
   }
-  return;
+  if (state.status.value === 'error' || state.status.value === 'fresh') {
+    state.status.value = 'stale'
+  }
+  state.statusDialogOpen.value = false;
 }
 
-const handleUpdatedTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) => {
+watch(state.status, () => {
+  console.log(state.status.value)
+})
+
+const handleUpdatedTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>): void => {
   if (team.data === null) return;
   updateTeam(team.data).then(() => {
-    state.statusDialogState.value = {
-      type: "successful",
-      message: `Team #${Number(router.currentRoute.value.params.teamNumber)} has been updated in database.`,
-    }
-    state.status.value = 'updated';
+    state.status.value = 'updated'
+    state.statusDialogState.value = updatedTeamState;
+    state.statusDialogOpen.value = true;
+  }).catch(() => {
+    state.status.value = 'error'
+    state.statusDialogState.value = updatingErrorTeamState;
     state.statusDialogOpen.value = true;
   })
 }
 
 const handleTeamDeletion = () => {
-  state.statusDialogOpen.value = false;
-  state.confirmationDialogOpen.value = true;
-
-}
-
-const deleteTeamAction = () => {
   deleteTeam(Number(router.currentRoute.value.params.teamNumber)).then(() => {
-    state.confirmationDialogOpen.value = false;
-    state.statusDialogState.value = {
-      type: "successful",
-      message: `Team #${Number(router.currentRoute.value.params.teamNumber)} has been deleted from the database.`,
-    }
-    state.status.value = 'updated';
+    state.statusDialogState.value = deletedTeamState;
+    state.status.value = 'updated'
+  }).catch(() => {
+    state.statusDialogState.value = deletingErrorTeamState;
     state.statusDialogOpen.value = true;
+    state.status.value = 'error'
   })
+  state.statusDialogOpen.value = true;
 }
 
 </script>
@@ -110,7 +122,6 @@ const deleteTeamAction = () => {
   <StatusDialog v-if="state.statusDialogState.value !== null" :type="state.statusDialogState.value.type"
                 v-model:dialog-open="state.statusDialogOpen.value" :message="state.statusDialogState.value.message"
                 @close="handleStatusDialogClose"/>
-  <ConfirmationDialog v-if="state.status.value !== 'failure'"  :message="`Delete Team #${router.currentRoute.value.params.teamNumber} from database?`" action-button-label="Delete Team" :action-button-handler="deleteTeamAction" :dialog-open="state.confirmationDialogOpen.value" />
 </template>
 
 <style scoped>

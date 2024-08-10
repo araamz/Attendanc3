@@ -44,7 +44,7 @@ export interface IStudentRecord {
     rubricGrade: Array<IRubricGrade>;
 }
 
-export interface IRecord {
+export interface ITeamRecord {
     id: string;
     team: ITeam;
     studentRecords: Array<IStudentRecord>

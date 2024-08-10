@@ -1,9 +1,9 @@
 import {db} from "./db.ts";
-import {IStudent, ITeam} from "../types.ts";
+import {ITeamRecord, IStudent, IStudentRecord, ITeam} from "../types.ts";
 
 export function useDatabase() {
 
-    const createNewTeam = async (team: ITeam) => {
+    const createTeam = async (team: ITeam) => {
 
         const sanitizedAssignedStudentsArray: Array<IStudent> = team.assignedStudents.map((student: IStudent) => {
             return {
@@ -87,6 +87,28 @@ export function useDatabase() {
         }
     };
 
-    return {createNewTeam, getAllTeams, getSingleTeam, updateTeam, deleteTeam}
+    /*const createRecord = async (record: ITeamRecord): Promise<IStudentRecord> => {
+
+        const sanitizedStudentRecords: IStudentRecord = record.studentRecords.map((studentRecord: IStudentRecord) => {
+            return {
+                student: {
+                    id: studentRecord.student.id,
+                    firstName: studentRecord.student.firstName,
+                    lastName: studentRecord.student.lastName,
+                    preferredName: studentRecord.student.preferredName,
+                    notes: studentRecord.student.notes
+                },
+                rubricGrade: {
+                    rubric: {}
+                }
+            }
+        })
+
+        const sanitizedRubricGrade = record.studentRecords.
+
+            return db.records.add(record)
+    }*/
+
+    return {createTeam, getAllTeams, getSingleTeam, updateTeam, deleteTeam}
 
 }
