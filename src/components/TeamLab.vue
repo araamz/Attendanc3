@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref, Ref} from "vue";
+import {ref, Ref} from "vue";
 import {IFormData, IStudent, ITeam} from "../types.ts";
 import {UserGroupIcon, UserPlusIcon, UserIcon, PlusIcon, InformationCircleIcon} from "@heroicons/vue/20/solid";
 import VerticalStack from "./VerticalStack.vue";

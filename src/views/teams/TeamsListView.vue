@@ -12,7 +12,7 @@
   const router = useRouter();
   const navigateNewTeamView = () => {
     router.push({
-      name: "new_team",
+      name: "team_creator",
     });
   }
 

@@ -2,14 +2,14 @@
 
 
 
-import ViewShell from "../components/ViewShell.vue";
-import VerticalStack from "../components/VerticalStack.vue";
-import RadioSelector from "../components/RadioSelector.vue";
-import {ITeam, IStudent, ITeamRecord, IStudentRecord} from "../types.ts";
-import {computed, onBeforeMount, Ref, ref, watch} from "vue";
-import { v4 as uuid } from 'uuid';
+import ViewShell from "../../components/ViewShell.vue";
+import VerticalStack from "../../components/VerticalStack.vue";
+import {ITeam, IStudent} from "../../types.ts";
+import {onBeforeMount, Ref, ref, watch} from "vue";
 import {useRouter} from "vue-router";
-import {useDatabase} from "../composables/useDatabase.ts";
+import {useDatabase} from "../../composables/useDatabase.ts";
+import RecordForm from "../../components/RecordForm.vue";
+import RecordLab from "../../components/RecordLab.vue";
 
 const router = useRouter();
 const {getAllTeams} = useDatabase();
@@ -43,18 +43,7 @@ watch(router.currentRoute, () => {
 
 
 <template>
-  <ViewShell>
-    <VerticalStack>
-      <VerticalStack>
-        <button @click="() => router.push({query: {
-          teamNumber: 32,
-          studentId: '33232333dfdf23'
-        }})">
-          Change
-        </button>
-      </VerticalStack>
-    </VerticalStack>
-  </ViewShell>
+  <RecordLab mode="create" />
 </template>
 
 <style scoped>

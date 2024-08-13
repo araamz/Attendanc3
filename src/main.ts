@@ -3,7 +3,7 @@ import './style.css'
 import App from './App.vue'
 import RecordsRoot from "./views/records/RecordsRoot.vue";
 import TeamsRoot from "./views/teams/TeamsRoot.vue";
-import NewRecordView from "./views/NewRecordView.vue";
+import NewRecordView from "./views/records/NewRecordView.vue";
 import RecordEditView from "./views/records/RecordEditView.vue";
 import RecordsListView from "./views/records/RecordsListView.vue";
 import NewTeamView from "./views/teams/NewTeamView.vue";
@@ -15,9 +15,14 @@ import ReportView from "./views/ReportView.vue";
 
 const routes = [
     {
-        path: '',
+        path: '/records',
         component: RecordsRoot,
         children: [
+            {
+              path: 'new',
+                component: NewRecordView,
+                name: 'record_creator',
+            },
             {
                 path: 'edit/:recordId',
                 component: RecordEditView,
@@ -26,7 +31,7 @@ const routes = [
             {
                 path: '',
                 component: RecordsListView,
-                name: 'record_list'
+                name: 'records_list'
             }
         ]
     },
@@ -37,7 +42,7 @@ const routes = [
             {
                 path: 'new',
                 component: NewTeamView,
-                name: 'new_team'
+                name: 'team_creator'
             },
             {
                 path: 'edit/:teamNumber',
@@ -47,14 +52,9 @@ const routes = [
             {
                 path: '',
                 component: TeamsListView,
-                name: 'team_list'
+                name: 'teams_list'
             }
         ]
-    },
-    {
-        path: '/grade',
-        component: NewRecordView,
-        name: 'grade'
     },
     {
         path: '/report',
@@ -62,7 +62,7 @@ const routes = [
         name: 'generate_report'
     },
     {
-        path: '/help',
+        path: '',
         component: ReportView,
         name: 'help'
     }

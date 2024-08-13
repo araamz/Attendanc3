@@ -47,7 +47,7 @@ const handleNewTeamSubmission = (team: IFormData<ITeam, ITeamFormValidation>) =>
 
 const handleStatusDialogClose = () => {
   if ((state.statusDialogState.value !== null) && (state.statusDialogState?.value.type === "successful")) {
-    router.push({name: 'team_list'})
+    router.push({name: 'teams_list'})
   } else {
     state.statusDialogState.value = null;
     return;
@@ -59,7 +59,6 @@ const handleStatusDialogClose = () => {
 <template>
   <TeamLab mode="create" @submit="handleNewTeamSubmission"/>
   <StatusDialog @close="handleStatusDialogClose()" v-if="state.statusDialogState.value !== null" v-model:dialog-open="state.statusDialogOpen.value" :type="state.statusDialogState.value.type" :message="state.statusDialogState.value!.message" />
-
 </template>
 
 <style scoped></style>

@@ -35,7 +35,6 @@ export interface IRubric {
 export interface IRubricGrade {
     rubric: IRubric;
     earnedSlice: IRubricSlice;
-    commonDeductionsSelections: Array<string>;
     comment: string;
 }
 

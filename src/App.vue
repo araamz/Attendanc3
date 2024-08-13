@@ -74,12 +74,12 @@
   <div class="h-svh flex flex-col bg-neutral-200 overflow-y-auto md:flex-row-reverse">
       <router-view class="grow overflow-y-auto" />
     <PrimaryNavigation>
-      <PrimaryNavigationButton label="Grade" :to="{name: 'grade'}">
+      <PrimaryNavigationButton label="Grade" :to="{name: 'record_creator'}">
         <template #icon>
           <PlusIcon />
         </template>
       </PrimaryNavigationButton>
-      <PrimaryNavigationButton label="Records" :to="{name: 'record_list'}">
+      <PrimaryNavigationButton label="Records" :to="{name: 'records_list'}">
         <template #icon>
           <ListBulletIcon />
         </template>
@@ -89,7 +89,7 @@
           <DocumentCheckIcon/>
         </template>
       </PrimaryNavigationButton>
-      <PrimaryNavigationButton label="Teams" :to="{name: 'team_list'}">
+      <PrimaryNavigationButton label="Teams" :to="{name: 'teams_list'}">
         <template #icon>
           <UserGroupIcon />
         </template>
