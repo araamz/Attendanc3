@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div>
-      <TeamSelector :team-selections="state.teamSelections.value" />
-    </div>
+    <p>
+      RecordLab
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
 import {IStudentRecord, ITeam, ITeamRecord} from "../types.ts";
-import {computed, onBeforeMount, ref, Ref} from "vue";
+import {onBeforeMount, ref, Ref, watch} from "vue";
 import TeamSelector from "./TeamSelector.vue";
 import {useDatabase} from "../composables/useDatabase.ts";
+import StudentSelector from "./StudentSelector.vue";
+import VerticalStack from "./VerticalStack.vue";
 
   export interface IRecordLabProps {
     teamRecord?: ITeamRecord;
@@ -31,7 +33,13 @@ import {useDatabase} from "../composables/useDatabase.ts";
     studentRecords: ref<Array<IStudentRecord>>([])
   }
 
+  const teamSelection = ref<ITeam | undefined>(undefined)
+
   const {getAllTeams} = useDatabase();
+
+  watch(teamSelection, () => {
+    console.log(teamSelection.value);
+  })
 
   onBeforeMount(() => {
     getAllTeams().then((data) => {

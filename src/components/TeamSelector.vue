@@ -1,47 +1,39 @@
 <template>
-  <PaperContainer>
-    <p class="text-xs font-semibold text-neutral-400 uppercase">
-      Team Selection
-    </p>
-    <div class="flex flex-row flex-wrap gap-4">
-      <div class="flex flex-row items-center basis-1/2 bg-neutral-100 pr-4 pl-2 py-2 rounded-md gap-2" v-for="team in teamSelections">
-        <div class="flex flex-col *:leading-none gap-1">
-          <p class="font-medium line-clamp-1">
-            {{ team.nickname ? team.nickname : `#${team.teamNumber}` }}
+  <InputContainer label="Team Selection">
+    <div
+        class="grid grid-cols-2 gap-4 @md/team-selector:grid-cols-3 @lg/team-selector:grid-cols-4 @xl/team-selector:flex  @xl/team-selector:flex-row @xl/team-selector:flex-wrap">
+      <label
+          v-for="team in teamSelections"
+          :key="team.teamNumber"
+          class="group has-[:checked]:bg-slate-600 has-[:checked]:text-white transition-colors flex flex-row justify-between items-center bg-neutral-100 p-4 rounded-md gap-3 @xl/team-selector:max-w-[160px] @xl/team-selector:w-[160px]"
+      >
+        <input class="appearance-none hidden" type="radio" :id="String(team.teamNumber)" v-model="teamSelectionModel" :value="team">
+        <div class="flex flex-col *:leading-none gap-1 peer-checked:text-white">
+          <p class="font-semibold text-lg line-clamp-1">
+            {{ generalized ? `#${team.teamNumber}` : team.nickname || `#${team.teamNumber}` }}
           </p>
-          <p class="text-sm">
+          <p class="text-xs font-medium text-nowrap">
+            Section {{ team.section }}
+          </p>
+          <p class="text-xs text-neutral-400 group-has-[:checked]:text-white font-medium">
             Table {{team.table}}
           </p>
-          <p class="text-sm">
-            Section {{team.section}}
-          </p>
         </div>
-        <button>
-          <InformationCircleIcon class="size-6 text-neutral-400" />
-        </button>
-      </div>
+      </label>
     </div>
-  </PaperContainer>
+  </InputContainer>
 </template>
 
 <script setup lang="ts">
+import {defineProps} from 'vue';
+import {ITeam} from '../types';
+import InputContainer from "./InputContainer.vue";
 
-import {IFormData, ITeam} from "../types.ts";
-import {computed} from "vue";
-import PaperContainer from "./PaperContainer.vue";
-import IconButton from "./IconButton.vue";
-import {InformationCircleIcon} from "@heroicons/vue/20/solid";
-
-interface ITeamSelectorProps {
-  teamSelections: Array<ITeam>;
+const {teamSelections, generalized} = defineProps<{
+  teamSelections: ITeam[];
   generalized?: boolean;
-}
-const {teamSelections, generalized} = defineProps<ITeamSelectorProps>()
+}>();
 
-const selectionModel = defineModel<ITeam | undefined>('currentTeamSelection')
+const teamSelectionModel = defineModel<ITeam | undefined>()
 
 </script>
-
-<style scoped>
-
-</style>

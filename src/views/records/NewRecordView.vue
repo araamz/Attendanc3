@@ -2,48 +2,63 @@
 
 
 
-import ViewShell from "../../components/ViewShell.vue";
-import VerticalStack from "../../components/VerticalStack.vue";
-import {ITeam, IStudent} from "../../types.ts";
+import {ITeam} from "../../types.ts";
 import {onBeforeMount, Ref, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import {useDatabase} from "../../composables/useDatabase.ts";
-import RecordForm from "../../components/RecordForm.vue";
+import Dialog from "../../components/Dialog.vue";
+import TeamSelector from "../../components/TeamSelector.vue";
 import RecordLab from "../../components/RecordLab.vue";
 
 const router = useRouter();
-const {getAllTeams} = useDatabase();
+const {getAllTeams, getSingleTeam} = useDatabase();
 
 interface INewRecordViewState {
-  currentTeamSelection: Ref<number | undefined>;
+  teamSelectorDialogOpen: Ref<boolean>;
   teamSelections: Ref<Array<ITeam>>;
-  currentStudentSelection: Ref<string | undefined>;
-  studentSelections: Ref<Array<IStudent>>;
+  currentTeamSelection: Ref<ITeam | undefined>;
 }
 const state: INewRecordViewState = {
-  currentTeamSelection: Number(router.currentRoute.value.query.teamNumber),
-  teamSelections: ref([]),
-  currentStudentSelection: ref(null),
-  studentSelections: ref([]),
+  teamSelectorDialogOpen: ref<boolean>(true),
+  teamSelections: ref<Array<ITeam>>([]),
+  currentTeamSelection: ref<ITeam | undefined>(undefined)
 }
 
 onBeforeMount(() => {
-  console.log("OnBeforeMount");
   getAllTeams().then((teams: Array<ITeam>) => {
     state.teamSelections.value = teams;
   })
 })
 
-watch(router.currentRoute, () => {
-  console.log("SEE CHANGE")
+const handleTeamSelection = () => {
+  console.log("Running", state.currentTeamSelection.value)
+  if (state.currentTeamSelection.value !== undefined) {
+    router.push({
+      query: {
+        teamNumber: state.currentTeamSelection.value.teamNumber
+    }})
+  }
+}
+
+onBeforeMount(() => {
+  if (router.currentRoute.value.query.teamNumber !== undefined) {
+    getSingleTeam(Number(router.currentRoute.value.query.teamNumber)).then((team) => {
+      state.currentTeamSelection.value = team;
+      state.teamSelectorDialogOpen.value = false;
+    });
+  }
+})
+
+watch(state.currentTeamSelection, () => {
+  console.log('NewRecordView', state.currentTeamSelection.value === undefined)
 })
 
 </script>
-
-
-
 <template>
-  <RecordLab mode="create" />
+  <Dialog :dialog-open="state.teamSelectorDialogOpen.value" action-button-label="Select Team" :action-button-handler="handleTeamSelection" :action-button-handler-disabled="state.currentTeamSelection.value === undefined" >
+      <TeamSelector v-model="state.currentTeamSelection.value" :team-selections="state.teamSelections.value" />
+  </Dialog>
+  <RecordLab v-if="router.currentRoute.value.query.teamNumber" mode="create" />
 </template>
 
 <style scoped>

@@ -12,9 +12,11 @@
           </p>
         </HorizontalStack>
         <PaperContainer class="flex flex-col gap-4 overflow-y-auto">
-          <slot/>
+          <div class="box-border overflow-y-auto">
+            <slot/>
+          </div>
           <HorizontalStack class="border-t-2 border-neutral-100 pt-4 flex-row-reverse">
-            <Button highlighted v-if="actionButtonHandler !== undefined" @click="actionButtonHandler()">
+            <Button :disabled="actionButtonHandlerDisabled" highlighted v-if="actionButtonHandler !== undefined" @click="actionButtonHandler()">
               {{ actionButtonLabel }}
             </Button>
             <Button @click="handleClose()">
@@ -56,9 +58,10 @@ export interface IDialogProps {
   title?: string;
   actionButtonLabel?: string;
   actionButtonHandler?: Function;
+  actionButtonHandlerDisabled?: boolean;
 }
 
-const {title, actionButtonLabel, actionButtonHandler} = defineProps<IDialogProps>()
+const {title, actionButtonLabel, actionButtonHandler, actionButtonHandlerDisabled} = defineProps<IDialogProps>()
 
 </script>
 
