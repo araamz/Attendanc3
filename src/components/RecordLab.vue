@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4">
-    <div v-if="team" class="flex flex-row justify-between items-center">
+    <div v-if="team" class="flex flex-row justify-between items-center md:justify-start md:gap-4">
       <p class="font-semibold text-lg">
         {{ team.nickname || `TEAM #${team.teamNumber}` }}
       </p>
@@ -9,6 +9,15 @@
       </p>
     </div>
     <StudentSelector v-model:student-selection="state.currentStudentSelection.value" :student-selections="team?.assignedStudents || []"/>
+    <div>
+      <div>
+
+      </div>
+      <div>
+        <RubricForm />
+        <RubricForm />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,6 +28,7 @@ import TeamSelector from "./TeamSelector.vue";
 import {useDatabase} from "../composables/useDatabase.ts";
 import StudentSelector from "./StudentSelector.vue";
 import {useRouter} from "vue-router";
+import RubricForm from "./RubricForm.vue";
 
 const router = useRouter();
 
