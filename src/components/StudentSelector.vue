@@ -1,40 +1,38 @@
 <template>
-  <PaperContainer class="@container/team-selector">
-    <InputContainer label="Student Selection">
-      <div class="grid grid-cols-2 gap-4 @md/team-selector:grid-cols-3 @lg/team-selector:grid-cols-4 @xl/team-selector:flex  @xl/team-selector:flex-row @xl/team-selector:flex-wrap">
+  <div class="@container/student-selector">
+      <div class="flex flex-col gap-4 @sm/student-selector:grid @sm/student-selector:grid-cols-2 @md/student-selector:grid-cols-3 @lg/student-selector:grid-cols-4 @xl/student-selector:flex  @xl/student-selector:flex-row @xl/student-selector:flex-wrap">
         <label
             v-for="student in studentSelections"
             :key="student.id"
-            class="has-[:checked]:bg-slate-600 has-[:checked]:text-white transition-colors flex flex-row justify-between items-center bg-neutral-100 p-4 rounded-md gap-3 @xl/team-selector:max-w-[160px] @xl/team-selector:w-[160px]"
+            class="group has-[:checked]:bg-slate-600 has-[:checked]:text-white transition-colors flex flex-row justify-between items-center bg-white p-4 rounded-md gap-3 @xl/student-selector:max-w-[170px] @xl/student-selector:w-[190px]"
         >
-          <input class="peer appearance-none hidden" type="radio" v-model="studentSelectionModel" :value="student">
-          <div class="flex flex-col *:leading-none gap-1">
+          <input class="peer appearance-none hidden" type="radio" v-model="studentSelectionModel" :value="student" :id="student.id">
+          <div class="flex shrink flex-col *:leading-none gap-1">
             <p class="font-semibold text-lg line-clamp-1">
               {{ generalized ? student.firstName : student.preferredName || student.firstName }}
             </p>
-            <p class="text-xs font-medium text-nowrap">
-              {{ student.preferredPronouns }}
+            <p class="text-xs font-medium text-nowrap text-neutral-400 group-has-[:checked]:text-white">
+              {{ student.lastName }}
             </p>
           </div>
-          <div class="peer-checked:text-white text-neutral-500 hidden flex-col items-center @xs/team-selector:flex *:leading-none gap-1">
-
-          </div>
+          <p class="text-neutral-400 font-medium text-xs group-has-[:checked]:text-white">
+            {{ student.preferredPronouns }}
+          </p>
         </label>
-      </div>
-    </InputContainer>
-  </PaperContainer>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-import PaperContainer from './PaperContainer.vue';
+import {defineProps, watch} from 'vue';
 import {IStudent} from '../types';
-import InputContainer from "./InputContainer.vue";
 
 const {studentSelections, generalized} = defineProps<{
   studentSelections: IStudent[];
   generalized?: boolean;
 }>();
 
+
 const studentSelectionModel = defineModel<IStudent | undefined>('studentSelection')
+
 </script>

@@ -62,6 +62,11 @@ const routes = [
         name: 'generate_report'
     },
     {
+      path: '/grade',
+      component: NewRecordView,
+      name: 'grade'
+    },
+    {
         path: '',
         component: ReportView,
         name: 'help'

@@ -2,70 +2,82 @@
   import PrimaryNavigation from "./components/PrimaryNavigation.vue";
   import PrimaryNavigationButton from "./components/PrimaryNavigationLink.vue";
   import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon, QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
-  import {IRubric} from "./types.ts";
+  import {IRubricGroup} from "./types.ts";
+  import {provide} from "vue";
 
   // Add State for Report Selections - use Dependency Injection to provide functionality between RecordsListView and ReportView
   // Make Rubrics Available = use Dependency Injection to provide functionality NewRecordView
   // Make Pronouns Available = use Dependency Injection to provide functionality NewTeamView
 
-  const billableHoursRubric: IRubric = {
-    label: "Billable Hours",
-    commonDeductions: [
-      "Absent.",
-      "Late first 5 minutes.",
-      "Late first 10 minutes.",
-      "Late first 15 minutes."
-    ],
-    slices: [
-      {
-        id: "70c41ff1-b234-48bd-b9d9-52629c8bf373",
-        score: 0,
-        label: "No Marks",
-        description: "Did not attend lab or multiple reasons why billable hours should not be awarded."
-      },
-      {
-        id: "c0852a50-cc22-4d81-a3fc-be002298a661",
-        score: 5,
-        label: "Partial Marks",
-        description: "Student is NOT on time and ready to participate at start of class."
-      },
-      {
-        id: "92478a18-db74-4fae-aab7-0e32e4277cfb",
-        score: 10,
-        label: "Full Marks",
-        description: "Student is on time and ready to participate at start of class."
-      }
-    ]
-  }
-  const labPreparationRubric: IRubric = {
-    label: "Lab Preparation",
-    commonDeductions: [
-        "Absent.",
-        "Incomplete notes on Page ...",
-        "Missing notes on Page ...",
-    ],
-    slices: [
-      {
-        id: "c18335d0-5d56-4268-bfa3-dc1c209fca3a",
-        score: 0,
-        label: "No Marks",
-        description: "Missing CSE Lecture 1 notes."
-      },
-      {
-        id: "be4c59e6-fc0c-46b0-866e-c0574d3d2ccd",
-        score: 2.5,
-        label: "Partial Marks",
-        description: "Some CSE Lecture 1 notes are filled in, but not all sections are complete."
-      },
-      {
-        id: "6cb45610-7331-4507-9bdb-fcd14400e84f",
-        score: 5,
-        label: "Full Marks",
-        description: "Lecture notes from CSE Lecture 1 are complete."
-      }
-    ]
-  }
-  const consolidatedRubrics: Array<IRubric> = [billableHoursRubric, labPreparationRubric]
+  const rubricGroups: Array<IRubricGroup> = [
+    {
+      id: '7948d1f6-ecf5-4d3f-9ac2-c19641dfd02f',
+      label: 'CSE Lab 1',
+      rubrics: [
+        {
+          id: '6cf5514f-5e5a-4a17-841d-b0af216ea5ff',
+          label: 'Billable Hours',
+          commonDeductions: [
+              'Late 5 minutes.',
+              'Late 10 minutes.',
+              'Late 15 minutes.',
+              'Late more than 15 minutes.'
+          ],
+          slices: [
+            {
+              id: '39c86758-1cd6-4794-899c-015f6cf46995',
+              score: 10,
+              label: 'Full Marks',
+              description: 'Student is on time and ready to participate at start of class.'
+            },
+            {
+              id: '445a0332-2a75-4dbd-b4e5-2355c65afd8d',
+              score: 5,
+              label: 'Partial Marks',
+              description: 'Student is NOT on time and ready to participate at start of class.'
+            },
+            {
+              id: '54408cbf-0942-42c5-a92d-2c9e94716d57',
+              score: 0,
+              label: 'No Marks',
+              description: 'Did not attend lab or multiple reasons why billable hours should not be awarded.'
+            }
+          ]
+        },
+        {
+          id: 'e2a8b581-a195-4459-8646-d5ad9fb521d6',
+          label: 'Lab Preparation',
+          commonDeductions: [
+              'Notes missing on Page 34.',
+              'Notes partially missing on Page 34.',
+              'Did not bring notebook to class.'
+          ],
+          slices: [
+            {
+              id: '0cf2be43-1b93-4064-ae55-c20b36909d77',
+              score: 5,
+              label: 'Full Marks',
+              description: 'Lecture notes from CSE Lecture 1 are complete.'
+            },
+            {
+              id: '24cc1f87-09ac-4422-8973-d536a73e699d',
+              score: 2.5,
+              label: 'Partial Marks',
+              description: 'Some CSE Lecture 1 notes are filled in, but not all sections are complete.',
+            },
+            {
+              id: 'fc22142a-bfc1-4cdb-b374-dc892e3574de',
+              score: 0,
+              label: 'No Marks',
+              description: 'Missing CSE Lecture 1 notes.'
+            }
+          ]
+        }
+      ]
+    }
+  ]
+
+  provide('rubricGroups', rubricGroups)
 
 
 </script>
@@ -74,7 +86,7 @@
   <div class="h-svh flex flex-col bg-neutral-200 overflow-y-auto md:flex-row-reverse">
       <router-view class="grow overflow-y-auto" />
     <PrimaryNavigation>
-      <PrimaryNavigationButton label="Grade" :to="{name: 'record_creator'}">
+      <PrimaryNavigationButton label="Grade" :to="{name: 'grade'}">
         <template #icon>
           <PlusIcon />
         </template>

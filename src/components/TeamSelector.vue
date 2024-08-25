@@ -1,11 +1,11 @@
 <template>
-  <InputContainer label="Team Selection">
+  <InputContainer label="Team Selection" class="@container/team-selector">
     <div
         class="grid grid-cols-2 gap-4 @md/team-selector:grid-cols-3 @lg/team-selector:grid-cols-4 @xl/team-selector:flex  @xl/team-selector:flex-row @xl/team-selector:flex-wrap">
       <label
           v-for="team in teamSelections"
           :key="team.teamNumber"
-          class="group has-[:checked]:bg-slate-600 has-[:checked]:text-white transition-colors flex flex-row justify-between items-center bg-neutral-100 p-4 rounded-md gap-3 @xl/team-selector:max-w-[160px] @xl/team-selector:w-[160px]"
+          class="group has-[:checked]:bg-slate-600 has-[:checked]:text-white transition-colors flex flex-row justify-between items-center bg-neutral-100 p-3 rounded-md gap-3 @xl/team-selector:max-w-[160px] @xl/team-selector:w-[160px]"
       >
         <input class="appearance-none hidden" type="radio" :id="String(team.teamNumber)" v-model="teamSelectionModel" :value="team">
         <div class="flex flex-col *:leading-none gap-1 peer-checked:text-white">

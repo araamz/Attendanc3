@@ -27,9 +27,15 @@ export interface IRubricSlice {
     description: string;
 }
 export interface IRubric {
+    id: string;
     label: string;
     commonDeductions: Array<string>;
     slices: Array<IRubricSlice>
+}
+export interface IRubricGroup {
+    id: string;
+    label: string;
+    rubrics: Array<IRubric>;
 }
 
 export interface IRubricGrade {
@@ -41,6 +47,7 @@ export interface IRubricGrade {
 export interface IStudentRecord {
     student: IStudent;
     rubricGrade: Array<IRubricGrade>;
+    rubricGroupLabel: string;
 }
 
 export interface ITeamRecord {

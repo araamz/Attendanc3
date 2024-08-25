@@ -16,7 +16,7 @@
             <slot/>
           </div>
           <HorizontalStack class="border-t-2 border-neutral-100 pt-4 flex-row-reverse">
-            <Button :disabled="actionButtonHandlerDisabled" highlighted v-if="actionButtonHandler !== undefined" @click="actionButtonHandler()">
+            <Button highlighted v-if="actionButtonHandler !== undefined" @click="actionButtonHandler()" :disableOption="actionButtonHandlerDisabled">
               {{ actionButtonLabel }}
             </Button>
             <Button @click="handleClose()">
@@ -62,6 +62,7 @@ export interface IDialogProps {
 }
 
 const {title, actionButtonLabel, actionButtonHandler, actionButtonHandlerDisabled} = defineProps<IDialogProps>()
+
 
 </script>
 
