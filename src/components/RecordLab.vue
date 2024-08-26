@@ -4,19 +4,20 @@
       <p class="font-semibold text-lg">
         {{ team.nickname || `TEAM #${team.teamNumber}` }}
       </p>
-      <p class="bg-slate-600 text-white text-sm h-min w-fit font-medium py-1 px-2 drop-shadow rounded-md" v-if="rubricGroup">
+      <p class="bg-slate-600 text-white text-sm h-min w-fit font-medium py-1 px-2 drop-shadow rounded-md"
+         v-if="rubricGroup">
         {{ rubricGroup.label }}
       </p>
     </div>
-    <StudentSelector v-model:student-selection="state.currentStudentSelection.value" :student-selections="team?.assignedStudents || []"/>
+    <StudentSelector v-model:student-selection="state.currentStudentSelection.value"
+                     :student-selections="team?.assignedStudents || []"/>
     <div>
       <div>
 
       </div>
-      <div>
-        <RubricForm />
-        <RubricForm />
-      </div>
+      <HorizontalStack v-if="rubricGroup">
+        <RubricForm v-for="rubric in rubricGroup.rubrics" :rubric="rubric"/>
+      </HorizontalStack>
     </div>
   </div>
 </template>
@@ -29,6 +30,7 @@ import {useDatabase} from "../composables/useDatabase.ts";
 import StudentSelector from "./StudentSelector.vue";
 import {useRouter} from "vue-router";
 import RubricForm from "./RubricForm.vue";
+import HorizontalStack from "./HorizontalStack.vue";
 
 const router = useRouter();
 
@@ -39,7 +41,6 @@ export interface IRecordLabProps {
 }
 
 const {team, rubricGroup, mode} = defineProps<IRecordLabProps>();
-
 export interface IRecordLabEmits {
   (event: 'delete'): void;
 }
@@ -64,7 +65,7 @@ const state: IRecordLabState = {
 }
 
 watch(state.currentStudentSelection, () => {
-  console.log('RecordLab', 'watch',state.currentStudentSelection);
+  console.log('RecordLab', 'watch', state.currentStudentSelection);
   if (state.currentStudentSelection.value !== undefined) {
     router.push({
       query: {

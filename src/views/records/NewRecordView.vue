@@ -42,9 +42,14 @@ onBeforeMount(() => {
       console.log(error)
     });
   }
+
+  if (router.currentRoute.value.query.rubricGroup !== undefined) {
+    state.currentRubricGroupSelection.value = rubricGroups.find((rubricGroup: IRubricGroup) => rubricGroup.id === router.currentRoute.value.query.rubricGroup)
+  }
 })
 
 watch(router.currentRoute, () => {
+  console.log('NewRecordView', rubricGroups)
   if (router.currentRoute.value.query.teamNumber === undefined && state.currentTeamSelection.value !== undefined) {
     state.currentTeamSelection.value = undefined;
     state.teamSelectorDialogOpen.value = true;
