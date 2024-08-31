@@ -7,7 +7,7 @@
 </script>
 
 <template>
-  <div class="flex flex-row justify-between items-center py-0.5">
+  <div class="flex flex-row gap-1 justify-between items-center py-0.5">
     <p class='text-xs font-medium text-neutral-400 uppercase'>
       {{ label }}
     </p>
