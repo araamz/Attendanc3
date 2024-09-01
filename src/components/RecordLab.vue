@@ -24,10 +24,8 @@
     </div>
     <StudentSelector v-model:student-selection="state.currentStudentSelection.value"
                      :student-selections="team?.assignedStudents || []"/>
-    <div class="flex flex-col gap-4 lg:grid lg:grid-cols-2" v-if="rubricGroup && state.currentStudentSelection.value">
-      <RubricForm v-for="rubric in rubricGroup.rubrics" :rubric="rubric"/>
-    </div>
-    <ScrollButton label="Submit Record">
+      <StudentRecordLab v-if="rubricGroup && state.currentStudentSelection.value" :student-record="currentStudentRecord" @record-update="data => {console.log(data)}" />
+    <ScrollButton :onclick="() =>{console.log('RecordLab', state.studentRecords.value)}" label="Submit Record">
       <template #icon>
         <ClipboardDocumentCheckIcon />
       </template>
@@ -48,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import {IRubricGroup, IStudent, IStudentRecord, ITeam, ITeamRecord} from "../types.ts";
+import {IRubric, IRubricGroup, IStudent, IStudentRecord, ITeam, ITeamRecord} from "../types.ts";
 import {computed, onBeforeMount, ref, Ref, watch} from "vue";
 import {ClipboardDocumentCheckIcon} from "@heroicons/vue/16/solid";
 import StudentSelector from "./StudentSelector.vue";
@@ -58,16 +56,19 @@ import Button from "./Button.vue";
 import {InformationCircleIcon} from "@heroicons/vue/20/solid";
 import Dialog from "./Dialog.vue";
 import ScrollButton from "./ScrollButton.vue";
+import StudentRecord from "./StudentRecordLab.vue";
+import StudentRecordLab from "./StudentRecordLab.vue";
 
 const router = useRouter();
 
 export interface IRecordLabProps {
   team?: ITeam;
   rubricGroup?: IRubricGroup;
+  completeStudentRecords?: Array<IStudentRecord>;
   mode: 'create' | 'edit';
 }
 
-const {team, rubricGroup, mode} = defineProps<IRecordLabProps>();
+const {team, rubricGroup, completeStudentRecords,  mode} = defineProps<IRecordLabProps>();
 
 export interface IRecordLabEmits {
   (event: 'delete'): void;
@@ -93,8 +94,27 @@ const state: IRecordLabState = {
   studentRecords: ref<Array<IStudentRecord>>([])
 }
 
+onBeforeMount(() => {
+  if (mode === 'create') {
+    state.studentRecords.value = team.assignedStudents.map((student: IStudent) => {
+      return {
+        student: student,
+        grades: rubricGroup.rubrics.map((rubric: IRubric) => {
+          return {
+            rubric: rubric,
+            earnedSlice: undefined,
+            comment: ""
+          }
+        }),
+        rubricGroup: rubricGroup
+      }
+    })
+  } else {
+    state.studentRecords.value = completeStudentRecords
+  }
+})
+
 watch(state.currentStudentSelection, () => {
-  console.log('RecordLab', 'watch', state.currentStudentSelection);
   if (state.currentStudentSelection.value !== undefined) {
     router.push({
       query: {
@@ -126,8 +146,6 @@ const processedStudentInformation = computed(() => {
     processedStudentInformationObject["Notes"] = state.currentStudentSelection.value.notes
   }
 
-  console.log(processedStudentInformationObject)
-
   return processedStudentInformationObject
 
 })
@@ -135,6 +153,11 @@ const processedStudentInformation = computed(() => {
 const openStudentInformationDialog = () => {
   state.studentInformationDialogOpen.value = true;
 }
+
+const currentStudentRecord = computed(() => {
+  return state.studentRecords.value.find((studentRecord: IStudentRecord) => studentRecord.student.id === state.currentStudentSelection.value?.id)
+})
+
 
 </script>
 

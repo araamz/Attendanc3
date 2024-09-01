@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 
-import {IRubricGroup, ITeam} from "../../types.ts";
+import {IRubricGroup, IStudentRecord, ITeam} from "../../types.ts";
 import {computed, inject, onBeforeMount, Ref, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import {useDatabase} from "../../composables/useDatabase.ts";
@@ -21,13 +21,15 @@ interface INewRecordViewState {
   teamSelections: Ref<Array<ITeam>>;
   currentTeamSelection: Ref<ITeam | undefined>;
   currentRubricGroupSelection: Ref<IRubricGroup | undefined>;
+  studentRecords: Ref<Array<IStudentRecord>>;
 }
 
 const state: INewRecordViewState = {
   teamSelectorDialogOpen: ref<boolean>(true),
   teamSelections: ref<Array<ITeam>>([]),
   currentTeamSelection: ref<ITeam | undefined>(undefined),
-  currentRubricGroupSelection: ref<IRubricGroup | undefined>(undefined)
+  currentRubricGroupSelection: ref<IRubricGroup | undefined>(undefined),
+  studentRecords: ref([])
 }
 
 onBeforeMount(() => {
@@ -49,7 +51,6 @@ onBeforeMount(() => {
 })
 
 watch(router.currentRoute, () => {
-  console.log('NewRecordView', rubricGroups)
   if (router.currentRoute.value.query.teamNumber === undefined && state.currentTeamSelection.value !== undefined) {
     state.currentTeamSelection.value = undefined;
     state.teamSelectorDialogOpen.value = true;

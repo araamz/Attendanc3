@@ -40,14 +40,14 @@ export interface IRubricGroup {
 
 export interface IRubricGrade {
     rubric: IRubric;
-    earnedSlice: IRubricSlice;
+    earnedSlice: IRubricSlice | undefined;
     comment: string;
 }
 
 export interface IStudentRecord {
     student: IStudent;
-    rubricGrade: Array<IRubricGrade>;
-    rubricGroupLabel: string;
+    grades: Array<IRubricGrade>;
+    rubricGroup: IRubricGroup;
 }
 
 export interface ITeamRecord {
