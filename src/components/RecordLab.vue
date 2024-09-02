@@ -43,10 +43,13 @@
       </div>
     </div>
   </Dialog>
+  <StatusDialog type="" dialog-open="">
+
+  </StatusDialog>
 </template>
 
 <script setup lang="ts">
-import {IRubric, IRubricGroup, IStudent, IStudentRecord, ITeam, ITeamRecord} from "../types.ts";
+import {IRubric, IRubricGrade, IRubricGroup, IStudent, IStudentRecord, ITeam, ITeamRecord} from "../types.ts";
 import {computed, onBeforeMount, ref, Ref, watch} from "vue";
 import {ClipboardDocumentCheckIcon} from "@heroicons/vue/16/solid";
 import StudentSelector from "./StudentSelector.vue";
@@ -58,6 +61,7 @@ import Dialog from "./Dialog.vue";
 import ScrollButton from "./ScrollButton.vue";
 import StudentRecord from "./StudentRecordLab.vue";
 import StudentRecordLab from "./StudentRecordLab.vue";
+import StatusDialog, {IStatusDialogProps} from "./StatusDialog.vue";
 
 const router = useRouter();
 
@@ -89,6 +93,8 @@ interface IRecordLabState {
 }
 
 const state: IRecordLabState = {
+  recordLabStatusDialogState: Ref<IStatusDialogProps | null>,
+  recordLabStatusDialogOpen: false,
   studentInformationDialogOpen: ref<boolean>(false),
   currentStudentSelection: ref<IStudent | undefined>(),
   studentRecords: ref<Array<IStudentRecord>>([])
@@ -158,7 +164,38 @@ const currentStudentRecord = computed(() => {
   return state.studentRecords.value.find((studentRecord: IStudentRecord) => studentRecord.student.id === state.currentStudentSelection.value?.id)
 })
 
+interface IRecordLabValidation {
+  earnedSlice: Array<{
+    student: IStudent;
+    errors: Array<{
+      rubric: IRubric;
+      message: string;
+    }>
+  }> | null;
+}
+const validation: IRecordLabValidation = {
+  earnedSlice: ref(null),
+}
 
+const validateRecord = (field: keyof IRecordLabValidation): IRecordLabValidation => {
+  if (field === 'earnedSlice') validation.earnedSlice = null;
+
+  if (field === 'earnedSlice') {
+    const errors: Array<{
+      student: IStudent;
+      errors: Array<{
+        rubric: IRubric;
+        message: string;
+      }>;
+    }
+    state.studentRecords.value.filter((studentRecord: IStudentRecord) => {
+      studentRecord.grades.map((rubricGrade: IRubricGrade) => {
+        if (rubricGrade.earnedSlice === undefined) {
+        }
+      })
+    })
+  }
+}
 </script>
 
 <style scoped>
