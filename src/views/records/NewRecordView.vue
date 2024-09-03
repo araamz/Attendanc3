@@ -83,7 +83,7 @@ const handleTeamSelectorDialogClose = () => {
 <template>
   <ViewShell>
     <RecordLab v-if="router.currentRoute.value.query.teamNumber && state.currentTeamSelection.value" :rubric-group="state.currentRubricGroupSelection.value" :team="state.currentTeamSelection.value"
-               mode="create"/>
+               mode="create" @create="data => {console.log(data)}"/>
     <Dialog :dialog-open="state.teamSelectorDialogOpen.value" action-button-label="Create Rubric"
             :action-button-handler="handleTeamSelection" :action-button-handler-disabled="buttonDisabled"
             @close="handleTeamSelectorDialogClose">

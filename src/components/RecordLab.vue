@@ -24,8 +24,8 @@
     </div>
     <StudentSelector v-model:student-selection="state.currentStudentSelection.value"
                      :student-selections="team?.assignedStudents || []"/>
-      <StudentRecordLab v-if="rubricGroup && state.currentStudentSelection.value" :student-record="currentStudentRecord" @record-update="data => {console.log(data)}" />
-    <ScrollButton :onclick="() =>{console.log('RecordLab', state.studentRecords.value)}" label="Submit Record">
+      <StudentRecordLab v-if="rubricGroup && state.currentStudentSelection.value" :student-record="currentStudentRecord" />
+    <ScrollButton :onclick="handleRecordSubmission" label="Submit Record">
       <template #icon>
         <ClipboardDocumentCheckIcon />
       </template>
@@ -43,8 +43,10 @@
       </div>
     </div>
   </Dialog>
-  <StatusDialog type="" dialog-open="">
-
+  <StatusDialog type="error" v-model:dialog-open="state.recordLabStatusDialogOpen.value" @close="handleStatusDialogClose">
+    <VerticalStack spacing="lg">
+      <RubricValidationError v-for="validator in validation.earnedSlice" :student="validator.student" :errors="validator.errors" :key="validator.student.id" />
+    </VerticalStack>
   </StatusDialog>
 </template>
 
@@ -54,7 +56,6 @@ import {computed, onBeforeMount, ref, Ref, watch} from "vue";
 import {ClipboardDocumentCheckIcon} from "@heroicons/vue/16/solid";
 import StudentSelector from "./StudentSelector.vue";
 import {useRouter} from "vue-router";
-import RubricForm from "./RubricForm.vue";
 import Button from "./Button.vue";
 import {InformationCircleIcon} from "@heroicons/vue/20/solid";
 import Dialog from "./Dialog.vue";
@@ -62,6 +63,9 @@ import ScrollButton from "./ScrollButton.vue";
 import StudentRecord from "./StudentRecordLab.vue";
 import StudentRecordLab from "./StudentRecordLab.vue";
 import StatusDialog, {IStatusDialogProps} from "./StatusDialog.vue";
+import RubricValidationError from "./RubricValidationError.vue";
+import VerticalStack from "./VerticalStack.vue";
+import { v4 as uuid } from 'uuid'
 
 const router = useRouter();
 
@@ -75,9 +79,10 @@ export interface IRecordLabProps {
 const {team, rubricGroup, completeStudentRecords,  mode} = defineProps<IRecordLabProps>();
 
 export interface IRecordLabEmits {
-  (event: 'delete'): void;
-  (event: 'update', data: IStudentRecord): void;
+  (event: 'create', data: ITeamRecord): void;
+  (event: 'edit', data: IStudentRecord): void;
 }
+const emit = defineEmits<IRecordLabEmits>()
 
 onBeforeMount(() => {
   if (router.currentRoute.value.query.student !== undefined && team !== undefined) {
@@ -87,17 +92,32 @@ onBeforeMount(() => {
 
 
 interface IRecordLabState {
+  recordLabStatusDialogOpen: Ref<boolean>;
   studentInformationDialogOpen: Ref<boolean>;
   currentStudentSelection: Ref<IStudent | undefined>;
   studentRecords: Ref<Array<IStudentRecord>>;
 }
 
 const state: IRecordLabState = {
-  recordLabStatusDialogState: Ref<IStatusDialogProps | null>,
-  recordLabStatusDialogOpen: false,
+  recordLabStatusDialogOpen: ref<boolean>(false),
   studentInformationDialogOpen: ref<boolean>(false),
   currentStudentSelection: ref<IStudent | undefined>(),
   studentRecords: ref<Array<IStudentRecord>>([])
+}
+
+export interface IRecordLabValidation {
+    student: IStudent;
+    errors: Array<{
+      rubric: IRubric;
+      message: string;
+    }>;
+}
+interface IRecordLabValidationState {
+  earnedSlice: Array<IRecordLabValidation>;
+}
+
+const validation: IRecordLabValidationState = {
+  earnedSlice: ref([]),
 }
 
 onBeforeMount(() => {
@@ -164,37 +184,61 @@ const currentStudentRecord = computed(() => {
   return state.studentRecords.value.find((studentRecord: IStudentRecord) => studentRecord.student.id === state.currentStudentSelection.value?.id)
 })
 
-interface IRecordLabValidation {
-  earnedSlice: Array<{
-    student: IStudent;
-    errors: Array<{
-      rubric: IRubric;
-      message: string;
-    }>
-  }> | null;
-}
-const validation: IRecordLabValidation = {
-  earnedSlice: ref(null),
-}
+const isEarnedSliceValid = computed<boolean>(() => {
+  const hasInvalidSlice = state.studentRecords.value.some(studentRecord =>
+      studentRecord.grades.some(rubricGrade => rubricGrade.earnedSlice === undefined)
+  );
 
-const validateRecord = (field: keyof IRecordLabValidation): IRecordLabValidation => {
-  if (field === 'earnedSlice') validation.earnedSlice = null;
+  return !hasInvalidSlice;
+});
 
-  if (field === 'earnedSlice') {
-    const errors: Array<{
-      student: IStudent;
-      errors: Array<{
-        rubric: IRubric;
-        message: string;
-      }>;
-    }
-    state.studentRecords.value.filter((studentRecord: IStudentRecord) => {
+const validateRecord = (field: keyof IRecordLabValidationState): IRecordLabValidationState => {
+  let fieldValid = true;
+  if (field === 'earnedSlice' && !isEarnedSliceValid.value) {
+    validation.earnedSlice = []
+    state.studentRecords.value.forEach((studentRecord: IStudentRecord) => {
+      const studentValidator: IRecordLabValidation = {
+        student: studentRecord.student,
+        errors: []
+      }
       studentRecord.grades.map((rubricGrade: IRubricGrade) => {
         if (rubricGrade.earnedSlice === undefined) {
+          fieldValid = false;
+          studentValidator.errors.push({
+            rubric: rubricGrade.rubric,
+            message: 'Rubric Slice selection is missing.'
+          })
         }
       })
+      if (studentValidator.errors.length > 0) validation.earnedSlice.push(studentValidator)
     })
   }
+  console.log('RecordLab', 'validateRecord', 'post', validation.earnedSlice)
+  return fieldValid;
+}
+
+
+const handleRecordSubmission = () => {
+  if (!validateRecord('earnedSlice')) {
+    state.recordLabStatusDialogOpen.value = true;
+    return
+  }
+
+  if (mode === 'create') {
+    emit('create', {
+      id: uuid(),
+      team: team,
+      studentRecords: state.studentRecords.value,
+      timestamp: new Date()
+    })
+  }
+
+  return;
+
+}
+
+const handleStatusDialogClose = () => {
+  if (state.recordLabStatusDialogOpen.value) state.recordLabStatusDialogOpen.value = false
 }
 </script>
 

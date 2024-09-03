@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps, watch} from 'vue';
+import {defineProps} from 'vue';
 import {IStudent} from '../types';
 
 const {studentSelections, generalized} = defineProps<{
