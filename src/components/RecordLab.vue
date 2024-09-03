@@ -232,8 +232,6 @@ const handleRecordSubmission = () => {
     })
   }
 
-  return;
-
 }
 
 const handleStatusDialogClose = () => {

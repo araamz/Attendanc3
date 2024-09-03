@@ -1,5 +1,15 @@
 import {db} from "./db.ts";
-import {ITeamRecord, IStudent, IStudentRecord, ITeam} from "../types.ts";
+import {
+    ITeamRecord,
+    IStudent,
+    IStudentRecord,
+    ITeam,
+    IRubricGrade,
+    IRubricSlice,
+    IRubric,
+    IRubricGroup
+} from "../types.ts";
+import RubricSlice from "../components/RubricSlice.vue";
 
 export function useDatabase() {
 
@@ -103,29 +113,8 @@ export function useDatabase() {
                 notes: student.notes
             }))
         };
-
-        const sanitizeRubricGrade = (rubricGrade: IRubricGrade): IRubricGrade => ({
-            rubric: {
-                id: rubricGrade.rubric.id,
-                label: rubricGrade.rubric.label,
-                commonDeductions: rubricGrade.rubric.commonDeductions,
-                slices: rubricGrade.rubric.slices.map((slice: IRubricSlice) => ({
-                    id: slice.id,
-                    score: slice.score,
-                    label: slice.label,
-                    description: slice.description
-                }))
-            },
-            earnedSlice: rubricGrade.earnedSlice ? {
-                id: rubricGrade.earnedSlice.id,
-                score: rubricGrade.earnedSlice.score,
-                label: rubricGrade.earnedSlice.label,
-                description: rubricGrade.earnedSlice.description
-            } : undefined,
-            comment: rubricGrade.comment
-        });
-
-        const sanitizedStudentRecords: Array<IStudentRecord> = record.studentRecords.map((studentRecord: IStudentRecord) => ({
+        
+        const sanitizedStudentRecords: Array<IStudentRecord> = record.studentRecords.map((studentRecord: IStudentRecord): IStudentRecord => ({
             student: {
                 id: studentRecord.student.id,
                 firstName: studentRecord.student.firstName,
@@ -134,23 +123,42 @@ export function useDatabase() {
                 preferredPronouns: studentRecord.student.preferredPronouns,
                 notes: studentRecord.student.notes
             },
-            grades: studentRecord.grades.map(sanitizeRubricGrade),
+            grades: studentRecord.grades.map((rubricGrade: IRubricGrade) => ({
+                rubric: {
+                    id: rubricGrade.rubric.id,
+                    label: rubricGrade.rubric.label,
+                    commonDeductions: rubricGrade.rubric.commonDeductions.map((deduction: string) => deduction),
+                    slices: rubricGrade.rubric.slices.map((rubricSlice: IRubricSlice) => ({
+                        id: rubricSlice.id,
+                        score: rubricSlice.score,
+                        label: rubricSlice.label,
+                        description: rubricSlice.description
+                    }))
+                },
+                earnedSlice: rubricGrade.earnedSlice ? {
+                    id: rubricGrade.earnedSlice.id,
+                    score: rubricGrade.earnedSlice.score,
+                    label: rubricGrade.earnedSlice.label,
+                    description: rubricGrade.earnedSlice.description
+                } : undefined,
+                comment: rubricGrade.comment
+            })),
             rubricGroup: {
                 id: studentRecord.rubricGroup.id,
                 label: studentRecord.rubricGroup.label,
                 rubrics: studentRecord.rubricGroup.rubrics.map((rubric: IRubric) => ({
                     id: rubric.id,
                     label: rubric.label,
-                    commonDeductions: rubric.commonDeductions,
-                    slices: rubric.slices.map((slice: IRubricSlice) => ({
-                        id: slice.id,
-                        score: slice.score,
-                        label: slice.label,
-                        description: slice.description
+                    commonDeductions: rubric.commonDeductions.map((deduction: string) => deduction),
+                    slices: rubric.slices.map((rubricSlice: IRubricSlice) => ({
+                        id: rubricSlice.id,
+                        score: rubricSlice.score,
+                        label: rubricSlice.label,
+                        description: rubricSlice.description
                     }))
                 }))
             }
-        }));
+        }))
 
         const formattedTimestamp = new Intl.DateTimeFormat('en-US', {
             year: 'numeric',

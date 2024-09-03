@@ -11,6 +11,7 @@ import RecordLab from "../../components/RecordLab.vue";
 import RubricGroupSelector from "../../components/RubricGroupSelector.vue";
 import VerticalStack from "../../components/VerticalStack.vue";
 import ViewShell from "../../components/ViewShell.vue";
+import StatusDialog, {IStatusDialogProps} from "../../components/StatusDialog.vue";
 
 const router = useRouter();
 const rubricGroups: Array<IRubricGroup> = inject('rubricGroups') || []
@@ -22,6 +23,8 @@ interface INewRecordViewState {
   currentTeamSelection: Ref<ITeam | undefined>;
   currentRubricGroupSelection: Ref<IRubricGroup | undefined>;
   studentRecords: Ref<Array<IStudentRecord>>;
+  statusDialogOpen: Ref<boolean>;
+  statusDialogState: Ref<IStatusDialogProps | null>;
 }
 
 const state: INewRecordViewState = {
@@ -29,7 +32,9 @@ const state: INewRecordViewState = {
   teamSelections: ref<Array<ITeam>>([]),
   currentTeamSelection: ref<ITeam | undefined>(undefined),
   currentRubricGroupSelection: ref<IRubricGroup | undefined>(undefined),
-  studentRecords: ref([])
+  studentRecords: ref([]),
+  statusDialogOpen: ref<boolean>(false),
+  statusDialogState: ref<IStatusDialogProps | null>(null)
 }
 
 onBeforeMount(() => {
@@ -51,6 +56,7 @@ onBeforeMount(() => {
 })
 
 watch(router.currentRoute, () => {
+  console.log('Router Watch')
   if (router.currentRoute.value.query.teamNumber === undefined && state.currentTeamSelection.value !== undefined) {
     state.currentTeamSelection.value = undefined;
     state.teamSelectorDialogOpen.value = true;
@@ -69,7 +75,7 @@ const handleTeamSelection = () => {
   }
 }
 
-const buttonDisabled = computed(() => {
+const rubricCreatorDisabled = computed(() => {
   return state.currentTeamSelection.value === undefined || state.currentRubricGroupSelection.value === undefined;
 })
 
@@ -80,13 +86,26 @@ const handleTeamSelectorDialogClose = () => {
 }
 
 const handleNewRecordSubmission = (record: ITeamRecord) => {
-  createRecord(record).then((res) => {
-    console.log(res)
+  createRecord(record).then((response) => {
+    state.statusDialogState.value = {
+      type: "successful",
+      message: `Successfully saved Record ${record.id} for Team #${record.team.teamNumber} to database.`
+    }
   }).catch(error => {
-    console.log(error)
+    state.statusDialogState.value = {
+      type: "error",
+      message: `Error occurred saving Record ${record.id} for Team #${record.team.teamNumber} to database. ${error.message}`
+    }
   })
+  state.statusDialogOpen.value = true;
 }
 
+const handleStatusDialogClose = () => {
+  if (state.statusDialogState.value?.type === "successful") {
+    router.push({name: 'records_list'})
+  }
+  state.statusDialogOpen.value = false;
+}
 
 </script>
 <template>
@@ -94,13 +113,14 @@ const handleNewRecordSubmission = (record: ITeamRecord) => {
     <RecordLab v-if="router.currentRoute.value.query.teamNumber && state.currentTeamSelection.value" :rubric-group="state.currentRubricGroupSelection.value" :team="state.currentTeamSelection.value"
                mode="create" @create="handleNewRecordSubmission"/>
     <Dialog :dialog-open="state.teamSelectorDialogOpen.value" action-button-label="Create Rubric"
-            :action-button-handler="handleTeamSelection" :action-button-handler-disabled="buttonDisabled"
+            :action-button-handler="handleTeamSelection" :action-button-handler-disabled="rubricCreatorDisabled"
             @close="handleTeamSelectorDialogClose">
       <VerticalStack spacing="lg">
         <TeamSelector v-model="state.currentTeamSelection.value" :team-selections="state.teamSelections.value"/>
         <RubricGroupSelector v-model="state.currentRubricGroupSelection.value" :rubric-group-selections="rubricGroups"/>
       </VerticalStack>
     </Dialog>
+    <StatusDialog v-if="!!state.statusDialogState.value" :type="state.statusDialogState.value?.type" :message="state.statusDialogState.value?.message" v-model:dialog-open="state.statusDialogOpen.value" @close="handleStatusDialogClose" />
   </ViewShell>
 </template>
 
