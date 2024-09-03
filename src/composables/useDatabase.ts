@@ -76,39 +76,104 @@ export function useDatabase() {
             const countBefore = await db.teams.where("teamNumber").equals(teamNumber).count();
 
             if (countBefore === 0) {
-                return 0; // or handle the case where the team doesn't exist
+                return 0;
             }
 
             // Perform the delete operation
             return db.teams.where("teamNumber").equals(teamNumber).delete();
 
         } catch (error) {
-            throw error; // or handle the error as needed
+            throw error;
         }
     };
 
-    /*const createRecord = async (record: ITeamRecord): Promise<IStudentRecord> => {
+    const createRecord = async (record: ITeamRecord): Promise<IStudentRecord> => {
+        const sanitizedTeam: ITeam = {
+            teamNumber: record.team.teamNumber,
+            nickname: record.team.nickname,
+            table: record.team.table,
+            section: record.team.section,
+            mentor: record.team.mentor,
+            assignedStudents: record.team.assignedStudents.map((student: IStudent) => ({
+                id: student.id,
+                firstName: student.firstName,
+                lastName: student.lastName,
+                preferredName: student.preferredName,
+                preferredPronouns: student.preferredPronouns,
+                notes: student.notes
+            }))
+        };
 
-        const sanitizedStudentRecords: IStudentRecord = record.studentRecords.map((studentRecord: IStudentRecord) => {
-            return {
-                student: {
-                    id: studentRecord.student.id,
-                    firstName: studentRecord.student.firstName,
-                    lastName: studentRecord.student.lastName,
-                    preferredName: studentRecord.student.preferredName,
-                    notes: studentRecord.student.notes
-                },
-                rubricGrade: {
-                    rubric: {}
-                }
+        const sanitizeRubricGrade = (rubricGrade: IRubricGrade): IRubricGrade => ({
+            rubric: {
+                id: rubricGrade.rubric.id,
+                label: rubricGrade.rubric.label,
+                commonDeductions: rubricGrade.rubric.commonDeductions,
+                slices: rubricGrade.rubric.slices.map((slice: IRubricSlice) => ({
+                    id: slice.id,
+                    score: slice.score,
+                    label: slice.label,
+                    description: slice.description
+                }))
+            },
+            earnedSlice: rubricGrade.earnedSlice ? {
+                id: rubricGrade.earnedSlice.id,
+                score: rubricGrade.earnedSlice.score,
+                label: rubricGrade.earnedSlice.label,
+                description: rubricGrade.earnedSlice.description
+            } : undefined,
+            comment: rubricGrade.comment
+        });
+
+        const sanitizedStudentRecords: Array<IStudentRecord> = record.studentRecords.map((studentRecord: IStudentRecord) => ({
+            student: {
+                id: studentRecord.student.id,
+                firstName: studentRecord.student.firstName,
+                lastName: studentRecord.student.lastName,
+                preferredName: studentRecord.student.preferredName,
+                preferredPronouns: studentRecord.student.preferredPronouns,
+                notes: studentRecord.student.notes
+            },
+            grades: studentRecord.grades.map(sanitizeRubricGrade),
+            rubricGroup: {
+                id: studentRecord.rubricGroup.id,
+                label: studentRecord.rubricGroup.label,
+                rubrics: studentRecord.rubricGroup.rubrics.map((rubric: IRubric) => ({
+                    id: rubric.id,
+                    label: rubric.label,
+                    commonDeductions: rubric.commonDeductions,
+                    slices: rubric.slices.map((slice: IRubricSlice) => ({
+                        id: slice.id,
+                        score: slice.score,
+                        label: slice.label,
+                        description: slice.description
+                    }))
+                }))
             }
-        })
+        }));
 
-        const sanitizedRubricGrade = record.studentRecords.
+        const formattedTimestamp = new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true
+        }).format(record.timestamp);
 
-            return db.records.add(record)
-    }*/
+        const sanitizedRecord: ITeamRecord = {
+            id: record.id,
+            team: sanitizedTeam,
+            studentRecords: sanitizedStudentRecords,
+            timestamp: formattedTimestamp
+        };
 
-    return {createTeam, getAllTeams, getSingleTeam, updateTeam, deleteTeam}
+        console.log(sanitizedRecord)
+
+        return db.records.add(sanitizedRecord)
+    }
+
+    return {createTeam, getAllTeams, getSingleTeam, updateTeam, deleteTeam, createRecord}
 
 }

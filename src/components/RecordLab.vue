@@ -213,7 +213,6 @@ const validateRecord = (field: keyof IRecordLabValidationState): IRecordLabValid
       if (studentValidator.errors.length > 0) validation.earnedSlice.push(studentValidator)
     })
   }
-  console.log('RecordLab', 'validateRecord', 'post', validation.earnedSlice)
   return fieldValid;
 }
 

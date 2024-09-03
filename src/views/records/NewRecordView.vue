@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 
-import {IRubricGroup, IStudentRecord, ITeam} from "../../types.ts";
+import {IRubricGroup, IStudentRecord, ITeam, ITeamRecord} from "../../types.ts";
 import {computed, inject, onBeforeMount, Ref, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import {useDatabase} from "../../composables/useDatabase.ts";
@@ -14,7 +14,7 @@ import ViewShell from "../../components/ViewShell.vue";
 
 const router = useRouter();
 const rubricGroups: Array<IRubricGroup> = inject('rubricGroups') || []
-const {getAllTeams, getSingleTeam} = useDatabase();
+const {getAllTeams, getSingleTeam, createRecord} = useDatabase();
 
 interface INewRecordViewState {
   teamSelectorDialogOpen: Ref<boolean>;
@@ -79,11 +79,20 @@ const handleTeamSelectorDialogClose = () => {
   })
 }
 
+const handleNewRecordSubmission = (record: ITeamRecord) => {
+  createRecord(record).then((res) => {
+    console.log(res)
+  }).catch(error => {
+    console.log(error)
+  })
+}
+
+
 </script>
 <template>
   <ViewShell>
     <RecordLab v-if="router.currentRoute.value.query.teamNumber && state.currentTeamSelection.value" :rubric-group="state.currentRubricGroupSelection.value" :team="state.currentTeamSelection.value"
-               mode="create" @create="data => {console.log(data)}"/>
+               mode="create" @create="handleNewRecordSubmission"/>
     <Dialog :dialog-open="state.teamSelectorDialogOpen.value" action-button-label="Create Rubric"
             :action-button-handler="handleTeamSelection" :action-button-handler-disabled="buttonDisabled"
             @close="handleTeamSelectorDialogClose">
