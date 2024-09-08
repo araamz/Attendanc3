@@ -86,7 +86,7 @@
   <div class="h-svh flex flex-col bg-neutral-200 overflow-y-auto md:flex-row-reverse">
       <router-view class="grow overflow-y-auto" />
     <PrimaryNavigation>
-      <PrimaryNavigationButton label="Grade" :to="{name: 'grade'}">
+      <PrimaryNavigationButton label="Grade" :to="{name: 'rubric_selector'}">
         <template #icon>
           <PlusIcon />
         </template>

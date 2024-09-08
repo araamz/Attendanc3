@@ -3,7 +3,7 @@ import './style.css'
 import App from './App.vue'
 import RecordsRoot from "./views/records/RecordsRoot.vue";
 import TeamsRoot from "./views/teams/TeamsRoot.vue";
-import NewRecordView from "./views/records/NewRecordView.vue";
+import NewRecordView from "./views/grader/GraderRoot.vue";
 import RecordEditView from "./views/records/RecordEditView.vue";
 import RecordsListView from "./views/records/RecordsListView.vue";
 import NewTeamView from "./views/teams/NewTeamView.vue";
@@ -12,17 +12,15 @@ import TeamsListView from "./views/teams/TeamsListView.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import {VueQueryPlugin} from '@tanstack/vue-query'
 import ReportView from "./views/ReportView.vue";
+import RecordCreatorView from "./views/grader/RecordCreatorView.vue";
+import RubricSelectorView from "./views/grader/RubricSelectorView.vue";
+import GraderRoot from "./views/grader/GraderRoot.vue";
 
 const routes = [
     {
         path: '/records',
         component: RecordsRoot,
         children: [
-            {
-              path: 'new',
-                component: NewRecordView,
-                name: 'record_creator',
-            },
             {
                 path: 'edit/:recordId',
                 component: RecordEditView,
@@ -63,8 +61,19 @@ const routes = [
     },
     {
       path: '/grade',
-      component: NewRecordView,
-      name: 'grade'
+      component: GraderRoot,
+        children: [
+            {
+                path: '',
+                component: RubricSelectorView,
+                name: 'rubric_selector'
+            },
+            {
+                path: ':teamNumber/:rubricGroupId',
+                component: RecordCreatorView,
+                name: 'grader'
+            }
+        ]
     },
     {
         path: '',

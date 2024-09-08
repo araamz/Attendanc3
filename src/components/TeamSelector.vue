@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
+import {defineProps, watch} from 'vue';
 import {ITeam} from '../types';
 import InputContainer from "./InputContainer.vue";
 
@@ -34,6 +34,6 @@ const {teamSelections, generalized} = defineProps<{
   generalized?: boolean;
 }>();
 
-const teamSelectionModel = defineModel<ITeam | undefined>()
+const teamSelectionModel = defineModel<ITeam | undefined>('teamSelection')
 
 </script>

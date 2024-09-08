@@ -25,6 +25,6 @@ const {rubricGroupSelections} = defineProps<{
   rubricGroupSelections: Array<IRubricGroup>;
 }>();
 
-const rubricGroupSelectionModel = defineModel<IRubricGroup | undefined>()
+const rubricGroupSelectionModel = defineModel<IRubricGroup | undefined>('rubricGroupSelection')
 
 </script>

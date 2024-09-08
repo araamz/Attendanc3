@@ -54,7 +54,7 @@
       <Descriptor label="date created" value="12/15/2024" />
       <Descriptor label="time created" value="3:15 p.m." />
     </DescriptorContainer>
-    <p class="mt-auto font-medium">
+    <p class="mt-auto font-medium line-clamp-3">
       Emily Johnson, Marcus Rodriguez, Amanda Smith, Benjamin Lee, Sophia Martinez
     </p>
     <div class="flex flex-row justify-between items-center">
