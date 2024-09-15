@@ -3,7 +3,7 @@ import './style.css'
 import App from './App.vue'
 import RecordsRoot from "./views/records/RecordsRoot.vue";
 import TeamsRoot from "./views/teams/TeamsRoot.vue";
-import NewRecordView from "./views/records/NewRecordView.vue";
+import NewRecordView from "./views/GradeView.vue";
 import RecordEditView from "./views/records/RecordEditView.vue";
 import RecordsListView from "./views/records/RecordsListView.vue";
 import NewTeamView from "./views/teams/NewTeamView.vue";
@@ -12,6 +12,7 @@ import TeamsListView from "./views/teams/TeamsListView.vue";
 import {createRouter, createWebHistory} from "vue-router";
 import {VueQueryPlugin} from '@tanstack/vue-query'
 import ReportView from "./views/ReportView.vue";
+import GradeView from "./views/GradeView.vue";
 
 const routes = [
     {
@@ -63,7 +64,7 @@ const routes = [
     },
     {
       path: '/grade',
-      component: NewRecordView,
+      component: GradeView,
       name: 'grade'
     },
     {

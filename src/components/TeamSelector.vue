@@ -34,6 +34,6 @@ const {teamSelections, generalized} = defineProps<{
   generalized?: boolean;
 }>();
 
-const teamSelectionModel = defineModel<ITeam | undefined>()
+const teamSelectionModel = defineModel<ITeam | undefined>('teamSelection')
 
 </script>

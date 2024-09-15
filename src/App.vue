@@ -9,7 +9,7 @@
   // Make Rubrics Available = use Dependency Injection to provide functionality NewRecordView
   // Make Pronouns Available = use Dependency Injection to provide functionality NewTeamView
 
-  const rubricGroups: Array<IRubricGroup> = [
+  const rubricGroupSelections: Array<IRubricGroup> = [
     {
       id: '7948d1f6-ecf5-4d3f-9ac2-c19641dfd02f',
       label: 'CSE Lab 1',
@@ -77,7 +77,7 @@
     }
   ]
 
-  provide('rubricGroups', rubricGroups)
+  provide('rubricGroupSelections', rubricGroupSelections)
 
 
 </script>
