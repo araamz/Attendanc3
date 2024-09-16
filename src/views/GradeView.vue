@@ -320,18 +320,21 @@ onBeforeMount(() => {
               <InputContainer label="Comment">
                 <textarea :name="studentRecord.rubricGroup.id" rows="3" v-model="rubricGrade.comment" @change="(event) => handleRubricComment(studentRecord, rubricGrade.rubric, event.target.value)" />
               </InputContainer>
-              <InputContainer label="Common Deductions">
+              <div class="flex flex-col gap-1 rounded-md">
+                <span class="text-xs font-semibold text-neutral-400 uppercase">
+                  Common Deductions
+                </span>
                 <div class="flex flex-wrap gap-2">
                   <button
-                      class="hover:bg-slate-600 hover:text-white has-[:checked]:bg-slate-600 has-[:checked]:text-white bg-neutral-100 text-neutral-400 inline-flex items-center gap-1 py-1 px-2.5 rounded-md font-medium w-fit transition-colors"
-                      v-for="commonDeduction in rubricGrade.rubric.commonDeductions" @click="handleCommonDeduction(studentRecord, rubricGrade.rubric, commonDeduction)">
+                      class="hover:bg-slate-600 hover:text-white has-[:checked]:bg-slate-600 has-[:checked]:text-white bg-neutral-100 text-neutral-400 flex items-center gap-1 py-1 px-2.5 rounded-md font-medium w-fit transition-colors"
+                      v-for="commonDeduction in rubricGrade.rubric.commonDeductions" @click="handleCommonDeduction(studentRecord, rubricGrade.rubric, commonDeduction)" :key="commonDeduction">
                       <span>
                         <PlusIcon class="size-4 leading-none"/>
                       </span>
                     {{ commonDeduction }}
                   </button>
                 </div>
-              </InputContainer>
+              </div>
             </div>
           </Section>
         </div>
@@ -342,7 +345,7 @@ onBeforeMount(() => {
         <PlusIcon />
       </template>
     </ScrollButton>
-    <Dialog v-model:dialog-open="state.studentInformationDialogOpen.value">
+    <Dialog v-model:dialog-open="state.studentInformationDialogOpen.value" @close="handleStudentInformationDialogClose">
       <div class="flex flex-col gap-2">
         <div class="flex flex-col" v-for="(value, key) in processedStudentInformation">
           <p class="text-xs font-semibold text-neutral-400 uppercase">
