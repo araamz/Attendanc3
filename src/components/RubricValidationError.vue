@@ -23,7 +23,15 @@
 
 import {ExclamationCircleIcon} from "@heroicons/vue/16/solid";
 import {computed} from "vue";
-import {IRecordLabValidation} from "./RecordLab.vue";
+import {IRubric, IStudent} from "../types.ts";
+
+  export interface IRecordLabValidation {
+    student: IStudent;
+    errors: Array<{
+      rubric: IRubric;
+      message: string;
+    }>;
+  }
 
   const props = defineProps<IRecordLabValidation>()
 

@@ -5,9 +5,10 @@
       <label
           v-for="team in teamSelections"
           :key="team.teamNumber"
+          :for="team.teamNumber"
           class="group has-[:checked]:bg-slate-600 has-[:checked]:text-white transition-colors flex flex-row justify-between items-center bg-neutral-100 p-3 rounded-md gap-3 @xl/team-selector:max-w-[160px] @xl/team-selector:w-[160px]"
       >
-        <input class="appearance-none hidden" type="radio" :id="String(team.teamNumber)" v-model="teamSelectionModel" :value="team">
+        <input :form="team.teamNumber"  class="appearance-none hidden" type="radio" :id="String(team.teamNumber)" v-model="teamSelectionModel" :value="team">
         <div class="flex flex-col *:leading-none gap-1 peer-checked:text-white">
           <p class="font-semibold text-lg line-clamp-1">
             {{ generalized ? `#${team.teamNumber}` : team.nickname || `#${team.teamNumber}` }}
