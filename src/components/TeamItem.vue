@@ -36,7 +36,7 @@ const studentNames = computed(() => assignedStudents.map((student: IStudent) => 
         <p class="font-medium">
           TEAM #{{ teamNumber }}
         </p>
-        <p class="text-neutral-400 font-medium leading-0 text-sm">
+        <p class="text-neutral-400 font-medium leading-0 text-right text-sm">
           {{ nickname }}
         </p>
       </HorizontalStack>

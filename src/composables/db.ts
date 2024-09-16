@@ -8,7 +8,7 @@ const db = new Dexie('database') as Dexie & {
 
 db.version(1).stores({
     teams: 'teamNumber, nickname, table, mentor, assignedStudents',
-    records: 'id, team, studentRecords, timestamp'
+    records: 'id, team, studentRecords, timestamp, updatedTimestamp'
 })
 
 export {db}

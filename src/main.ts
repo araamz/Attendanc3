@@ -66,11 +66,6 @@ const routes = [
       path: '/grade',
       component: GradeView,
       name: 'grade'
-    },
-    {
-        path: '',
-        component: ReportView,
-        name: 'help'
     }
 ]
 

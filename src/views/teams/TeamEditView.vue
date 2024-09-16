@@ -66,7 +66,7 @@ onBeforeMount(() => {
 
 const handleStatusDialogClose = () => {
   if (state.status.value === 'failure' || state.status.value === 'updated') {
-    router.push({name: 'team_list'})
+    router.push({name: 'teams_list'})
   }
   if (state.status.value === 'error' || state.status.value === 'fresh') {
     state.status.value = 'stale'

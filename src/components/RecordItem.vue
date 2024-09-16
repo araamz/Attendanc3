@@ -6,20 +6,15 @@
   import {PencilIcon, PlusIcon} from "@heroicons/vue/16/solid";
   import Checkbox from "./Checkbox.vue";
   import {useRouter} from "vue-router";
+  import {ITeamRecord} from "../types.ts";
+  import {computed} from "vue";
 
   interface IRecordItemProps {
-    recordId: string;
-    teamNumber: number;
-    teamNickname: string;
-    table: string;
-    section: string;
-    mentor: string
-    dateCreated: Date;
-    timeCreated: Date;
+    teamRecord: ITeamRecord;
   }
-  const {recordId, teamNumber, teamNickname, table, section, mentor, dateCreated, timeCreated} = defineProps<IRecordItemProps>();
+  const {teamRecord} = defineProps<IRecordItemProps>();
 
-  const model = defineModel<boolean>("recordChecked", {
+  const selectedRecordReportsModel = defineModel<Array<ITeamRecord>>("selectedRecordReports", {
     default: false,
     required: true
   })
@@ -29,36 +24,54 @@
     router.push({
       name: "record_editor",
       params: {
-        recordId: recordId
+        recordId: teamRecord.id
       }
     });
   }
+
+  const creationDateTime = computed(() => {
+    const datetime = new Date(teamRecord.timestamp);
+
+    return {
+      date: datetime.toLocaleDateString(),
+      time: datetime.toLocaleTimeString(),
+    }
+  })
+
+  const isSelected = computed({
+    get() {
+      return selectedRecordReportsModel.value.some((record: ITeamRecord) => record.id === teamRecord.id);
+    },
+    set(value) {
+      if (value) {
+        selectedRecordReportsModel.value = [...selectedRecordReportsModel.value, teamRecord];
+      } else {
+        console.log(value);
+        selectedRecordReportsModel.value = selectedRecordReportsModel.value.filter((record: ITeamRecord) => record.id !== teamRecord.id)
+      }
+    }
+  })
 
 
 </script>
 
 <template>
   <GridItem class="flex flex-col gap-3">
-    <div class="flex flex-row justify-between items-center">
+    <div class="flex flex-row justify-between items-center gap-2">
       <p class="font-medium">
-        TEAM #{{ teamNumber }}
+        TEAM #{{ teamRecord.team.teamNumber }}
       </p>
-      <p class="text-neutral-400 font-medium leading-0">
-        {{ teamNickname }}
+      <p v-if="teamRecord.team.nickname" class="text-neutral-400 font-medium leading-0 text-right text-sm">
+        {{ teamRecord.team.nickname }}
       </p>
     </div>
     <DescriptorContainer>
-      <Descriptor label="table" :value="table" />
-      <Descriptor label="section" :value="section" />
-      <Descriptor label="mentor" :value="mentor" />
-      <Descriptor label="date created" value="12/15/2024" />
-      <Descriptor label="time created" value="3:15 p.m." />
+      <Descriptor label="rubric" :value="String(teamRecord.studentRecords[0].rubricGroup.label)" />
+      <Descriptor label="section" :value="String(teamRecord.team.section)" />
+      <Descriptor label="time created" :value="creationDateTime.time" />
     </DescriptorContainer>
-    <p class="mt-auto font-medium">
-      Emily Johnson, Marcus Rodriguez, Amanda Smith, Benjamin Lee, Sophia Martinez
-    </p>
-    <div class="flex flex-row justify-between items-center">
-      <Checkbox v-model="model" :unique-identifier="recordId">
+    <div class="flex flex-row justify-between items-center mt-auto">
+      <Checkbox v-model="isSelected" :unique-identifier="teamRecord.id">
         <template #icon>
           <PlusIcon />
         </template>

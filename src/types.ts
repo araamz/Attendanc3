@@ -55,4 +55,5 @@ export interface ITeamRecord {
     team: ITeam;
     studentRecords: Array<IStudentRecord>
     timestamp: Date;
+    updatedTimestamp?: Date;
 }

@@ -1,13 +1,16 @@
 <script setup lang="ts">
   import PrimaryNavigation from "./components/PrimaryNavigation.vue";
   import PrimaryNavigationButton from "./components/PrimaryNavigationLink.vue";
+  import {ITeamRecord} from "./types.ts";
   import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon, QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
   import {IRubricGroup} from "./types.ts";
-  import {provide} from "vue";
+  import {provide, ref} from "vue";
 
   // Add State for Report Selections - use Dependency Injection to provide functionality between RecordsListView and ReportView
   // Make Rubrics Available = use Dependency Injection to provide functionality NewRecordView
   // Make Pronouns Available = use Dependency Injection to provide functionality NewTeamView
+
+  const selectedRecordReports = ref<Array<ITeamRecord>>([]);
 
   const rubricGroupSelections: Array<IRubricGroup> = [
     {
@@ -78,13 +81,15 @@
   ]
 
   provide('rubricGroupSelections', rubricGroupSelections)
+  provide('selectedRecordReports', selectedRecordReports)
 
-
+  import { useRoute } from 'vue-router'
+  const route = useRoute()
 </script>
 
 <template>
   <div class="h-svh flex flex-col bg-neutral-200 overflow-y-auto md:flex-row-reverse">
-      <router-view class="grow overflow-y-auto" />
+      <router-view :key="route.fullPath" class="grow overflow-y-auto" />
     <PrimaryNavigation>
       <PrimaryNavigationButton label="Grade" :to="{name: 'grade'}">
         <template #icon>
@@ -104,11 +109,6 @@
       <PrimaryNavigationButton label="Teams" :to="{name: 'teams_list'}">
         <template #icon>
           <UserGroupIcon />
-        </template>
-      </PrimaryNavigationButton>
-      <PrimaryNavigationButton label="Help" :to="{name: 'help'}">
-        <template #icon>
-          <QuestionMarkCircleIcon />
         </template>
       </PrimaryNavigationButton>
     </PrimaryNavigation>

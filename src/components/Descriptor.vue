@@ -11,7 +11,7 @@
     <p class='text-xs font-medium text-neutral-400 uppercase'>
       {{ label }}
     </p>
-    <p class='text-right text-sm font-semibold text-black'>
+    <p class='text-right text-sm font-semibold text-black line-clamp-1'>
       {{ value }}
     </p>
   </div>
