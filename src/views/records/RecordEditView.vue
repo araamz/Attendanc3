@@ -8,8 +8,6 @@ import StatusDialog, {IStatusDialogProps} from "../../components/StatusDialog.vu
 import RecordLab from "../../components/RecordLab.vue";
 import PaperContainer from "../../components/PaperContainer.vue";
 import Tag from "../../components/Tag.vue";
-import IconButton from "../../components/IconButton.vue";
-import {InformationCircleIcon} from "@heroicons/vue/20/solid";
 
 const router = useRouter()
 const {getSingleRecord, updateRecord} = useDatabase();
@@ -46,8 +44,9 @@ const tableLabel = computed(() => {
 
 const handleEditedRecordSubmission = (records: Array<IStudentRecord>) => {
   const teamRecord = {
-    ...state.teamRecord,
+    ...state.teamRecord.value,
     studentRecords: records,
+    timestamp: new Date(state.teamRecord.value?.timestamp),
     updatedTimestamp: new Date()
   }
 
@@ -67,7 +66,10 @@ const handleEditedRecordSubmission = (records: Array<IStudentRecord>) => {
 
 const handleStatusDialogClose = () => {
   if (state.teamRecord.value === null) router.push({name: 'records_list'})
-  if (state.statusDialogState.value?.type === 'error') return;
+  if (state.statusDialogState.value?.type === 'error') {
+    state.statusDialogState.value = null;
+    state.statusDialogOpen.value = false;
+  }
   router.push({name: 'records_list'})
 }
 
@@ -108,7 +110,7 @@ onBeforeMount(() => {
         </p>
         <p v-if="state.teamRecord.value.updatedTimestamp"
            class="font-medium text-sm leading-none text-neutral-400 italic">
-          Updated at {{ state.teamRecord.value.timestamp }}
+          Updated at {{ state.teamRecord.value.updatedTimestamp }}
         </p>
       </div>
     </div>
@@ -128,7 +130,7 @@ onBeforeMount(() => {
     </PaperContainer>
     <RecordLab @update="(data: Array<IStudentRecord>) => handleEditedRecordSubmission(data)" mode="update" v-model:student-records="state.studentRecords.value"/>
   </div>
-  <StatusDialog v-if="state.statusDialogState.value" @close="handleStatusDialogClose" :type="state.statusDialogState.value?.type" :message="state.statusDialogState.value?.message" v-model:dialog-open="state.statusDialogOpen.value" />
+  <StatusDialog v-if="state.statusDialogState.value" @close="() => handleStatusDialogClose()" :type="state.statusDialogState.value?.type" :message="state.statusDialogState.value?.message" v-model:dialog-open="state.statusDialogOpen.value" />
 </template>
 
 <style scoped>

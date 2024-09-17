@@ -38,6 +38,15 @@
     }
   })
 
+  const updatedDateTime = computed(() => {
+    const datetime = new Date(teamRecord.updatedTimestamp)
+
+    return {
+      date: datetime.toLocaleDateString(),
+      time: datetime.toLocaleTimeString()
+    }
+  })
+
   const isSelected = computed({
     get() {
       return selectedRecordReportsModel.value.some((record: ITeamRecord) => record.id === teamRecord.id);
@@ -68,7 +77,8 @@
     <DescriptorContainer>
       <Descriptor label="rubric" :value="String(teamRecord.studentRecords[0].rubricGroup.label)" />
       <Descriptor label="section" :value="String(teamRecord.team.section)" />
-      <Descriptor label="time created" :value="creationDateTime.time" />
+      <Descriptor v-if="!teamRecord.updatedTimestamp" label="time created" :value="creationDateTime.time" />
+      <Descriptor v-if="teamRecord.updatedTimestamp" label="time updated" :value="updatedDateTime.time" />
     </DescriptorContainer>
     <div class="flex flex-row justify-between items-center mt-auto">
       <Checkbox v-model="isSelected" :unique-identifier="teamRecord.id">
