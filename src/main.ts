@@ -16,7 +16,7 @@ import GradeView from "./views/GradeView.vue";
 
 const routes = [
     {
-        path: '/',
+        path: '',
         redirect: '/records',
     },
     {
