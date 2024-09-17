@@ -77,6 +77,74 @@
           ]
         }
       ]
+    },
+    {
+      id: '6528eedd-0931-438d-994b-5acc3021b1c7',
+      label: 'CSE Lab 2',
+      rubrics: [
+        {
+          id: 'be8503e9-c4a1-4558-af1b-1d88f8e6ef85',
+          label: 'Billable Hours',
+          commonDeductions: [
+            'Absent.',
+            'Late 5 minutes.',
+            'Late 10 minutes.',
+            'Late 15 minutes.',
+            'Late more than 15 minutes.'
+          ],
+          slices: [
+            {
+              id: '9365003b-3ae3-43d5-8641-1c7d71f695d6',
+              score: 10,
+              label: 'Full Marks',
+              description: 'Student is on time and ready to participate at start of class.'
+            },
+            {
+              id: '46832f49-00c4-4a19-ab4f-25f746e7dd54',
+              score: 5,
+              label: 'Partial Marks',
+              description: 'Student is NOT on time and ready to participate at start of class.'
+            },
+            {
+              id: '89475d6f-582f-46e0-a37d-4c8ed7c10e01',
+              score: 0,
+              label: 'No Marks',
+              description: 'Did not attend lab or multiple reasons why billable hours should not be awarded.'
+            }
+          ]
+        },
+        {
+          id: '6faee760-6158-4916-934a-a6f5f776bf56',
+          label: 'Lab Preparation',
+          commonDeductions: [
+            'Absent.',
+            'Notes incomplete on Page 29.',
+            'Notes incomplete on Page 30.',
+            'Notes incomplete on Page 31.',
+            'Did not bring notebook to class.'
+          ],
+          slices: [
+            {
+              id: 'ffa0857e-c0b1-4a01-94ed-bdccd96dfe0a',
+              score: 5,
+              label: 'Full Marks',
+              description: 'Lecture notes from CSE Lecture 3 are complete.'
+            },
+            {
+              id: '2c86eb6b-b10e-4d46-be06-9d3780d16549',
+              score: 2.5,
+              label: 'Partial Marks',
+              description: 'Some CSE Lecture 3 notes are filled in, but not all sections are complete.',
+            },
+            {
+              id: '66c64304-4495-444f-bb12-e2890ca8bceb',
+              score: 0,
+              label: 'No Marks',
+              description: 'Missing CSE Lecture 3 notes.'
+            }
+          ]
+        }
+      ]
     }
   ]
 
