@@ -16,6 +16,10 @@ import GradeView from "./views/GradeView.vue";
 
 const routes = [
     {
+        path: '/',
+        redirect: '/records',
+    },
+    {
         path: '/records',
         component: RecordsRoot,
         children: [
