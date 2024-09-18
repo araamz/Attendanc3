@@ -89,7 +89,6 @@ export function useDatabase() {
                 return 0;
             }
 
-            // Perform the delete operation
             return db.teams.where("teamNumber").equals(teamNumber).delete();
 
         } catch (error) {
@@ -284,12 +283,27 @@ export function useDatabase() {
             team: sanitizedTeam,
             studentRecords: sanitizedStudentRecords,
             timestamp: formattedTimestamp,
-            updatedTimestamp: formattedUpdatedTimestamp
+            updatedTimestamp: formattedUpdatedTimestamp,
         };
 
         return db.records.put(sanitizedRecord)
     }
 
-    return {createTeam, getAllTeams, getSingleTeam, updateTeam, deleteTeam, createRecord, getAllRecords, getSingleRecord, updateRecord}
+    const deleteRecord = async (recordId: number): Promise<number> => {
+        try {
+            const countBefore = await db.records.where("id").equals(recordId).count();
+
+            if (countBefore === 0) {
+                return 0;
+            }
+
+            return db.records.where("id").equals(recordId).delete();
+
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    return {createTeam, getAllTeams, getSingleTeam, updateTeam, deleteTeam, createRecord, getAllRecords, getSingleRecord, updateRecord, deleteRecord}
 
 }

@@ -6,6 +6,7 @@
   import {useRouter} from "vue-router";
   import {ITeamRecord} from "../../types.ts";
   import {inject, onBeforeMount, Ref, ref, watch} from "vue";
+  import PlaceholderMessage from "../../components/PlaceholderMessage.vue";
 
   const router = useRouter()
   const {getAllRecords} = useDatabase();
@@ -28,7 +29,14 @@
 
 <template>
   <HorizontalStack>
-    <GridContainer>
+    <PlaceholderMessage v-if="state.teamRecords.value.length === 0" message="Uh oh...No records are found.">
+      <template #routerLink>
+        <RouterLink :to="{name: 'grade'}">
+          Create Record
+        </RouterLink>
+      </template>
+    </PlaceholderMessage>
+    <GridContainer v-if="state.teamRecords.value.length > 0">
       <RecordItem v-for="record in state.teamRecords.value" :team-record="record" v-model:selected-record-reports="selectedRecordReports" />
     </GridContainer>
   </HorizontalStack>

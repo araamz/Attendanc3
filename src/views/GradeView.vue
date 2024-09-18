@@ -113,7 +113,7 @@ const handleRecordLabSubmission = (records: Array<IStudentRecord>) => {
     id: uuid(),
     team: state.currentTeamSelection.value,
     studentRecords: records,
-    timestamp: new Date()
+    timestamp: new Date(),
   }
 
   createRecord(teamRecord).then((recordId) => {

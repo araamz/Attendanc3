@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="flex flex-col">
-        <div v-for="record in teamRecordModel.studentRecords" class="odd:bg-neutral-100 px-5 py-3">
+        <div v-for="record in teamRecordModel.studentRecords" class="odd:bg-neutral-100 odd:rounded-md px-5 py-3">
           <div class="flex flex-row justify-between items-center leading-none pb-2">
             <p class="font-medium">
               {{record.student.firstName}} {{record.student.lastName}}

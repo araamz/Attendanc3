@@ -4,7 +4,7 @@
   import {ITeamRecord} from "./types.ts";
   import { ListBulletIcon, PlusIcon, UserGroupIcon, DocumentCheckIcon, QuestionMarkCircleIcon } from "@heroicons/vue/24/solid";
   import {IRubricGroup} from "./types.ts";
-  import {provide, ref} from "vue";
+  import {onBeforeMount, provide, ref} from "vue";
 
   // Add State for Report Selections - use Dependency Injection to provide functionality between RecordsListView and ReportView
   // Make Rubrics Available = use Dependency Injection to provide functionality NewRecordView
@@ -152,7 +152,23 @@
   provide('selectedRecordReports', selectedRecordReports)
 
   import { useRoute } from 'vue-router'
+  import {useDatabase} from "./composables/useDatabase.ts";
   const route = useRoute()
+  const {getAllRecords, deleteRecord} = useDatabase()
+
+  onBeforeMount(() => {
+    const expirationTime_ms = 48 * 60 * 60 * 1000;
+    getAllRecords().then((records) => {
+      records.forEach((record) => {
+        const currentTime = new Date();
+        const timeDifference = currentTime.getTime() - new Date(record.timestamp).getTime();
+        if (timeDifference > expirationTime_ms) {
+          deleteRecord(record.id)
+          console.log("Deleted Record: ", record)
+        }
+      })
+    })
+  })
 </script>
 
 <template>
