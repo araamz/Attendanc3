@@ -9,7 +9,7 @@ import RecordsListView from "./views/records/RecordsListView.vue";
 import NewTeamView from "./views/teams/NewTeamView.vue";
 import TeamEditView from "./views/teams/TeamEditView.vue";
 import TeamsListView from "./views/teams/TeamsListView.vue";
-import {createRouter, createWebHistory} from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 import {VueQueryPlugin} from '@tanstack/vue-query'
 import ReportView from "./views/ReportView.vue";
 import GradeView from "./views/GradeView.vue";
@@ -74,7 +74,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
     routes,
 })
 
