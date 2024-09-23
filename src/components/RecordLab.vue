@@ -2,7 +2,7 @@
   <VerticalStack spacing="lg">
     <PaperContainer class="flex flex-col gap-2" v-for="studentRecord in studentRecordsModel"
                     :key="studentRecord.student.id">
-      <div class="flex flex-row justify-between items-center">
+      <div class="flex flex-row justify-between items-center" @click="handleStudentOpen(studentRecord.student)">
         <div class="flex flex-row gap-2 items-center">
           <p class="font-medium leading-none">
             {{ studentRecord.student.preferredName ? `${studentRecord.student.preferredName} (${studentRecord.student.firstName} ${studentRecord.student.lastName})` : `${studentRecord.student.firstName} ${studentRecord.student.lastName}` }}
@@ -15,7 +15,7 @@
           </template>
         </IconButton>
       </div>
-      <div class="flex flex-col gap-3">
+      <div class="flex flex-col gap-3" v-if="state.currentStudentOpen.value === studentRecord.student">
         <Section v-for="rubricGrade in studentRecord.grades" :key="rubricGrade.rubric.id"
                  :title="rubricGrade.rubric.label" class="border-2 border-slate-200 p-3 rounded-md">
           <div class="flex flex-col gap-2">
@@ -142,6 +142,7 @@ interface IGradeViewState {
   recordLabStatusDialogOpen: Ref<boolean>;
   studentInformationDialogOpen: Ref<boolean>;
   currentStudentSelection: Ref<IStudent | undefined>;
+  currentStudentOpen: Ref<IStudent | undefined>;
 }
 
 const state: IGradeViewState = {
@@ -149,7 +150,8 @@ const state: IGradeViewState = {
   statusDialogOpen: ref<boolean>(false),
   recordLabStatusDialogOpen: ref<boolean>(false),
   studentInformationDialogOpen: ref<boolean>(false),
-  currentStudentSelection: ref<IStudent | undefined>(undefined)
+  currentStudentSelection: ref<IStudent | undefined>(undefined),
+  currentStudentOpen: ref<IStudent | undefined>(undefined)
 }
 
 interface IRecordLabValidationState {
@@ -240,6 +242,10 @@ const handleStudentInformationDialogClose = () => {
   if (!state.studentInformationDialogOpen.value) return;
   state.studentInformationDialogOpen.value = false;
   state.currentStudentSelection.value = undefined;
+}
+
+const handleStudentOpen = (student: IStudent) => {
+  state.currentStudentOpen.value = student;
 }
 
 const validateRecord = (field: keyof IRecordLabValidationState): IRecordLabValidationState => {
