@@ -229,8 +229,6 @@
             'Late 10 minutes.',
             'Late 15 minutes.',
             'Late more than 15 minutes.',
-            'Pseudocode on Page 36 is incomplete.',
-            'Pseudocode on Page 36 is missing.'
           ],
           slices: [
             {
