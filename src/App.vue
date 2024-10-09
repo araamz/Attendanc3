@@ -284,6 +284,75 @@
           ]
         }
       ]
+    },
+    {
+      id: '6da30561-e10a-4c27-ba4d-6fb411f4761d',
+      label: 'CME Lab 1',
+      rubrics: [
+        {
+          id: 'c46adee7-68cb-456d-8331-944dd9236ce8',
+          label: 'Billable Hours',
+          commonDeductions: [
+            'Absent.',
+            'Late 5 minutes.',
+            'Late 10 minutes.',
+            'Late 15 minutes.',
+            'Late more than 15 minutes.',
+          ],
+          slices: [
+            {
+              id: '1848351c-530b-4b0e-b515-b85fecd3923f',
+              score: 10,
+              label: 'Full Marks',
+              description: 'Student is on time and ready to participate at start of class.'
+            },
+            {
+              id: '1b411199-3734-4efd-876d-55ff3ef58e7d',
+              score: 5,
+              label: 'Partial Marks',
+              description: 'Student is NOT on time and ready to participate at start of class.'
+            },
+            {
+              id: '930a15f8-e6b3-4cbb-a994-461fb6022d8d',
+              score: 0,
+              label: 'No Marks',
+              description: 'Did not attend lab or multiple reasons why billable hours should not be awarded.'
+            }
+          ]
+        },
+        {
+          id: 'c1743375-959f-4070-abc0-e871bc8e988e',
+          label: 'Lab Preparation',
+          commonDeductions: [
+            'Absent.',
+            'Notes incomplete on Page 38.',
+            'Notes incomplete on Page 39.',
+            'Notes incomplete on Page 40.',
+            'Notes incomplete on Page 41.',
+            'Did not bring notebook to class.'
+          ],
+          slices: [
+            {
+              id: 'd5137e4f-f05d-48ac-8492-0a32cfb7a7e7',
+              score: 5,
+              label: 'Full Marks',
+              description: 'Lecture notes from CME Lecture 1 are complete.'
+            },
+            {
+              id: 'ab515918-3de3-4d41-a24e-79816ba54ae9',
+              score: 2.5,
+              label: 'Partial Marks',
+              description: 'Some CME Lecture 1 notes are filled in, but not all sections are complete.',
+            },
+            {
+              id: '7a761021-0044-4970-98b6-9c2c08c4d3f0',
+              score: 0,
+              label: 'No Marks',
+              description: 'Missing CME Lecture 1 notes.'
+            }
+          ]
+        }
+      ]
     }
   ]
 
